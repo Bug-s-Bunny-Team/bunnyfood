@@ -31,8 +31,7 @@ class ScoringPost:
         self.textsScore = dict()
         self.finalScore = 0.0
 
-    @classmethod
-    def __validate_input_json(cls, in_json):
+    def __validate_input_json(self, in_json):
         return (
             key_present_in_dict(in_json, "id")
             & key_present_in_dict(in_json, "caption")
