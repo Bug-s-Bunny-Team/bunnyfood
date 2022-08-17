@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter
 
 from api.models import SocialProfile
@@ -5,14 +7,23 @@ from api.models import SocialProfile
 router = APIRouter()
 
 
-@router.get('/profiles')
+@router.get(
+    '/profiles', response_model=List[SocialProfile], response_model_exclude_unset=True
+)
 def get_profiles():
-    return [{'id': 1, 'username': 'someone'}]
+    return [
+        SocialProfile(id=1, username='someone1'),
+        SocialProfile(id=2, username='someone2'),
+    ]
 
 
-@router.get('/profiles/{profile_id}')
+@router.get(
+    '/profiles/{profile_id}',
+    response_model=SocialProfile,
+    response_model_exclude_unset=True,
+)
 def get_profile(profile_id: int):
-    return {'id': profile_id, 'username': f'someone{profile_id}'}
+    return SocialProfile(id=profile_id, username=f'someone{profile_id}')
 
 
 @router.post('/profiles/')

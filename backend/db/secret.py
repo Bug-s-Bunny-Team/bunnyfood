@@ -4,15 +4,14 @@ from botocore.exceptions import ClientError
 import os
 import json
 
-def get_db_secret():
 
+def get_db_secret():
     secret_name = "test-db-secret"
 
     # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
-        service_name='secretsmanager',
-        region_name=os.environ['ENV_REGION_NAME']
+        service_name='secretsmanager', region_name=os.environ['ENV_REGION_NAME']
     )
 
     # In this sample we only handle the specific exceptions for the 'GetSecretValue' API.
@@ -46,7 +45,7 @@ def get_db_secret():
         # Decrypts secret using the associated KMS key.
         # Depending on whether the secret is a string or binary, one of these fields will be populated.
         if 'SecretString' in get_secret_value_response:
-            return json.loads(get_secret_value_response['SecretString']) # dict
+            return json.loads(get_secret_value_response['SecretString'])  # dict
         else:
             raise Exception("Unsupported secret format")
             # return base64.b64decode(get_secret_value_response['SecretBinary'])

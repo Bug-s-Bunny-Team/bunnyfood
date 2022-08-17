@@ -10,7 +10,7 @@ from peewee import (
     ForeignKeyField,
     FloatField,
     IntegerField,
-    DateTimeField
+    DateTimeField,
 )
 
 from . import db
@@ -42,7 +42,7 @@ class Location(BaseModel):
     def from_instaloader_location(cls, location) -> Tuple['Location', bool]:
         return Location.get_or_create(
             # insta_id=location.id,
-            insta_id=0,     # some ids causes an overflow, need to fix later
+            insta_id=0,  # some ids causes an overflow, need to fix later
             name=location.name,
             lat=location.lat,
             long=location.lng,
@@ -81,7 +81,7 @@ class Post(BaseModel):
             media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
             media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
             social_profile=profile,
-            location=location
+            location=location,
         )
         return post, True
 
