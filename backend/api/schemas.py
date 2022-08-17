@@ -6,6 +6,9 @@ from pydantic import BaseModel
 class Base(BaseModel):
     id: Union[int, None] = None
 
+    class Config:
+        orm_mode = True
+
 
 class Location(Base):
     name: str
