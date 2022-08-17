@@ -9,7 +9,6 @@ from peewee import (
     TextField,
     ForeignKeyField,
     FloatField,
-    IntegerField,
     DateTimeField,
 )
 
@@ -32,8 +31,8 @@ class SocialProfile(BaseModel):
 
 
 class Location(BaseModel):
-    insta_id = IntegerField()
     name = CharField(unique=True)
+    description = TextField()
     lat = FloatField(default=0)
     long = FloatField(default=0)
     score = FloatField(null=True)
@@ -41,11 +40,7 @@ class Location(BaseModel):
     @classmethod
     def from_instaloader_location(cls, location) -> Tuple['Location', bool]:
         return Location.get_or_create(
-            # insta_id=location.id,
-            insta_id=0,  # some ids causes an overflow, need to fix later
-            name=location.name,
-            lat=location.lat,
-            long=location.lng,
+            name=location.name, lat=location.lat, long=location.lng, description=''
         )
 
 

@@ -7,7 +7,6 @@ from .routers import locations, profiles
 init_db(user='user', password='password', host='localhost', database='bunnyfood_dev')
 create_all_tables()
 
-# app = FastAPI(dependencies=[Depends(get_db)])
 app = FastAPI()
 
 app.include_router(locations.router)

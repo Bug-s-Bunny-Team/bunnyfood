@@ -10,6 +10,9 @@ class Base(BaseModel):
 class Location(Base):
     name: str
     description: str
+    lat: float = 0
+    long: float = 0
+    score: float = 0
 
 
 class SocialProfile(Base):
