@@ -99,7 +99,6 @@ class BasicScoringService(ScoringService):
         # ADD NEW RESPONSE
         # response = self._rekognition.facial_analysis(Image={'S3Object': {'Bucket': os.environ['ENV_BUCKET_NAME'], 'Name': sPost.image}})
         # BasicScoringService.__parse_rekognition_response(sPost, response)
-
         print('Successfully analized image')
 
     def _runComprehend(self, sPost: ScoringPost):
