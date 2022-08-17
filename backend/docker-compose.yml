@@ -8,13 +8,15 @@ services:
       - db
     ports:
       - '8000:80'
+    networks:
+      - bunnyfood
     restart: unless-stopped
 
   db:
     container_name: db
     image: postgres:13.7-alpine
     environment:
-      POSTGRES_DB: bunnyfood
+      POSTGRES_DB: bunnyfood_dev
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
@@ -22,6 +24,9 @@ services:
       - ./data/pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      bunnyfood:
+        ipv4_address: 172.18.0.10
     restart: unless-stopped
 
   pgadmin:
@@ -30,9 +35,19 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: password
-#    volumes:
-#       - ./local_db/pgadmin:/var/lib/pgadmin
-#      - ./local_db/servers.json:/pgadmin4/servers.json
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+      - ./data/servers.json:/pgadmin4/servers.json
     ports:
       - "8080:80"
+    networks:
+      - bunnyfood
     restart: unless-stopped
+
+networks:
+  bunnyfood:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/24
