@@ -1,12 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="api" type="Python.FastAPI">
+    <option name="additionalOptions" value="--reload --reload-exclude ./data/*" />
     <option name="appName" value="app" />
     <option name="file" value="$PROJECT_DIR$/backend/api/main.py" />
     <module name="bunnyfood" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <option name="SDK_HOME" value="$PROJECT_DIR$/backend/venv/bin/python" />
-    <option name="WORKING_DIRECTORY" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
     <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />
     <option name="ADD_SOURCE_ROOTS" value="true" />
