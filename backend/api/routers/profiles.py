@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter
 
-from api.models import SocialProfile
+from api.schemas import SocialProfile
 
 router = APIRouter()
 

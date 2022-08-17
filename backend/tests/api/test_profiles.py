@@ -1,4 +1,4 @@
-from backend.api.models import SocialProfile
+from backend.api.schemas import SocialProfile
 
 
 def test_get_all_profiles(api_client):

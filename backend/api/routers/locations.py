@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter
 
-from api.models import Location
+from api.schemas import Location
 
 router = APIRouter()
 
