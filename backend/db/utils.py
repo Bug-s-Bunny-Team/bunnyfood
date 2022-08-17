@@ -1,26 +1,31 @@
-import os
-from typing import Optional
-from .secret import get_db_secret
-
 from . import db
-from db.models import SocialProfile, PostScore, Post, Location
+from .secret import get_db_secret
+from .models import SocialProfile, PostScore, Post, Location
 
 
 def init_db(
-    user: Optional[str] = None,
-    password: Optional[str] = None,
-    host: Optional[str] = None,
-    database: Optional[str] = None,
+    user: str,
+    password: str,
+    host: str,
+    database: str,
 ):
-    get_secret = True
     db.init(
-        user=get_db_secret()["username"] if get_secret else os.environ['DB_USER'],
-        password=get_db_secret()["password"] if get_secret else os.environ['DB_PASSWORD'],
-        host=get_db_secret()["host"] if get_secret else os.environ['DB_HOST'],
-        database=get_db_secret()["database"] if get_secret else os.environ['DB_NAME'],
+        user=user,
+        password=password,
+        host=host,
+        database=database,
     )
     db.connect()
     create_all_tables()
+
+
+def init_db_from_secrets():
+    init_db(
+        user=get_db_secret()['username'],
+        password=get_db_secret()['password'],
+        host=get_db_secret()['host'],
+        database=get_db_secret()['database'],
+    )
 
 
 def create_all_tables():
