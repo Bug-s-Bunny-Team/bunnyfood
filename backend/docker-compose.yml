@@ -4,6 +4,35 @@ services:
   api:
     container_name: api
     image: api
+    depends_on:
+      - db
     ports:
       - '8000:80'
+    restart: unless-stopped
+
+  db:
+    container_name: db
+    image: postgres:13.7-alpine
+    environment:
+      POSTGRES_DB: bunnyfood
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: password
+#    volumes:
+#       - ./local_db/pgadmin:/var/lib/pgadmin
+#      - ./local_db/servers.json:/pgadmin4/servers.json
+    ports:
+      - "8080:80"
     restart: unless-stopped
