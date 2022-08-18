@@ -5,45 +5,42 @@ def scoreFaceRekognition():
     with open(Path('facialAnalysisMOC.json'),'r') as f:
         response = json.load(f)
 
-    '''###############################################
-    for line in rekResult['TextDetections']:
-        if line['Type'] == 'LINE':
-            sPost.texts[line['Id']] = line['DetectedText']
-    ###############################################'''
+    faceCount = 0
+    scoreSum = 0
 
-    faceCount=0
-    scoreSum=0
-
-    '''for face in response['FaceDetails']:
-        for emotion in face['Emotions']:
-            if emotion['Type'] == 'HAPPY':
-                #SOMMA LA CONFIDENCE DI HAPPY PER OGNI FACCIA
-                #scoreSum = scoreSum + emotion['Confidence']
-                print(emotion['Confidence'])
-                #faceCount=faceCount+1'''
 
     for face in response['FaceDetails']:
         pose = face['Pose']
-        print(pose['Yaw'], pose['Pitch'])
+        #print(pose['Yaw'], pose['Pitch'])
         #SE VOLTO DRITTO
         if (abs(pose['Yaw']) <= 50) and (abs(pose['Pitch']) <= 50): #abs() perchè deve essere -50<pose<50
             #CALCOLARE SCORE EMOZIONI
             faceCount = faceCount + 1
-            print('Volto valido num=', faceCount)
+            #print('Volto valido num=', faceCount)
+            faceSum = 0
             for emotion in face['Emotions']:
                 if emotion['Type'] == 'HAPPY':
-                    scoreSum = scoreSum + emotion['Confidence']
-                    print(emotion['Confidence'])
+                    faceSum = faceSum + emotion['Confidence']
+                    #print('HAPPY=', emotion['Confidence'])
+                    #print('faceSum=', faceSum)
                 if emotion['Type'] == 'CALM':
-                    scoreSum = scoreSum + emotion['Confidence']*0.5
-                    print(emotion['Confidence'])
+                    faceSum = faceSum + emotion['Confidence']*0.5 #ha peso minore di happy
+                    #print('CALM=', emotion['Confidence'])
+                    #print('faceSum=', faceSum)
+                if emotion['Type'] == 'DISGUSTED':
+                    if emotion['Confidence'] >= 50: #se disgust troppo elevato azzera il punteggio della faccia
+                        faceSum=0
+                        #print('Too much digust=', emotion['Confidence'])
+            scoreSum = scoreSum + faceSum
+
+            #print('scoreSum=', scoreSum)
         #UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
 
 
 
-
-    #totScore = scoreSum / faceCount
-    #print(totScore)
+    totScore = scoreSum / faceCount
+    print('Facce analizzate=', faceCount)
+    print('Score Immagine=' ,totScore)
 
 
 scoreFaceRekognition()
