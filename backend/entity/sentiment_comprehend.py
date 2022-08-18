@@ -1,0 +1,43 @@
+from enum import Enum
+
+
+class Sentiment(Enum):
+    POSITIVE = 1
+    NEGATIVE = 0
+    NEUTRAL = 0.3
+    MIXED = 0.1
+
+
+class SentimentComprehend:
+    def __init__(self, negative: float, positive: float, neutral: float, mixed: float):
+        self.__positive = positive
+        self.__neutral = neutral
+        self.__negative = negative
+        self.__mixed = mixed
+        self.__principal_sentiment = None
+
+    # set principal sentiment
+
+    def set_sentiment(self, sentiment: str):
+        sentiment = sentiment.lower()
+        if sentiment == "positive":
+            self.__principal_sentiment = Sentiment.POSITIVE
+        elif sentiment == "negative":
+            self.__principal_sentiment = Sentiment.NEGATIVE
+        elif sentiment == "mixed":
+            self.__principal_sentiment = Sentiment.MIXED
+        else:
+            self.__principal_sentiment = Sentiment.NEUTRAL
+
+    def calculate_score(self) -> float:
+        return Sentiment.POSITIVE.value * self.__positive + \
+               Sentiment.NEUTRAL.value * self.__neutral + \
+               Sentiment.NEGATIVE.value * self.__negative + \
+               Sentiment.MIXED.value * self.__mixed
+
+    def __str__(self) -> str:
+        return "Principal Sentiment: " + str(self.__principal_sentiment) + "\n" + \
+               "Positive: " + str(self.__positive) + "\n" + \
+               "Neutral: " + str(self.__neutral) + "\n" + \
+               "Negative: " + str(self.__negative) + "\n" + \
+               "Mixed: " + str(self.__mixed) + "\n"
