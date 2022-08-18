@@ -1,3 +1,4 @@
+from enum import Enum, unique
 from typing import Union, Any
 
 import peewee
@@ -31,3 +32,13 @@ class Location(Base):
 
 class SocialProfile(Base):
     username: str
+
+
+@unique
+class GuideType(str, Enum):
+    MAP = 'map'
+    LIST = 'list'
+
+
+class UserPreferences(Base):
+    default_guide_view: GuideType = GuideType.MAP
