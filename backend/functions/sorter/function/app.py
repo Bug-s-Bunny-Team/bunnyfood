@@ -1,13 +1,14 @@
 import json
-import os
 
 from db.utils import init_db
-from .sorting_service import BasicScoringService
+from entity.post import Post
+from functions.sorter.function.sorting_service import SorterService
+
 
 def lambda_handler(event, context):
     try:
         init_db()
-        sorterEvent = ListaDatiPost
+        sorterEvent = SorterService
         sorterEvent.sort(event)
         return 'Success'
     except Exception as e:

@@ -8,7 +8,7 @@ from entity.post import Post
 from entity.sentiment_comprehend import SentimentComprehend
 
 
-class ScoringService(ABC):
+class SorterService(ABC):
     def __init__(self, aws_region='eu-central-1'):
         self._rekognition = boto3.client(service_name='rekognition', region_name=aws_region)
         self._comprehend = boto3.client(service_name='comprehend', region_name=aws_region)
@@ -128,7 +128,7 @@ class ScoringService(ABC):
         print("\n-------------------")
         print("image_analyzer")
 
-        bucket = 'bucket-for-image'  # To be adding on AWS
+        bucket = 'test-bucket-backend-bugsbunny'
         emotions = {}
         emotions_confidence = {}
 

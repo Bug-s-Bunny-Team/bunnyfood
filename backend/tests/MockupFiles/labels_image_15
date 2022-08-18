@@ -1,0 +1,321 @@
+{
+    "Labels": [
+        {
+            "Name": "Person",
+            "Confidence": 99.88428497314453,
+            "Instances": [
+                {
+                    "BoundingBox": {
+                        "Width": 0.27858132123947144,
+                        "Height": 0.44550982117652893,
+                        "Left": 0.2236727923154831,
+                        "Top": 0.35303789377212524
+                    },
+                    "Confidence": 99.88428497314453
+                },
+                {
+                    "BoundingBox": {
+                        "Width": 0.20297367870807648,
+                        "Height": 0.6778767108917236,
+                        "Left": 0.5247262716293335,
+                        "Top": 0.10922279208898544
+                    },
+                    "Confidence": 99.81658172607422
+                },
+                {
+                    "BoundingBox": {
+                        "Width": 0.1879337579011917,
+                        "Height": 0.6780399084091187,
+                        "Left": 0,
+                        "Top": 0.2805716097354889
+                    },
+                    "Confidence": 99.4343490600586
+                },
+                {
+                    "BoundingBox": {
+                        "Width": 0.1857394129037857,
+                        "Height": 0.7207215428352356,
+                        "Left": 0.8122804164886475,
+                        "Top": 0.26372382044792175
+                    },
+                    "Confidence": 99.33649444580078
+                },
+                {
+                    "BoundingBox": {
+                        "Width": 0.3435731828212738,
+                        "Height": 0.5872151255607605,
+                        "Left": 0.6002987623214722,
+                        "Top": 0.37104183435440063
+                    },
+                    "Confidence": 99.21895599365234
+                },
+                {
+                    "BoundingBox": {
+                        "Width": 0.04421132802963257,
+                        "Height": 0.0647316426038742,
+                        "Left": 0.21105122566223145,
+                        "Top": 0.4905780255794525
+                    },
+                    "Confidence": 77.19906616210938
+                },
+                {
+                    "BoundingBox": {
+                        "Width": 0.24612759053707123,
+                        "Height": 0.649583101272583,
+                        "Left": 0.5614517331123352,
+                        "Top": 0.21997611224651337
+                    },
+                    "Confidence": 63.90801239013672
+                }
+            ],
+            "Parents": []
+        },
+        {
+            "Name": "Human",
+            "Confidence": 99.88428497314453,
+            "Instances": [],
+            "Parents": []
+        },
+        {
+            "Name": "Restaurant",
+            "Confidence": 99.67289733886719,
+            "Instances": [],
+            "Parents": []
+        },
+        {
+            "Name": "Dating",
+            "Confidence": 95.8533935546875,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Cafeteria",
+            "Confidence": 87.65536499023438,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Restaurant"
+                }
+            ]
+        },
+        {
+            "Name": "Food Court",
+            "Confidence": 87.0301284790039,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Restaurant"
+                },
+                {
+                    "Name": "Food"
+                }
+            ]
+        },
+        {
+            "Name": "Food",
+            "Confidence": 87.0301284790039,
+            "Instances": [],
+            "Parents": []
+        },
+        {
+            "Name": "Juice",
+            "Confidence": 81.4052734375,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Beverage"
+                }
+            ]
+        },
+        {
+            "Name": "Beverage",
+            "Confidence": 81.4052734375,
+            "Instances": [],
+            "Parents": []
+        },
+        {
+            "Name": "Drink",
+            "Confidence": 81.4052734375,
+            "Instances": [],
+            "Parents": []
+        },
+        {
+            "Name": "Cafe",
+            "Confidence": 81.15908813476562,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Restaurant"
+                }
+            ]
+        },
+        {
+            "Name": "People",
+            "Confidence": 73.60607147216797,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Beer",
+            "Confidence": 59.805973052978516,
+            "Instances": [
+                {
+                    "BoundingBox": {
+                        "Width": 0.09326697885990143,
+                        "Height": 0.12219686806201935,
+                        "Left": 0.27671658992767334,
+                        "Top": 0.8471678495407104
+                    },
+                    "Confidence": 59.805973052978516
+                }
+            ],
+            "Parents": [
+                {
+                    "Name": "Alcohol"
+                },
+                {
+                    "Name": "Beverage"
+                }
+            ]
+        },
+        {
+            "Name": "Alcohol",
+            "Confidence": 59.805973052978516,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Beverage"
+                }
+            ]
+        },
+        {
+            "Name": "Table",
+            "Confidence": 57.2387580871582,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Furniture"
+                }
+            ]
+        },
+        {
+            "Name": "Furniture",
+            "Confidence": 57.2387580871582,
+            "Instances": [],
+            "Parents": []
+        },
+        {
+            "Name": "Orange Juice",
+            "Confidence": 57.23634338378906,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Juice"
+                },
+                {
+                    "Name": "Beverage"
+                }
+            ]
+        },
+        {
+            "Name": "Blonde",
+            "Confidence": 55.60399627685547,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Woman"
+                },
+                {
+                    "Name": "Girl"
+                },
+                {
+                    "Name": "Kid"
+                },
+                {
+                    "Name": "Teen"
+                },
+                {
+                    "Name": "Female"
+                },
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Female",
+            "Confidence": 55.60399627685547,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Teen",
+            "Confidence": 55.60399627685547,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Kid",
+            "Confidence": 55.60399627685547,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Girl",
+            "Confidence": 55.60399627685547,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Female"
+                },
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Woman",
+            "Confidence": 55.60399627685547,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Female"
+                },
+                {
+                    "Name": "Person"
+                }
+            ]
+        },
+        {
+            "Name": "Child",
+            "Confidence": 55.60399627685547,
+            "Instances": [],
+            "Parents": [
+                {
+                    "Name": "Person"
+                }
+            ]
+        }
+    ],
+    "LabelModelVersion": "2.0"
+}

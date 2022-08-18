@@ -18,13 +18,13 @@ class Post:
     textsScore: Dict[int, float]
     finalScore: float
 
-    def __init__(self, id: str, caption: str, image_key: str, hashtags: Dict[int, str]):
+    def __init__(self, id: str, caption: str, image_key: str, list_images: List[Image]):
         self.id = id
         self.caption = caption
         self.image_key = image_key
-        self.image = None
+        self.list_images = list_images
         self.texts = dict()
-        self.hashtags = hashtags
+        self.hashtags = dict()
         self.captionScore = None
         self.imageScore = 0.0
         self.textsScore = dict()
