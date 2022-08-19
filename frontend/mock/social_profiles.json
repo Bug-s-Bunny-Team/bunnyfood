@@ -1,0 +1,42 @@
+[
+  {
+    "id": 0,
+    "username": "antoniorazzi",
+    "followers": 300000
+  },
+  {
+    "id": 1,
+    "username": "tulliovardanega",
+    "followers": 1
+  },
+  {
+    "id": 2,
+    "username": "cardin",
+    "followers": 1
+  },
+  {
+    "id": 3,
+    "username": "sergiomattarella",
+    "followers": 100000
+  },
+  {
+    "id": 4,
+    "username": "giuseppeconte",
+    "followers": 200000
+  },
+  {
+    "id": 5,
+    "username": "mariodraghi",
+    "followers": 500000
+  },
+  {
+    "id": 6,
+    "username": "fanpage",
+    "followers": 3
+  },
+  {
+    "id": 7,
+    "username": "unipd",
+    "followers": 10000
+  }
+]
