@@ -20,6 +20,16 @@ def get_profiles():
 
 
 @router.get(
+    '/profiles/followed',
+    response_model=List[schemas.SocialProfile],
+    response_model_exclude_unset=True,
+    dependencies=[Depends(get_db)],
+)
+def get_followed_profiles():
+    return []
+
+
+@router.get(
     '/profiles/{profile_id}',
     response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,

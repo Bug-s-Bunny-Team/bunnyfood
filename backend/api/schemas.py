@@ -5,6 +5,8 @@ import peewee
 from pydantic import BaseModel
 from pydantic.utils import GetterDict
 
+from db.models import GuideType
+
 
 class PeeweeGetterDict(GetterDict):
     def get(self, key: Any, default: Any = None):
@@ -22,6 +24,10 @@ class Base(BaseModel):
         getter_dict = PeeweeGetterDict
 
 
+class User(Base):
+    username: str
+
+
 class Location(Base):
     name: str
     description: str
@@ -32,12 +38,6 @@ class Location(Base):
 
 class SocialProfile(Base):
     username: str
-
-
-@unique
-class GuideType(str, Enum):
-    MAP = 'map'
-    LIST = 'list'
 
 
 class UserPreferences(Base):
