@@ -10,6 +10,7 @@ from peewee import (
     ForeignKeyField,
     FloatField,
     DateTimeField,
+    ManyToManyField,
 )
 
 from . import db
@@ -21,13 +22,29 @@ class MediaType(str, Enum):
     VIDEO = 'video'
 
 
+@unique
+class GuideType(str, Enum):
+    MAP = 'map'
+    LIST = 'list'
+
+
 class BaseModel(Model):
     class Meta:
         database = db
 
 
+class User(BaseModel):
+    username = CharField(unique=True, null=False)
+
+
+class UserPreferences(BaseModel):
+    user = ForeignKeyField(User, backref='preferences')
+    default_guide_view = CharField(choices=[GuideType.MAP, GuideType.LIST])
+
+
 class SocialProfile(BaseModel):
     username = CharField(unique=True, null=False)
+    followers = ManyToManyField(User, backref='followed_profiles')
 
 
 class Location(BaseModel):
