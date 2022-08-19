@@ -16,12 +16,14 @@
     <li class='left'><strong>BunnyFood</strong></li>
     <ul>
         {#each routes as route}
-            <li>
-                <a
-                    class={currentRoute.name == route.name ? "current" : ""}
-                    href={route.name}>{route.title}</a
-                >
-            </li>
+            {#if route.visible}
+                <li>
+                    <a
+                        class={currentRoute.name == route.name ? "current" : ""}
+                        href={route.name}>{route.title}</a
+                    >
+                </li>
+            {/if}
         {/each}
         <li>
             <ThemeSwitch/>

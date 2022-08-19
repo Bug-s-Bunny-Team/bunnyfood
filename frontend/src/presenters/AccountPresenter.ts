@@ -7,7 +7,7 @@ export class AccountPresenter {
     email: string;
     followers: number;
     preference: number;
-    isLogged: Writable<boolean> = writable(null);
+    isLogged: boolean;
 
     constructor() {
         this.changePreference = this.changePreference.bind(this);
@@ -17,7 +17,7 @@ export class AccountPresenter {
     }
 
     private updateAccount(account: Account) {
-        this.isLogged.set(account ? true : false);
+        this.isLogged = account ? true : false;
         if(account) {
             this.name = account.accountname;
             this.email = account.email;
