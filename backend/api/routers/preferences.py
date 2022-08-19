@@ -12,4 +12,5 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_user_prefs():
+    
     return schemas.UserPreferences(default_guide_view=GuideType.LIST)

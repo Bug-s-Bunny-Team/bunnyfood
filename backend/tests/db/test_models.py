@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from typing import Optional
 
 import pytest
-from instaloader import PostLocation
 
 from db import db
 from db.models import SocialProfile, Post, MediaType, Location
@@ -23,7 +22,7 @@ class DummyInstaPost:
 
 @pytest.fixture
 def transaction():
-    init_db('user', 'password', '172.18.0.10', 'poc_test')
+    init_db('user', 'password', 'localhost', 'bunnyfood_test')
     with db.transaction() as txn:
         create_all_tables()
         yield txn
@@ -84,10 +83,10 @@ def test_create_from_instaloader_post(transaction, profile):
     assert post.media_type == MediaType.IMAGE
 
 
-def test_create_from_instaloader_location(transaction):
-    insta_location = PostLocation(
-        123456, 'Random place', 'random-place', True, 40.0, 20.0
-    )
-    location, created = Location.from_instaloader_location(insta_location)
-    assert created
-    assert location.insta_id == 123456
+# def test_create_from_instaloader_location(transaction):
+#     insta_location = PostLocation(
+#         123456, 'Random place', 'random-place', True, 40.0, 20.0
+#     )
+#     location, created = Location.from_instaloader_location(insta_location)
+#     assert created
+#     assert location.insta_id == 123456

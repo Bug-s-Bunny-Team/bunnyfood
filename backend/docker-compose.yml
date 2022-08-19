@@ -1,16 +1,16 @@
 version: '3'
 
 services:
-  api:
-    container_name: api
-    image: api
-    depends_on:
-      - db
-    ports:
-      - '8000:80'
-    networks:
-      - bunnyfood
-    restart: unless-stopped
+#  api:
+#    container_name: api
+#    image: api
+#    depends_on:
+#      - db
+#    ports:
+#      - '8000:80'
+#    networks:
+#      - bunnyfood
+#    restart: unless-stopped
 
   db:
     container_name: db
