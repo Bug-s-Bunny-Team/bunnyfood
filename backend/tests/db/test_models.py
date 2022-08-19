@@ -5,7 +5,7 @@ import pytest
 
 from db import db
 from db.models import SocialProfile, Post, MediaType, Location
-from db.utils import init_db, create_all_tables
+from db.local_utils import init_db, create_all_tables
 
 
 @dataclass

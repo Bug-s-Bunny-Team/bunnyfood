@@ -2,12 +2,14 @@ from . import db
 from .secret import get_db_secret
 from .models import SocialProfile, PostScore, Post, Location, UserPreferences, User
 
+MODELS = [SocialProfile, Location, Post, PostScore, UserPreferences, User]
+
 
 def init_db(
-    user: str,
-    password: str,
-    host: str,
-    database: str,
+        user: str,
+        password: str,
+        host: str,
+        database: str,
 ):
     db.init(
         user=user,
@@ -30,5 +32,5 @@ def init_db_from_secrets():
 
 def create_all_tables():
     db.create_tables(
-        models=[SocialProfile, Location, Post, PostScore, UserPreferences, User]
+        models=MODELS
     )

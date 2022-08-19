@@ -39,7 +39,9 @@ class User(BaseModel):
 
 class UserPreferences(BaseModel):
     user = ForeignKeyField(User, backref='preferences')
-    default_guide_view = CharField(choices=[GuideType.MAP, GuideType.LIST])
+    default_guide_view = CharField(
+        choices=[GuideType.MAP, GuideType.LIST], default=GuideType.MAP
+    )
 
 
 class SocialProfile(BaseModel):

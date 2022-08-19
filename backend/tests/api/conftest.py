@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from db import db
-from db.utils import create_all_tables, init_db
+from db.local_utils import create_all_tables, init_db
 from api.main import app
 
 

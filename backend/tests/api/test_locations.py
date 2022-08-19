@@ -1,5 +1,5 @@
 # from db import models, db
-# from db.utils import create_all_tables, init_db
+# from db.local_utils import create_all_tables, init_db
 #
 #
 # def test_get_all_locations(api_client):
