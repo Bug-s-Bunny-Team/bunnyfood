@@ -43,27 +43,27 @@ export class MapPresenter {
 		return marker;
 	}
 
-    initMap(container: any) {
+  initMap(container: any) {
 		get(this.rankedList).then(locations => {
-            let markerPositions: [number, number][] = [];
-            let markerLayers: any;
-			locations.forEach(location => {
-				markerPositions.push([location.position.lat, location.position.long]);
-			});
+        let markerPositions: [number, number][] = [];
+        let markerLayers: any;
+			  locations.forEach(location => {
+				  markerPositions.push([location.position.lat, location.position.long]);
+			  });
 
-			this.map = this.createMap(container); 
-			
-			markerLayers = L.layerGroup();
-			for(let position of markerPositions) {
-				let m = this.createMarker(position);
-				markerLayers.addLayer(m);
-			}
+        this.map = this.createMap(container); 
+        
+        markerLayers = L.layerGroup();
+        for(let position of markerPositions) {
+          let m = this.createMarker(position);
+          markerLayers.addLayer(m);
+        }
 
-			markerLayers.addTo(this.map);
-			
-			return {
-                destroy: () => { this.map.remove(); this.map=null; }
-			};
+        markerLayers.addTo(this.map);
+        
+        return {
+                  destroy: () => { this.map.remove(); this.map=null; }
+        };
 		})
 	}
 
