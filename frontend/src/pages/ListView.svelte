@@ -7,6 +7,18 @@
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons; });
     presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
+
+  import StarRating from 'svelte-star-rating';
+  
+
+  const config = {
+    emptyColor: 'hsl(240, 80%, 85%)',
+    fullColor: '#FFFF00',
+    showText: false,
+    size: 42,
+  };
+  const style = 'border: 1px solid firebrick;padding: 12px;';
+
 </script>
 
 <div>
@@ -23,7 +35,7 @@
                         <header>
                             <strong>Location</strong>: {location.name}
                         </header>
-                        <strong>Score</strong>: {location.score}
+                        <strong>Score</strong>: <StarRating rating={((location.score)+1)*(2.5)} {config} {style} />
                     </article>
                 {/each}
             </div>
@@ -31,7 +43,9 @@
             <p>No locations</p>
         {/if}
     {/await}
+    
 </div>
+
 
 <style>
     :root[data-theme="light"] {
