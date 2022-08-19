@@ -15,18 +15,13 @@ class Emotions(float, Enum):
 
 class Image:
     name: str
-    labels: {}
     emotions: {}
     emotions_confidence: []
 
     def __init__(self, name: str):
         self.name = name
-        self.labels = {}
         self.emotions = {}
         self.emotions_confidence = []
-
-    def set_labels(self, labels: dict):
-        self.labels = labels
 
     def set_emotions(self, emotions: dict):
         self.emotions = emotions

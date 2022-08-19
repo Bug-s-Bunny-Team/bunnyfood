@@ -13,7 +13,7 @@ class SorterService(ABC):
         self._rekognition = boto3.client(service_name='rekognition', region_name=aws_region)
         self._comprehend = boto3.client(service_name='comprehend', region_name=aws_region)
 
-    def __detect_language_text(self, text: str) -> str:
+    def detect_language_text(self, text: str) -> str:
         # Detect language of a text with Comprehend and return (str).
         # text: text to analyze with Comprehend
 
@@ -28,10 +28,9 @@ class SorterService(ABC):
 
         # get language code
         language = languages['LanguageCode']
-        print(language)
         return language
 
-    def __detect_sentiment_text(self, post: Post, language) -> Optional[SentimentComprehend]:
+    def detect_sentiment_text(self, post: Post, language) -> Optional[SentimentComprehend]:
         # Detect sentiment of a post with Comprehend and return score
         # post: post to analyze with Comprehend
         # param language: language of the caption
@@ -62,34 +61,27 @@ class SorterService(ABC):
         else:
             return None
 
-    def __detect_labels(self, name_image: str, bucket: str):
-        # Detect object of an image with Rekognition and return a Dict of labels and a bool if there is a person
+    def detect_person(self, name_image: str, bucket: str):
+        # Analyze an image with Rekognition and return a bool if there is a person
         # name_image: name of the image to analyze
         # bucket: name of S3 bucket
         print("\n-------------------")
-        print('detect_labels')
+        print('detect_person')
 
-        response = self._rekognition.detect_labels(Image={'S3Object': {'Bucket': bucket, 'Name': name_image}},
+        response = self._rekognition.detect_labels(Image={'S3Object': {'Bucket': os.environ[bucket], 'Name': name_image}},
                                                    MaxLabels=10)
-        print('Detecting labels for ' + name_image)
+        print('Detecting person for ' + name_image)
 
-        labels_dict = {}
         contain_person = False
 
         for label in response['Labels']:
             if label['Confidence'] >= 90:
                 if label['Name'] == 'Person':
                     contain_person = True
-                else:
-                    for parent in label['Parents']:
-                        if parent['Name'] == 'Food':
-                            if label['Name'] in labels_dict:
-                                labels_dict[label['Name']] += 1
-                            else:
-                                labels_dict[label['Name']] = 1
-        return labels_dict, contain_person
 
-    def __detect_sentiment_person(self, name_image: str, bucket: str):
+        return contain_person
+
+    def detect_sentiment_person(self, name_image: str, bucket: str):
         # Detect sentiment of a person with Rekognition and return a Dict of emotions and a bool if emotions were found
         # name_image: name of the image to analyze with Rekognition
         # bucket: name of S3 bucket
@@ -98,9 +90,9 @@ class SorterService(ABC):
 
         print(name_image)
 
-        response = self._rekognition.detect_faces(Image={'S3Object': {'Bucket': bucket, 'Name': name_image}},
+        response = self._rekognition.detect_faces(Image={'S3Object': {'Bucket': os.environ[bucket], 'Name': name_image}},
                                                   Attributes=['ALL'])
-        contain_emotion = True
+        contain_emotion = False
         emotions_dict = {}
         emotions_confid = []
 
@@ -118,12 +110,12 @@ class SorterService(ABC):
                             emotions_dict[emotion_name] += 1
                         else:
                             emotions_dict[emotion_name] = 1
-                        contain_emotion = False
+                        contain_emotion = True
             emotions_confid.append(confid_single_face)
         return emotions_dict, contain_emotion, emotions_confid
 
-    def __analyze_image(self, name_image: str):
-        # Analyze an image with Rekognition and return a Dict of labels and emotions
+    def analyze_image(self, name_image: str):
+        # Analyze an image with Rekognition and return a Dict of emotions
         # name_image: name of the image to analyze
         print("\n-------------------")
         print("image_analyzer")
@@ -135,12 +127,12 @@ class SorterService(ABC):
         print("\n-------------------")
         print(name_image)
 
-        labels, contain_person = self.__detect_labels(name_image, bucket)
+        contain_person = self.detect_person(name_image, bucket)
         if contain_person:
             print("There is a person")
 
-            emotions, contain_emotion, emotions_confidence = self.__detect_sentiment_person(name_image, bucket)
-            if not contain_emotion:
+            emotions, contain_emotion, emotions_confidence = self.detect_sentiment_person(name_image, bucket)
+            if contain_emotion:
                 print("Emotion detected")
             else:
                 print("No emotion detected")
@@ -148,11 +140,11 @@ class SorterService(ABC):
             print("There is no person")
 
         print("-------------------\n")
-        return labels, emotions, emotions_confidence
+        return emotions, emotions_confidence
 
     def calculate_text_score(self, post: Post) -> float:
         if post.caption:
-            score = self.__detect_sentiment_text(post, self.__detect_language_text(post.caption))
+            score = self.detect_sentiment_text(post, self.detect_language_text(post.caption))
             post.set_caption_score(score)
             post.calculate_final_score()
 
@@ -163,9 +155,8 @@ class SorterService(ABC):
             for image in post.list_images:
                 image_name = image.name
                 print("image name " + image_name)
-                labels, emotions, emotions_confidence = self.__analyze_image(image_name)
+                emotions, emotions_confidence = self.analyze_image(image_name)
 
-                image.set_labels(labels)
                 image.set_emotions(emotions)
                 image.set_emotions_confidence(emotions_confidence)
         else:
@@ -190,7 +181,7 @@ class SorterService(ABC):
         self.calculate_image_score(post)
         image_score = post.imageScore
 
-        if image_score is not None or text_score is not None:
+        if image_score is not None:
             print("\n-------------------")
             print('save post')
         else:

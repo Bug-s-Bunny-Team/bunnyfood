@@ -9,7 +9,6 @@ from entity.sentiment_comprehend import SentimentComprehend
 class Post:
     id: int
     caption: str
-    image_key: str
     list_images: List[Image]
     texts: Dict[int, str]
     hashtags: Dict[int, str]
@@ -18,10 +17,9 @@ class Post:
     textsScore: Dict[int, float]
     finalScore: float
 
-    def __init__(self, id: str, caption: str, image_key: str, list_images: List[Image]):
+    def __init__(self, id: str, caption: str, list_images: List[Image]):
         self.id = id
         self.caption = caption
-        self.image_key = image_key
         self.list_images = list_images
         self.texts = dict()
         self.hashtags = dict()
