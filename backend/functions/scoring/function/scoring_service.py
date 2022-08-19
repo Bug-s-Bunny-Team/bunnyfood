@@ -43,16 +43,14 @@ class ScoringService(ABC):
 
 
 class BasicScoringService(ScoringService):
-    def __parse_rekognition_response(self, sPost: ScoringPost, rekResult):
-        for line in rekResult['TextDetections']:
+    def __parse_rekognition_response(self, sPost: ScoringPost, textResult, faceResult):
+        for line in textResult['TextDetections']:
             if line['Type'] == 'LINE':
                 sPost.texts[line['Id']] = line['DetectedText']
-
     #SCORING FACE ANALYSIS
-    def __parse_face_analysis_response(self, sPost: ScoringPost, facesResult):
         faceCount = 0
         scoreSum = 0
-        for face in facesResult['FaceDetails']:
+        for face in faceResult['FaceDetails']:
             pose = face['Pose']
             # SE VOLTO DRITTO
             if (abs(pose['Yaw']) <= 50) and (abs(pose['Pitch']) <= 50):  # abs() perchè deve essere -50<pose<50
@@ -116,11 +114,9 @@ class BasicScoringService(ScoringService):
                 'Name': sPost.image,
             }
         }
-        response = self._rekognition.detect_text(Image = Image)
-        BasicScoringService.__parse_rekognition_response(sPost, response)
-        #NOW RUN FACE ANALYSIS
-        response = self._rekognition.detect_faces(Image = Image)
-        BasicScoringService.__parse_face_analysis_response(sPost, response)
+        textResponse = self._rekognition.detect_text(Image = Image)
+        faceResponse = self._rekognition.detect_faces(Image = Image)
+        BasicScoringService.__parse_rekognition_response(sPost, textResponse, faceResponse)
         print('Successfully analized image')
 
     def _runComprehend(self, sPost: ScoringPost):
