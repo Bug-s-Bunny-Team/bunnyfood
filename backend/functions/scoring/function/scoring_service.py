@@ -43,12 +43,33 @@ class ScoringService(ABC):
 
 
 class BasicScoringService(ScoringService):
-    def __parse_rekognition_response(self, sPost: ScoringPost, rekResult):
-        for line in rekResult['TextDetections']:
+    def __parse_rekognition_response(self, sPost: ScoringPost, textResult, faceResult):
+        for line in textResult['TextDetections']:
             if line['Type'] == 'LINE':
                 sPost.texts[line['Id']] = line['DetectedText']
-        # FACE SCORE
-        # aggiungere Spost.faceScore = somenthing
+    #SCORING FACE ANALYSIS
+        faceCount = 0
+        scoreSum = 0
+        for face in faceResult['FaceDetails']:
+            pose = face['Pose']
+            # SE VOLTO DRITTO
+            if (abs(pose['Yaw']) <= 50) and (abs(pose['Pitch']) <= 50):  # abs() perchè deve essere -50<pose<50
+                # CALCOLARE SCORE EMOZIONI
+                faceCount = faceCount + 1
+                faceSum = 0
+                disgusted = False
+                for emotion in face['Emotions']:
+                    if emotion['Type'] == 'HAPPY':
+                        faceSum = faceSum + emotion['Confidence']
+                    if emotion['Type'] == 'CALM':
+                        faceSum = faceSum + emotion['Confidence'] * 0.5  # ha peso minore di happy
+                    if emotion['Type'] == 'DISGUSTED':
+                        if emotion['Confidence'] >= 50:  # se disgust troppo elevato azzera il punteggio della faccia
+                            disgusted = True
+                if disgusted == False:
+                    scoreSum = scoreSum + faceSum  # se volto disgusted value >= allora face value = 0
+            # UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
+        sPost.faceScore = scoreSum / faceCount
 
     def __unpack_post_for_comprehend(self, sPost: ScoringPost):
         return list([sPost.caption, *sPost.texts.values()])
@@ -87,18 +108,15 @@ class BasicScoringService(ScoringService):
 
     def _runRekognition(self, sPost: ScoringPost):
         print('Analyzing image')
-        response = self._rekognition.detect_text(
-            Image={
-                'S3Object': {
-                    'Bucket': os.environ['ENV_BUCKET_NAME'],
-                    'Name': sPost.image,
-                }
+        Image = {
+            'S3Object': {
+                'Bucket': os.environ['ENV_BUCKET_NAME'],
+                'Name': sPost.image,
             }
-        )
-        BasicScoringService.__parse_rekognition_response(sPost, response)
-        # ADD NEW RESPONSE
-        # response = self._rekognition.facial_analysis(Image={'S3Object': {'Bucket': os.environ['ENV_BUCKET_NAME'], 'Name': sPost.image}})
-        # BasicScoringService.__parse_rekognition_response(sPost, response)
+        }
+        textResponse = self._rekognition.detect_text(Image = Image)
+        faceResponse = self._rekognition.detect_faces(Image = Image)
+        BasicScoringService.__parse_rekognition_response(sPost, textResponse, faceResponse)
         print('Successfully analized image')
 
     def _runComprehend(self, sPost: ScoringPost):
@@ -121,6 +139,7 @@ class BasicScoringService(ScoringService):
         sPost.finalScore = (
             (
                 sPost.captionScore
+                + sPost.faceScore
                 + sum(sPost.textsScore.values()) / len(sPost.textsScore)
             )
             / 2.0
