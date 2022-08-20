@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException
 
 from api import schemas
-from api.db import get_db
+from api.dependencies import get_db
 from db import models
 
 router = APIRouter()

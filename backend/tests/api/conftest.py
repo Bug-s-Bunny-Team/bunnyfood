@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from db import db
-from db.local_utils import create_all_tables, init_db
+from db.utils import create_all_tables, init_db
 from api.main import app
 
 
@@ -12,9 +12,14 @@ def transaction():
     with db.transaction() as txn:
         create_all_tables()
         yield txn
-        txn.rollback()
+        # txn.rollback()
 
 
 @pytest.fixture(scope='class')
-def api_client(request):
+def api_client_class(request):
     request.cls.api_client = TestClient(app)
+
+
+@pytest.fixture
+def api_client():
+    return TestClient(app)

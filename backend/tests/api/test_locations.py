@@ -32,15 +32,23 @@ import unittest
 import pytest
 
 
-@pytest.mark.usefixtures('api_client')
-class LocationsTestCase(unittest.TestCase):
-    def setUp(self):
-        pass
+# @pytest.mark.usefixtures('api_client')
+# class LocationsTestCase(unittest.TestCase):
+#     def setUp(self):
+#         pass
+#
+#     def tearDown(self):
+#         pass
+#
+#     def test_get_location_by_id(self, transaction):
+#         location = self.api_client.get('/locations/666')
+#
+#         assert location.status_code == 404
+from db import db
+from db.utils import create_all_tables
 
-    def tearDown(self):
-        pass
 
-    def test_get_location_by_id(self):
-        location = self.api_client.get('/locations/666')
+def test_get_location_by_id(api_client, transaction):
+        location = api_client.get('/locations/666')
 
         assert location.status_code == 404

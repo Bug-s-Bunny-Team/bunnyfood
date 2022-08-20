@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 
 from api import schemas
-from api.auth.jwt_auth import get_current_user
-from api.db import get_db
+# from api.auth.jwt_auth import get_current_user
+from api.dependencies import get_db
 from api.schemas import GuideType
 from db import models
 
