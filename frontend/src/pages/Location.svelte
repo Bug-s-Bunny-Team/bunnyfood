@@ -25,7 +25,6 @@
     <img src={info.img.url} width={info.img.width} height={info.img.height} alt=""/>
     <article>
         <p>Address: {info.address}</p>
-        <p>Tel: {info.cell}</p>
         <p>Score: <StarRating rating={Math.round((info.score+1.0)*25)/10.0} {config} {style}/></p>
     </article>
 {/await}
@@ -40,7 +39,8 @@
         z-index: 1;
         max-width: 40%;
         top: 8em;
-        left: 3em;
+        left: 3.2em;
+        box-shadow: 5px 8px rgba(0, 0, 0, 0.1);
     }
     img {
         z-index: 0;

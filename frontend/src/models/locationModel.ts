@@ -38,7 +38,6 @@ export class LocationModel {
                             if (status === google.maps.places.PlacesServiceStatus.OK) {
                                 resolve(new Info(results[0].name, 
                                                 {height: results[0].photos[0].height, width:results[0].photos[0].width, url: results[0].photos[0].getUrl()}, 
-                                                '0', 
                                                 results[0].formatted_address,
                                                 location.score));
                             } else {

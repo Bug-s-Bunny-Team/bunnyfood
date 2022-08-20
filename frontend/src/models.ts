@@ -63,9 +63,8 @@ export class Post implements Model {
 export class Info {
     name: string; 
     img: any;
-    cell: string;
     address: string;
     score: number;
 
-    constructor(name: string, img: any, cell: string, address:string, score:number) {this.name=name; this.img=img; this.cell=cell; this.address=address; this.score=score;}
+    constructor(name: string, img: any, address:string, score:number) {this.name=name; this.img=img; this.address=address; this.score=score;}
 }
