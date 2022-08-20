@@ -5,7 +5,7 @@ export class AccountModel {
     private static accountModelInstance : AccountModel = AccountModel.construct_session();
 
     private static construct_session() : AccountModel {
-        let account: Account = new Account("nome default", "default email", "default password", true);
+        let account: Account = null;
         let str = window.sessionStorage.getItem('AccountModel.account');
         if(str) {
             account = JSON.parse(str);
