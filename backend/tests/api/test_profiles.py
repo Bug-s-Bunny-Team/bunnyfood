@@ -1,14 +1,15 @@
 import pytest
 
+import db.models
 from api import models
 
 
 @pytest.fixture()
 def profiles(session):
     profiles = [
-        models.SocialProfile(username='testprofile1'),
-        models.SocialProfile(username='testprofile2'),
-        models.SocialProfile(username='testprofile3'),
+        db.models.SocialProfile(username='testprofile1'),
+        db.models.SocialProfile(username='testprofile2'),
+        db.models.SocialProfile(username='testprofile3'),
     ]
     session.bulk_save_objects(profiles)
 

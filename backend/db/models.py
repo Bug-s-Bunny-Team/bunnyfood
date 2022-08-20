@@ -1,107 +1,71 @@
-import datetime
-from enum import Enum, unique
-from functools import cached_property
-from typing import Set, Tuple, Optional
+from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float
+from sqlalchemy.orm import relationship
 
-from peewee import (
-    Model,
-    CharField,
-    TextField,
-    ForeignKeyField,
-    FloatField,
-    DateTimeField,
-    ManyToManyField,
+from db import Base
+
+profiles_users_association = Table(
+    'profiles_users',
+    Base.metadata,
+    Column('left_id', ForeignKey('socialprofiles.id'), primary_key=True),
+    Column('right_id', ForeignKey('users.id'), primary_key=True),
 )
 
-from . import db
 
+class User(Base):
+    __tablename__ = 'users'
 
-@unique
-class MediaType(str, Enum):
-    IMAGE = 'image'
-    VIDEO = 'video'
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(length=50), unique=True)
 
-
-@unique
-class GuideType(str, Enum):
-    MAP = 'map'
-    LIST = 'list'
-
-
-class BaseModel(Model):
-    class Meta:
-        database = db
-
-
-class User(BaseModel):
-    username = CharField(unique=True, null=False)
-
-
-class UserPreferences(BaseModel):
-    user = ForeignKeyField(User, backref='preferences')
-    default_guide_view = CharField(
-        choices=[GuideType.MAP, GuideType.LIST], default=GuideType.MAP
+    preferences = relationship('UserPreferences', back_populates='user')
+    followed_profiles = relationship(
+        'SocialProfile',
+        secondary=profiles_users_association,
+        back_populates='followers',
     )
 
 
-class SocialProfile(BaseModel):
-    username = CharField(unique=True, null=False)
-    followers = ManyToManyField(User, backref='followed_profiles')
+class UserPreferences(Base):
+    __tablename__ = 'userpreferences'
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    default_guide_view = Column(String(10), default='map')
+
+    user = relationship('User', back_populates='preferences', uselist=False)
 
 
-class Location(BaseModel):
-    name = CharField(unique=True)
-    description = TextField()
-    lat = FloatField(default=0)
-    long = FloatField(default=0)
-    score = FloatField(null=True)
+class SocialProfile(Base):
+    __tablename__ = 'socialprofiles'
 
-    @classmethod
-    def from_instaloader_location(cls, location) -> Tuple['Location', bool]:
-        return Location.get_or_create(
-            name=location.name, lat=location.lat, long=location.lng, description=''
-        )
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(length=50), unique=True)
+
+    posts = relationship('Post', back_populates='profile')
+    followers = relationship(
+        'User', secondary=profiles_users_association, back_populates='followed_profiles'
+    )
 
 
-class Post(BaseModel):
-    shortcode = CharField(unique=True)
-    caption = TextField()
-    social_profile = ForeignKeyField(SocialProfile, backref='posts', lazy_load=False)
-    media_type = CharField(choices=[MediaType.IMAGE, MediaType.VIDEO])
-    media_url = CharField(max_length=512)
-    media_s3_key = CharField(null=True, unique=True)
-    location = ForeignKeyField(Location, backref='posts', lazy_load=False, null=True)
-    added = DateTimeField(default=datetime.datetime.now())
+class Location(Base):
+    __tablename__ = 'locations'
 
-    @cached_property
-    def media_filename(self) -> str:
-        extension = 'mp4' if self.media_type == MediaType.VIDEO else 'jpg'
-        return f'{self.shortcode}.{extension}'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(length=50), unique=True)
+    description = Column(Text)
+    lat = Column(Float, default=0)
+    long = Column(Float, default=0)
+    score = Column(Float, nullable=True, default=None)
 
-    @cached_property
-    def hashtags(self) -> Set[str]:
-        tags = [tag.strip('#') for tag in self.caption.split() if tag.startswith('#')]
-        return set(tags)
-
-    @classmethod
-    def from_instaloader_post(
-        cls, insta_post, profile: SocialProfile, location: Optional[Location] = None
-    ) -> Tuple['Post', bool]:
-        if post := Post.get_or_none(shortcode=insta_post.shortcode):
-            return post, False
-        post = Post.create(
-            shortcode=insta_post.shortcode,
-            caption=insta_post.caption,
-            media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
-            media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
-            social_profile=profile,
-            location=location,
-        )
-        return post, True
+    posts = relationship('Post', back_populates='location')
 
 
-class PostScore(BaseModel):
-    media_score = FloatField(default=0)
-    caption_score = FloatField(default=0)
-    post = ForeignKeyField(Post, backref='score', lazy_load=False, unique=True)
-    created = DateTimeField(default=datetime.datetime.now())
+class Post(Base):
+    __tablename__ = 'posts'
+
+    id = Column(Integer, primary_key=True, index=True)
+    profile_id = Column(Integer, ForeignKey('socialprofiles.id'))
+    location_id = Column(Integer, ForeignKey('locations.id'))
+
+    profile = relationship('SocialProfile', back_populates='posts')
+    location = relationship('Location', back_populates='posts')

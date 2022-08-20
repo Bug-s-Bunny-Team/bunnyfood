@@ -1,4 +1,4 @@
-from api.database import SessionLocal
+from db import SessionLocal
 
 
 def get_db():
