@@ -9,7 +9,6 @@
     presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
 
   import StarRating from 'svelte-star-rating';
-  
 
   const config = {
     emptyColor: 'hsl(240, 80%, 85%)',
@@ -17,7 +16,7 @@
     showText: false,
     size: 42,
   };
-  const style = 'border: 1px solid firebrick;padding: 12px;';
+  const style = 'display: inline; padding: 0.2em 1em; padding-bottom: 0.6em;';
 
 </script>
 
