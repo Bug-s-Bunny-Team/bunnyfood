@@ -43,9 +43,9 @@ export class MapPresenter {
 		return marker;
 	}
 
-  createPopup(name, score) {
-    return `<p>${name}</p>
-            <p>${Math.round((score+1.0)*25)/10.0}/5</p>`;
+  createPopup(location) {
+    return `<p><a href="./location/${location.id}">${location.name}</a></p>
+            <p>${Math.round((location.score+1.0)*25)/10.0}/5</p>`;
   }
 
   initMap(container: any) {
@@ -55,7 +55,7 @@ export class MapPresenter {
         
 			  locations.forEach(location => {
 				  let m = this.createMarker([location.position.lat, location.position.long]);
-          m.bindPopup(this.createPopup(location.name, location.score));
+          m.bindPopup(this.createPopup(location));
           markerLayers.addLayer(m);
 			  });
 
