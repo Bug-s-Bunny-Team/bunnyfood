@@ -11,7 +11,7 @@ SQLALCHEMY_DATABASE_URL = 'postgresql://{user}:{password}@{host}/{db}'.format(
     db=os.environ.get('DB_NAME', 'bunnyfood_dev'),
 )
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False}
+    SQLALCHEMY_DATABASE_URL
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
