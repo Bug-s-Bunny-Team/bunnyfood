@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.get(
-    '/preferences',
+    '/preferences/',
     response_model=schemas.UserPreferences,
     response_model_exclude_unset=True,
 )

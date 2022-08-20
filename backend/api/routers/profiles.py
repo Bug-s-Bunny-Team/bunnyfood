@@ -8,12 +8,13 @@ from api.auth.jwt_auth import get_username
 from api.dependencies import get_db
 
 from db import models
+from db.utils import get_or_create
 
 router = APIRouter()
 
 
 @router.get(
-    '/profiles',
+    '/profiles/',
     response_model=List[schemas.SocialProfile],
     response_model_exclude_unset=True,
 )
@@ -50,33 +51,38 @@ def get_most_popular_profiles(limit: int, db: Session = Depends(get_db)):
 
 
 @router.get(
-    '/profiles/followed/',
+    '/followed/',
     response_model=List[schemas.SocialProfile],
     response_model_exclude_unset=True,
 )
 def get_followed_profiles(
     username: str = Depends(get_username), db: Session = Depends(get_db)
 ):
-    user = (
-        db.query(models.User)
-        .filter_by(username=username)
-        .first()
-    )
+    user = db.query(models.User).filter_by(username=username).first()
     followed = user.followed_profiles
     return followed
 
 
-@router.post('/profiles/followed/', status_code=status.HTTP_201_CREATED)
-def follow_profile(profile: schemas.SocialProfile, db: Session = Depends(get_db)):
-    db_profile = models.SocialProfile(username=profile.username)
-    db.add(db_profile)
+@router.post(
+    '/followed/',
+    status_code=status.HTTP_201_CREATED,
+    response_model=List[schemas.SocialProfile],
+    response_model_exclude_unset=True,
+)
+def follow_profile(
+    profile: schemas.SocialProfile,
+    db: Session = Depends(get_db),
+    username: str = Depends(get_username),
+):
+    user = db.query(models.User).filter_by(username=username).first()
+    db_profile = get_or_create(db, models.SocialProfile, username=profile.username)
+    user.followed_profiles.append(db_profile)
+    db.add(user)
     db.commit()
-    db.refresh(db_profile)
-    return db_profile
 
 
 @router.delete(
-    '/profiles/followed/',
+    '/followed/',
 )
 def follow_profile(profile: schemas.SocialProfile, db: Session = Depends(get_db)):
     return {}

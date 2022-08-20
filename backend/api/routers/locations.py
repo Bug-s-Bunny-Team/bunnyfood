@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.get(
-    '/locations',
+    '/locations/',
     response_model=List[schemas.Location],
     response_model_exclude_unset=True,
 )
