@@ -1,8 +1,9 @@
 import json
 from pathlib import Path
 
+
 def scoreFaceRekognition():
-    with open(Path('facialAnalysisMOC.json'),'r') as f:
+    with open(Path('MockupFiles/facialAnalysisMOC.json'), 'r') as f:
         response = json.load(f)
 
     faceCount = 0
