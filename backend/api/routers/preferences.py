@@ -17,9 +17,8 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_user_prefs(username: str = Depends(get_username), db: Session = Depends(get_db)):
-    print(username)
-#     user = db.query(models.User).filter_by(username=username).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail='User not found')
-#     prefs = get_or_create(db, models.UserPreferences, user=user)
-#     return prefs
+    user = db.query(models.User).filter_by(username=username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail='User not found')
+    prefs = get_or_create(db, models.UserPreferences, user=user)
+    return prefs
