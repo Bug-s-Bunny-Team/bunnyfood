@@ -25,8 +25,8 @@ def test_follow_profile(api_client, session):
 
 
 def test_unfollow_profile(api_client, session):
-    results = api_client.delete(
-        '/followed/', json={'id': 3, 'username': 'testprofile3'}
+    results = api_client.post(
+        '/followed/unfollow/', json={'id': 3, 'username': 'testprofile3'}
     )
 
     assert results.status_code == 200

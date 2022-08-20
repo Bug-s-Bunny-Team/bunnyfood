@@ -81,8 +81,8 @@ def follow_profile(
     db.commit()
 
 
-@router.delete(
-    '/followed/',
+@router.post(
+    '/followed/unfollow/',
 )
 def unfollow_profile(
     profile: schemas.SocialProfile,
