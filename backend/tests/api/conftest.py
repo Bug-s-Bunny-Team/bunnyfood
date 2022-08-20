@@ -5,21 +5,58 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from api.dependencies import get_db
 from api.main import app
+from db import models
 from db.models import Base
 
 
-@pytest.fixture(name='session')
-def session_fixture():
-    engine = create_engine('postgresql://user:password@localhost/bunnyfood_test')
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    with SessionLocal() as db:
-        Base.metadata.create_all(engine)
-        yield db
-        db.rollback()
+def populate_db(session):
+    users = [models.User(username='testuser')]
+    session.add_all(users)
+
+    locations = [
+        models.Location(id=1, name='testlocation1', description='some desc', score=1),
+        models.Location(id=2, name='testlocation2', description='some desc', score=1),
+        models.Location(id=3, name='testlocation3', description='some desc', score=1),
+    ]
+    session.add_all(locations)
+
+    profiles = [
+        models.SocialProfile(id=1, username='testprofile1'),
+        models.SocialProfile(id=2, username='testprofile2'),
+        models.SocialProfile(id=3, username='testprofile3'),
+    ]
+    session.add_all(profiles)
+    session.commit()
 
 
-@pytest.fixture(name='api_client')
-def api_fixture(session: Session):
+@pytest.fixture(scope='session')
+def engine():
+    return create_engine('postgresql://user:password@localhost/bunnyfood_test')
+
+
+@pytest.fixture(scope='session')
+def tables(engine):
+    Base.metadata.create_all(engine)
+    yield
+    Base.metadata.drop_all(engine)
+
+
+@pytest.fixture
+def session(engine, tables):
+    connection = engine.connect()
+    transaction = connection.begin()
+    session = Session(bind=connection)
+    populate_db(session)
+
+    yield session
+
+    session.close()
+    transaction.rollback()
+    connection.close()
+
+
+@pytest.fixture
+def api_client(session: Session):
     def get_db_override():
         return session
 
