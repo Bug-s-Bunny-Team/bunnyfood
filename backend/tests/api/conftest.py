@@ -15,6 +15,7 @@ def session_fixture():
     with SessionLocal() as db:
         Base.metadata.create_all(engine)
         yield db
+        db.rollback()
 
 
 @pytest.fixture(name='api_client')
