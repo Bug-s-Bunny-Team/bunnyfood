@@ -84,5 +84,14 @@ def follow_profile(
 @router.delete(
     '/followed/',
 )
-def follow_profile(profile: schemas.SocialProfile, db: Session = Depends(get_db)):
-    return {}
+def unfollow_profile(
+    profile: schemas.SocialProfile,
+    db: Session = Depends(get_db),
+    username: str = Depends(get_username),
+):
+    user = db.query(models.User).filter_by(username=username).first()
+    db_profile = db.query(models.SocialProfile).filter_by(id=profile.id).first()
+    if not db_profile:
+        raise HTTPException(status_code=404, detail='SocialProfile does not exist')
+    user.followed_profiles.remove(db_profile)
+    db.commit()
