@@ -2,7 +2,7 @@ interface Model {
     id: number;
 }
 
-class SocialProfile implements Model {
+export class SocialProfile implements Model {
     id: number;
     username: string;
     followers: number;
@@ -12,7 +12,7 @@ class SocialProfile implements Model {
     }
 }
 
-class Position {
+export class Position {
     lat: number;
     long: number;
 
@@ -21,7 +21,7 @@ class Position {
     }
 }
 
-class Location implements Model {
+export class Location implements Model {
     id: number;
     name: string;
     position: Position;
@@ -32,7 +32,7 @@ class Location implements Model {
     }
 }
 
-class Account {
+export class Account {
     accountname: string;
     email: string;
     password: string;
@@ -51,7 +51,7 @@ class PostScore {
     caption_score: number;
 }
 
-class Post implements Model {
+export class Post implements Model {
     id: number;
     caption: string;
     media_url: string;
@@ -60,4 +60,11 @@ class Post implements Model {
     score: PostScore | null;
 }
 
-export { Account, Post, SocialProfile, Position, Location };
+export class Info {
+    name: string; 
+    img: string;
+    cell: string;
+    address: string;
+
+    constructor(name: string, img: string, cell: string, address:string) {this.name=name; this.img=img; this.cell=cell; this.address=address; }
+}

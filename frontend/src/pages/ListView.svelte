@@ -8,15 +8,15 @@
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons; });
     presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
 
-  import StarRating from 'svelte-star-rating';
+    import StarRating from 'svelte-star-rating';
 
-  const config = {
-    emptyColor: 'hsl(240, 80%, 85%)',
-    fullColor: '#FFFF00',
-    showText: false,
-    size: 42,
-  };
-  const style = 'display: inline; padding: 0.2em 1em; padding-bottom: 0.6em;';
+    const config = {
+        emptyColor: 'hsl(240, 80%, 85%)',
+        fullColor: '#FFFF00',
+        showText: false,
+        size: 42,
+    };
+    const style = 'display: inline; padding: 0.2em 1em; padding-bottom: 0.6em;';
 
 </script>
 
@@ -32,7 +32,7 @@
                 {#each locations as location}
                     <article>
                         <header>
-                            <strong>Location</strong>: {location.name}
+                            <strong>Location</strong>: <a href="./location/{location.name}">{location.name}</a>
                         </header>
                         <strong>Score</strong>: <StarRating rating={Math.round((location.score+1.0)*25)/10.0} {config} {style} />
                     </article>

@@ -1,3 +1,4 @@
+import { AccountModel } from "./models/accountModel"; 
 import MainLayout from "./components/MainLayout.svelte";
 import Account from "./pages/Account.svelte";
 import Explore from "./pages/Explore.svelte";
@@ -5,7 +6,7 @@ import AddProfile from "./pages/AddProfile.svelte";
 import Home from "./pages/Home.svelte";
 import NotFound from "./pages/NotFound.svelte";
 import Root from "./pages/Root.svelte";
-import { AccountModel } from "./models/accountModel"; 
+import Location from "./pages/Location.svelte";
 
 function isLogged() : boolean {
     return AccountModel.getInstance().getAccount() ? true : false;
@@ -15,6 +16,7 @@ export const routes = [
     {
         name: '/',
         title: '',
+        onlyIf: { guard: () => {return !isLogged()}, redirect: '/home'},
         component: Root,
         layout: MainLayout,
         visible: false
@@ -50,6 +52,14 @@ export const routes = [
         component: Explore,
         layout: MainLayout,
         visible: true
+    },
+    {
+        name: '/location/:name',
+        title: '',
+        onlyIf: { guard: isLogged, redirect: '/'},
+        component: Location,
+        layout: MainLayout,
+        visible: false
     },
     {
         name: '404',
