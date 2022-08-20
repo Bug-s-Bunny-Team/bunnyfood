@@ -3,9 +3,10 @@ from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-import db.models
-from api import schemas, models
+from api import schemas
 from api.dependencies import get_db
+
+from db import models
 
 router = APIRouter()
 
@@ -16,7 +17,7 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_profiles(db: Session = Depends(get_db)):
-    return db.query(db.models.SocialProfile).all()
+    return db.query(models.SocialProfile).all()
 
 
 @router.get(
@@ -25,7 +26,7 @@ def get_profiles(db: Session = Depends(get_db)):
     response_model_exclude_unset=True,
 )
 def get_profile(profile_id: int, db: Session = Depends(get_db)):
-    profile = db.query(db.models.SocialProfile).filter_by(id=profile_id).first()
+    profile = db.query(models.SocialProfile).filter_by(id=profile_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail='SocialProfile not found')
     return profile

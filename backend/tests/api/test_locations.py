@@ -1,15 +1,14 @@
 import pytest
 
-import db.models
-from api import models
+from db import models
 
 
 @pytest.fixture()
 def locations(session):
     locations = [
-        db.models.Location(name='testlocation1', description='some desc', score=1),
-        db.models.Location(name='testlocation2', description='some desc', score=1),
-        db.models.Location(name='testlocation3', description='some desc', score=1),
+        models.Location(name='testlocation1', description='some desc', score=1),
+        models.Location(name='testlocation2', description='some desc', score=1),
+        models.Location(name='testlocation3', description='some desc', score=1),
     ]
     session.bulk_save_objects(locations)
 

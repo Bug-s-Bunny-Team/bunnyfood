@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from api.dependencies import get_db
 from api.main import app
-from api.models import Base
+from db.models import Base
 
 
 @pytest.fixture(name='session')

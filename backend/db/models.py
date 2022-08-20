@@ -1,7 +1,22 @@
+from enum import unique, Enum
+
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float
 from sqlalchemy.orm import relationship
 
 from db import Base
+
+
+@unique
+class MediaType(str, Enum):
+    IMAGE = 'image'
+    VIDEO = 'video'
+
+
+@unique
+class GuideType(str, Enum):
+    MAP = 'map'
+    LIST = 'list'
+
 
 profiles_users_association = Table(
     'profiles_users',
