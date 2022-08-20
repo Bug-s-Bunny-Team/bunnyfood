@@ -34,7 +34,7 @@
                         <header>
                             <strong>Location</strong>: {location.name}
                         </header>
-                        <strong>Score</strong>: <StarRating rating={((location.score)+1)*(2.5)} {config} {style} />
+                        <strong>Score</strong>: <StarRating rating={Math.round((location.score+1.0)*25)/10.0} {config} {style} />
                     </article>
                 {/each}
             </div>

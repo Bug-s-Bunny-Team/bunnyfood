@@ -45,7 +45,7 @@ export class MapPresenter {
 
   createPopup(name, score) {
     return `<p>${name}</p>
-            <p>${score}</p>`;
+            <p>${Math.round((score+1.0)*25)/10.0}/5</p>`;
   }
 
   initMap(container: any) {
