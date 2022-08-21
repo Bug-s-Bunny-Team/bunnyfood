@@ -100,9 +100,9 @@ def __parse_comprehend_response(sPost: ScoringPost, compResult):
         )
         if idx == 0:
             sPost.captionScore = float_score
-            print('captionScore=', float_score)
+            print('captionScore=', float_score) #caption score è una sola
         else:
-            sPost.textsScore[idx - 1] = float_score
+            sPost.textsScore[idx - 1] = float_score #texts score fa una score per ogni pezzo di testo
             print('textsScore=', float_score)
     print('########################################')
 
@@ -116,9 +116,19 @@ def _runComprehend(sPost: ScoringPost):
     print("response batch detect sentiment=", response)
     __parse_comprehend_response(sPost, response)
 
-
+def _calcComprehendScore(sPost: ScoringPost):
+    sPost.finalScore = (
+        (
+                sPost.captionScore
+                + sum(sPost.textsScore.values()) / len(sPost.textsScore)
+        )
+        / 2.0
+        if len(sPost.textsScore) != 0
+        else sPost.captionScore
+    )
+    print('FINAL SCORE =', sPost.finalScore)
 
 _parse_text_on_image(sPost)
 __unpack_post_for_comprehend(sPost)
 _runComprehend(sPost)
-
+_calcComprehendScore(sPost)

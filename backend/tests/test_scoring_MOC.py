@@ -188,6 +188,7 @@ def _calcFinalScore(sPost: ScoringPost):
         + normalizedTextScore
     )
 
+    #TODO varie possibilità
     #SE F,T VUOTE
     if sPost.faceScore == 0 and sPost.textsScore == 0:
         #
