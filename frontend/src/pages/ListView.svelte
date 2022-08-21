@@ -1,7 +1,8 @@
 <script lang="ts">
     import type { Location } from "../models";
     import { ListPresenter } from "../presenters/ListPresenter";
-    
+    import { capitalizeFirstLetter } from "../utils";
+
     let presenter = new ListPresenter();
     let locations: Promise<Location[]>;
     let disableButtons: boolean;
@@ -32,7 +33,7 @@
                 {#each locations as location}
                     <article>
                         <header>
-                            <strong>Location</strong>: <a href="./location/{location.name}">{location.name}</a>
+                            <strong>Location</strong>: <a href="./home?details_placeid={location.id}">{capitalizeFirstLetter(location.name)}</a>
                         </header>
                         <strong>Score</strong>: <StarRating rating={Math.round((location.score+1.0)*25)/10.0} {config} {style} />
                     </article>

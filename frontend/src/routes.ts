@@ -54,7 +54,7 @@ export const routes = [
         visible: true
     },
     {
-        name: '/location/:name',
+        name: '/location/:id',
         title: '',
         onlyIf: { guard: isLogged, redirect: '/'},
         component: Location,

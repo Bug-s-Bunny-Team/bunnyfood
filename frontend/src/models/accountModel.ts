@@ -9,7 +9,7 @@ export class AccountModel {
         let str = window.sessionStorage.getItem('AccountModel.account');
         if(str) {
             account = JSON.parse(str);
-            if(account) account.__proto__ = Account.prototype; // errore del compilatore don't worry
+            if(account) (account as any).__proto__ = Account.prototype;
         }
 
         let result = new AccountModel();
