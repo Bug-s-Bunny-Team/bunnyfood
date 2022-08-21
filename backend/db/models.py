@@ -32,7 +32,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(length=50), unique=True)
 
-    preferences = relationship('UserPreferences', back_populates='user')
+    preferences = relationship('UserPreferences', back_populates='user', uselist=False)
     followed_profiles = relationship(
         'SocialProfile',
         secondary=profiles_users_association,

@@ -23,13 +23,18 @@ def get_user_prefs(
     return prefs
 
 
-@router.get(
+@router.put(
     '/preferences/',
     response_model=schemas.UserPreferences,
     response_model_exclude_unset=True,
 )
 def get_user_prefs(
-    user: models.User = Depends(get_user), db: Session = Depends(get_db)
+    updated_prefs: schemas.UserPreferences,
+    user: models.User = Depends(get_user),
+    db: Session = Depends(get_db),
 ):
     prefs = get_or_create(db, models.UserPreferences, user=user)
+    prefs.default_guide_view = updated_prefs.default_guide_view
+    db.add(prefs)
+    db.commit()
     return prefs
