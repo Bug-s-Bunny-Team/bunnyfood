@@ -70,7 +70,7 @@ class BasicScoringService(ScoringService):
                     if disgusted == False:
                         scoreSum = scoreSum + faceSum  # se volto disgusted value >= allora face value = 0
                 # UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
-            sPost.faceScore = scoreSum / faceCount
+            sPost.faceScore = (scoreSum / faceCount) / 100 #normalizzato a [0,1]
         else:
             sPost.faceScore = 0  #se num facce =0 si ignora nel calcolo di final Score
 
