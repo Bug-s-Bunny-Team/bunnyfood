@@ -23,7 +23,9 @@ def get_locations(
     only_from_followed: bool = True,
     lat: Union[float, None] = None,
     long: Union[float, None] = None,
-    radius: int = 0,
+    current_lat: Union[float, None] = None,
+    current_long: Union[float, None] = None,
+    radius: Union[int, None] = None,
     min_rating: Union[float, None] = None,
 ):
     locations = db.query(models.Location)
@@ -33,6 +35,9 @@ def get_locations(
         locations = locations.filter(
             models.Location.lat == lat, models.Location.long == long
         )
+    if all([current_lat, current_long, radius]):
+        # filter by radius from current location
+        pass
     if only_from_followed:
         posts = (
             db.query(models.Post.id)

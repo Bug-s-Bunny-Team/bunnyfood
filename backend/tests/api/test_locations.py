@@ -37,3 +37,7 @@ def test_get_locations_min_rating(api_client):
 
     locations = response.json()
     assert all([l['score'] >= 2 for l in locations])
+
+
+def test_get_locations_radius(api_client):
+    pass
