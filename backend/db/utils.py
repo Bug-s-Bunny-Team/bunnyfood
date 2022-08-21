@@ -1,15 +1,19 @@
+import math
+
 from sqlalchemy.orm import Session
 
-from .secret import get_db_secret
+
+# from .secret import get_db_secret
 
 
-def init_db_from_secrets():
-    init_db(
-        user=get_db_secret()['username'],
-        password=get_db_secret()['password'],
-        host=get_db_secret()['host'],
-        database=get_db_secret()['database'],
-    )
+# def init_db_from_secrets():
+#     init_db(
+#         user=get_db_secret()['username'],
+#         password=get_db_secret()['password'],
+#         host=get_db_secret()['host'],
+#         database=get_db_secret()['database'],
+#     )
+#
 
 
 def get_or_create(db: Session, model, **kwargs):
@@ -22,3 +26,22 @@ def get_or_create(db: Session, model, **kwargs):
         db.commit()
         db.refresh(instance)
         return instance
+
+
+def gc_distance(lat1, lng1, lat2, lng2, math_lib=None):
+    """
+    Calculate distance between two coordinates.
+    https://en.wikipedia.org/wiki/Great-circle_distance
+    """
+    if not math_lib:
+        math_lib = math
+
+    ang = math_lib.acos(
+        math_lib.cos(math_lib.radians(lat1))
+        * math_lib.cos(math_lib.radians(lat2))
+        * math_lib.cos(math_lib.radians(lng2) - math_lib.radians(lng1))
+        + math_lib.sin(math_lib.radians(lat1)) * math_lib.sin(math_lib.radians(lat2))
+    )
+
+    # return 6371 * ang   # distance in kilometers
+    return 6371000 * ang    # distance in meters

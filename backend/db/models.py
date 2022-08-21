@@ -1,9 +1,11 @@
 from enum import unique, Enum
 
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float
+from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func
+from sqlalchemy.ext.hybrid import hybrid_method
 from sqlalchemy.orm import relationship
 
 from db import Base
+from db.utils import gc_distance
 
 
 @unique
@@ -73,6 +75,14 @@ class Location(Base):
     score = Column(Float, nullable=True, default=None)
 
     posts = relationship('Post', back_populates='location')
+
+    @hybrid_method
+    def distance(self, lat, lng):
+        return gc_distance(lat, lng, self.lat, self.long)
+
+    @distance.expression
+    def distance(cls, lat, lng):
+        return gc_distance(lat, lng, cls.lat, cls.long, math_lib=func)
 
 
 class Post(Base):

@@ -1,5 +1,6 @@
 def test_get_all_locations(api_client):
     response = api_client.get('/locations/?only_from_followed=false')
+    print(response.json())
 
     assert response.status_code == 200
     assert len(response.json()) == 6
