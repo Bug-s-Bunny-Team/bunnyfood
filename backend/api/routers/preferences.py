@@ -28,7 +28,7 @@ def get_user_prefs(
     response_model=schemas.UserPreferences,
     response_model_exclude_unset=True,
 )
-def get_user_prefs(
+def update_user_prefs(
     updated_prefs: schemas.UserPreferences,
     user: models.User = Depends(get_user),
     db: Session = Depends(get_db),
