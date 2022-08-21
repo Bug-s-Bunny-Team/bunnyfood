@@ -2,7 +2,7 @@ from typing import List, Union
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy import column
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 from starlette.status import HTTP_404_NOT_FOUND
 
 from api import schemas
@@ -29,22 +29,23 @@ def get_locations(
     radius: Union[int, None] = None,
     min_rating: Union[float, None] = None,
 ):
-    locations = db.query(
+    stmt = db.query(
         models.Location,
         models.Location.distance(
             lat=current_lat if current_lat else 0,
             lng=current_long if current_long else 0,
         ).label('distance'),
-    )
+    ).subquery()
+
+    location_alias = aliased(models.Location, stmt)
+    locations = db.query(location_alias)
+
     if min_rating:
-        locations = locations.filter(models.Location.score >= min_rating)
+        locations = locations.filter(stmt.c.score >= min_rating)
     if lat and long:
         locations = locations.filter(
-            models.Location.lat == lat, models.Location.long == long
+            stmt.c.lat == lat, stmt.c.long == long
         )
-    if all([current_lat, current_long, radius]):
-        # filter by radius from current location
-        locations = locations.having(column('distance') <= radius).order_by('distance')
     if only_from_followed:
         posts = (
             db.query(models.Post.id)
@@ -57,12 +58,17 @@ def get_locations(
             .subquery()
         )
         locations = locations.join(models.Post).filter(models.Post.id.in_(posts))
+    if all([current_lat, current_long, radius]):
+        # filter by radius from current location
+        # https://stackoverflow.com/questions/51014687/convert-a-complex-sql-query-to-sqlalchemy
+        locations = locations.filter(stmt.c.distance <= radius).order_by(stmt.c.distance)
+
     locations = locations.all()
 
-    for idx, l in enumerate(locations):
-        distance = locations[idx][1]
-        locations[idx] = locations[idx][0]
-        locations[idx].distance = distance
+    # for idx, l in enumerate(locations):
+    #     distance = locations[idx][1]
+    #     locations[idx] = locations[idx][0]
+    #     locations[idx].distance = distance
 
     return locations
 

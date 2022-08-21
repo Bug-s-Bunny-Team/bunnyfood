@@ -22,15 +22,29 @@ def populate_db(session: Session):
         models.Location(id=1, name='testlocation1', description='some desc', score=1),
         models.Location(id=2, name='testlocation2', description='some desc', score=1),
         models.Location(id=3, name='testlocation3', description='some desc', score=1),
-        models.Location(id=4, name='testlocation4', description='some desc', score=4),
-        models.Location(id=5, name='testlocation5', description='some desc', score=4),
+        models.Location(
+            id=4,
+            name='testlocation4',
+            description='some desc',
+            score=4,
+            lat=55.7255843,
+            long=37.6243329,
+        ),
+        models.Location(
+            id=5,
+            name='testlocation5',
+            description='some desc',
+            score=4,
+            lat=55.7252157,
+            long=37.6277554,
+        ),
         models.Location(
             id=6,
             name='testlocation6',
             description='some desc',
             score=4,
-            lat=43.5,
-            long=53.4,
+            lat=55.7251432,
+            long=37.6273906,
         ),
     ]
     session.add_all(locations)

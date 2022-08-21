@@ -1,6 +1,8 @@
+from db.utils import gc_distance
+
+
 def test_get_all_locations(api_client):
     response = api_client.get('/locations/?only_from_followed=false')
-    print(response.json())
 
     assert response.status_code == 200
     assert len(response.json()) == 6
@@ -25,10 +27,10 @@ def test_get_location_by_id(api_client):
 
 
 def test_get_locations_coords(api_client):
-    response = api_client.get('/locations/?only_from_followed=false&lat=43.5&long=53.4')
+    response = api_client.get('/locations/?only_from_followed=false&lat=55.7255843&long=37.6243329')
 
     assert response.status_code == 200
-    assert response.json()[0]['id'] == 6
+    assert response.json()[0]['id'] == 4
 
 
 def test_get_locations_min_rating(api_client):
@@ -41,4 +43,16 @@ def test_get_locations_min_rating(api_client):
 
 
 def test_get_locations_radius(api_client):
-    pass
+    lat = 55.7252037
+    long = 37.6284957
+    radius = 100
+
+    response = api_client.get(
+        f'/locations/?only_from_followed=false&current_lat={lat}&current_long={long}&radius={radius}'
+    )
+
+    assert response.status_code == 200
+
+    locations = response.json()
+    for l in locations:
+        assert gc_distance(lat, long, l['lat'], l['long']) <= 100
