@@ -1,4 +1,4 @@
-import type { SocialProfile } from "src/models";
+import type { SocialProfile } from "../models";
 import { writable, Writable } from "svelte/store";
 import { ProfilesModel } from "../models/profilesModel";
 

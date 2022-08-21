@@ -2,37 +2,43 @@
   {
     "id": 0,
     "name": "pedrocchi",
-    "position": {"lat": 45.4076980, "long": 11.8772232 },
+    "lat": 45.4076980, 
+    "long": 11.8772232,
     "score": 0.7
   },
   {
     "id": 1,
     "name": "bar dei osei",
-    "position": {"lat": 45.4074661, "long": 11.8757466 },
+    "lat": 45.4074661, 
+    "long": 11.8757466,
     "score": 0.6
   },
   {
     "id": 2,
     "name": "fly bar",
-    "position": {"lat": 45.4042886, "long": 11.8762006 },
+    "lat": 45.4042886, 
+    "long": 11.8762006,
     "score": 0.5
   },
   {
     "id": 3,
     "name": "caffeine",
-    "position": {"lat": 45.4041443, "long": 11.8757413 },
+    "lat": 45.4041443, 
+    "long": 11.8757413,
     "score": 0.8
   },
   {
     "id": 4,
     "name": "otvim",
-    "position": {"lat": 45.4046744, "long": 11.8761003 },
+    "lat": 45.4046744, 
+    "long": 11.8761003,
     "score": 0.6
   },
   {
     "id": 5,
     "name": "sumiti",
-    "position": {"lat": 45.4075226, "long": 11.8859662 },
+    "lat": 45.4075226, 
+    "long": 11.8859662,
     "score": 1.0
   }
 ]

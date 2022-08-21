@@ -1,6 +1,6 @@
 import { ProfilesModel } from "../models/profilesModel";
 import { Writable, writable } from "svelte/store";
-import type { SocialProfile } from "src/models";
+import type { SocialProfile } from "../models";
 
 
 export class AddProfilesPresenter {

@@ -28,30 +28,36 @@ export class AccountModel {
         });
     }
 
+    private static static_delay_ms = 200;
+
+    static get_request_options: RequestInit = {
+        method: 'GET',
+        mode: 'same-origin',
+        credentials: 'same-origin'
+    };
+
+    static post_request_options: RequestInit = {
+        method: 'POST',
+        mode: 'same-origin',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: ""
+    };
+
     account: Writable<Account> = writable();
     
-    login(email: string, password: string, remember: boolean): void {
-        this.account.set(new Account("nome default", email, password, true));
-    }
-    
-    registrati(email: string, password: string): void {
-        this.account.set(new Account("nome default", email, password, true));
-    }
-    
-    logout() : void {
-        this.account.set(null);
-    }
-    
-    cambiaPsw(psw_new: string) : void {
-        this.account.update(() => { let account = this.getAccount(); account.password = psw_new; return account; });
+    async createAccount(): Promise<void> {
+        await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
+        const response = await fetch('dev-api/account');
+        const res = await response.json();
+        if(!response.ok) return;
+        this.account.set(new Account(res.accountname, res.email, res.preferenza == "lista" ? true : false));
     }
 
     cambiaPreferenza(newPref: boolean) {
         this.account.update(() => { let account = this.getAccount(); account.preference = newPref; return account; });
-    }
-
-    cambiaRemember(newRem: boolean) {
-        this.account.update(() => { let account = this.getAccount(); account.remember = newRem; return account; });
     }
 
     getAccount() {

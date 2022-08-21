@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { SocialProfile } from "src/models";
+    import type { SocialProfile } from "../models";
     import { AddProfilesPresenter } from "../presenters/AddProfilesPresenter";
 
     let presenter = new AddProfilesPresenter();

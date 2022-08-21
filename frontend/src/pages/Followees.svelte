@@ -1,7 +1,7 @@
 <script lang="ts">
     import { FolloweesPresenter } from '../presenters/FolloweesPresenter';
     import { Navigate } from 'svelte-router-spa'
-    import type { SocialProfile } from 'src/models';
+    import type { SocialProfile } from '../models';
 
     let presenter = new FolloweesPresenter();
     let followees: Promise<SocialProfile[]>;

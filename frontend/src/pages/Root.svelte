@@ -1,24 +1,37 @@
 <script lang="ts">
     import { AccountModel } from "../models/accountModel";
-
-    if(AccountModel.getInstance().getAccount()) {
-        window.location.pathname = '/home';
-    } /*else {
-        window.location.href = "https://aws.amazon.com/it/cognito/";
-    }*/
-
-    function login() {
-        AccountModel.getInstance().login("automatic login email", "automatic login psw", false);
-        window.location.pathname = '/home';
+    let completed: Promise<boolean>;
+    
+    if(!AccountModel.getInstance().getAccount()) {
+        completed = (async () => {
+            await AccountModel.getInstance().createAccount();
+            if(AccountModel.getInstance().getAccount()) {return(true)}
+            else {return(false)}
+        })();
     }
+    else {completed = new Promise(resolve => {resolve(true)})}
+    
+    completed.then(logged => {
+        if(logged) {
+            window.location.pathname = '/home';
+        } else {
+            window.location.href = "https://aws.amazon.com/it/cognito/";
+        }
+    });
 </script>
 
-<a role="button" href="https://aws.amazon.com/it/cognito/">Cognito Login</a>
-<button on:click={login}>Automatic Login</button>
+{#await completed}
+    <p>Checking login...</p>
+    <progress/>
+{:then logged} 
+    {#if logged}
+        <p>Logged! Redirecting...</p>
+    {:else}
+        <p>Not Logged, Redirecting...</p>
+    {/if}
+{:catch error}
+    <p>{error}</p>
+{/await}
 
 <style>
-    a {
-        display: block;
-        margin: 2em 0em;
-    }
 </style>

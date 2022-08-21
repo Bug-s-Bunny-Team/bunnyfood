@@ -9,26 +9,31 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            // '/dev-api': {
-            //     target: 'http://127.0.0.1:3000/',
-            //     changeOrigin: true,
-            //     rewrite: (path) => path.replace(/^\/dev-api/, '')
-            // }
-            '/dev-api/posts': {
-                target: 'http://127.0.0.1:5000/mock/posts.json',
+            '/dev-api/profiles/popular': {
+                target: 'http://127.0.0.1:5000/mock/popular_profiles.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/dev-api\/posts/, '')
+                rewrite: (path) => path.replace(/^\/dev-api\/profiles\/popular/, '')
             },
             '/dev-api/profiles': {
                 target: 'http://127.0.0.1:5000/mock/social_profiles.json',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/dev-api\/profiles/, '')
             },
-            '/dev-api/results': {
-                target: 'http://127.0.0.1:5000/mock/results.json',
+            '/dev-api/locations': {
+                target: 'http://127.0.0.1:5000/mock/locations.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/dev-api\/results/, '')
-            }
+                rewrite: (path) => path.replace(/^\/dev-api\/locations/, '')
+            },
+            '/dev-api/followed': {
+                target: 'http://127.0.0.1:5000/mock/followed.json',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/dev-api\/followed/, '')
+            },
+            '/dev-api/account': {
+                target: 'http://127.0.0.1:5000/mock/account.json',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/dev-api\/account/, '')
+            },
         }
     }
 })

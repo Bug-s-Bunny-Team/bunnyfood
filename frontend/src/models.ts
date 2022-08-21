@@ -35,14 +35,10 @@ export class Location implements Model {
 export class Account {
     accountname: string;
     email: string;
-    password: string;
     preference: boolean;
-    followers: number;
-    remember: boolean;
 
-    constructor(accountname: string = 'default name', email: string = 'default email', password: string = 'default password', 
-                preference: boolean = true, followers: number = 0, remember: boolean = false) {
-        this.accountname = accountname; this.email = password; this.preference = preference; this.followers = followers; this.remember = remember;
+    constructor(accountname: string = 'default name', email: string = 'default email', preference: boolean = true) {
+        this.accountname = accountname; this.email=email; this.preference = preference;
     }
 }
 

@@ -36,15 +36,27 @@ export class ResultsModel {
         });
     }
 
+    static request_options: RequestInit = {
+        method: 'GET',
+        mode: 'same-origin',
+        credentials: 'same-origin'
+    };
+
     rankedList: Writable<Location[]> = writable();
 
     private static static_delay_ms = 200;
     
     async getRankedList(filter: Filter) : Promise<Location[]> {
         await new Promise(r => setTimeout(r, ResultsModel.static_delay_ms))
-        const response = await fetch('dev-api/results');
-        this.rankedList.set(await response.json());
+        const response = await fetch('dev-api/locations', ResultsModel.request_options);
+        const res = await response.json();
+        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        this.rankedList.set(this.fixLocations(res));
         return get(this.rankedList);
+    }
+
+    fixLocations(list: any[]) : Location[] {
+        return list.map(location => {return new Location(location.id, location.name, new Position(location.lat, location.long), location.score)})
     }
 
     getById(id: number) : Location {

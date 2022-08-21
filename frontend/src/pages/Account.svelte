@@ -11,7 +11,6 @@
     <form>
         <p> Name: { presenter.name }</p>
         <p> Email: { presenter.email }</p>
-        <p> Follower: {presenter.followers} </p>
 
         <p>
             Choose your predefined guide:
@@ -25,14 +24,14 @@
             </label>
         </p>
 
-        <p><strong class="link"><Navigate to="/changepsw">Change your password </Navigate></strong></p>
+        <p><strong class="link"><Navigate to="/changepsw">Change your password</Navigate></strong></p>
         <p>
             <details>
                 <summary>Show Followees</summary>
                 <span><Followees/></span>
             </details>
         </p>
-        <button type="submit" name="" id="logout" on:click={presenter.handleLogout}>Logout</button>
+        <a href="https://aws.amazon.com/it/cognito/" role="button" id="logout">Logout</a>
     </form>
 </article>
 
