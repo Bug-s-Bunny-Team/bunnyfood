@@ -175,12 +175,12 @@ def _calcFinalScore(sPost: ScoringPost):
     #                 -2 punti per face score
     #                 -1 punto per text on image score
     #TODO possono esserci zero testi o zero facce o nessuna caption
-    #TODO siamo sicuri che reko sia [0,1]
+    #TODO siamo sicuri che reko sia [0,1] ?
 
     #SE TUTTI E 3 GLI SCORE PRESENTI:
     textScore = sum(sPost.textsScore.values()) / len(sPost.textsScore)
     normalizedTextScore = (textScore + 1) / 2 # =[0,1]
-    normalizedCaptionScore = (sPost.captionScore +1) / 2
+    normalizedCaptionScore = (sPost.captionScore +1) / 2 # =[0,1]
 
     sPost.finalScore = (
         normalizedCaptionScore * 2
