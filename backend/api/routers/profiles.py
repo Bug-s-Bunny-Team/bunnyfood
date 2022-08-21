@@ -4,8 +4,7 @@ from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from api import schemas
-from api.auth.jwt_auth import get_username
-from api.dependencies import get_db
+from api.dependencies import get_db, get_user
 
 from db import models
 from db.utils import get_or_create
@@ -55,10 +54,7 @@ def get_most_popular_profiles(limit: int, db: Session = Depends(get_db)):
     response_model=List[schemas.SocialProfile],
     response_model_exclude_unset=True,
 )
-def get_followed_profiles(
-    username: str = Depends(get_username), db: Session = Depends(get_db)
-):
-    user = db.query(models.User).filter_by(username=username).first()
+def get_followed_profiles(user: models.User = Depends(get_user)):
     followed = user.followed_profiles
     return followed
 
@@ -70,11 +66,10 @@ def get_followed_profiles(
     response_model_exclude_unset=True,
 )
 def follow_profile(
-    profile: schemas.SocialProfile,
+    profile: schemas.FollowedSocialProfile,
     db: Session = Depends(get_db),
-    username: str = Depends(get_username),
+    user: models.User = Depends(get_user),
 ):
-    user = db.query(models.User).filter_by(username=username).first()
     db_profile = get_or_create(db, models.SocialProfile, username=profile.username)
     user.followed_profiles.append(db_profile)
     db.add(user)
@@ -85,12 +80,13 @@ def follow_profile(
     '/followed/unfollow/',
 )
 def unfollow_profile(
-    profile: schemas.SocialProfile,
+    profile: schemas.FollowedSocialProfile,
     db: Session = Depends(get_db),
-    username: str = Depends(get_username),
+    user: models.User = Depends(get_user),
 ):
-    user = db.query(models.User).filter_by(username=username).first()
-    db_profile = db.query(models.SocialProfile).filter_by(id=profile.id).first()
+    db_profile = (
+        db.query(models.SocialProfile).filter_by(username=profile.username).first()
+    )
     if not db_profile:
         raise HTTPException(status_code=404, detail='SocialProfile does not exist')
     user.followed_profiles.remove(db_profile)
