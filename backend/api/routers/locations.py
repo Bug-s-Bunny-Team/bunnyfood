@@ -20,7 +20,7 @@ router = APIRouter()
 def get_locations(
     db: Session = Depends(get_db),
     user: models.User = Depends(get_user),
-    only_followed: bool = True,
+    only_from_followed: bool = True,
     lat: Union[float, None] = None,
     long: Union[float, None] = None,
     radius: int = 0,
@@ -30,7 +30,21 @@ def get_locations(
     if min_rating:
         locations = locations.filter(models.Location.score >= min_rating)
     if lat and long:
-        locations = locations.filter(models.Location.lat == lat, models.Location.long == long)
+        locations = locations.filter(
+            models.Location.lat == lat, models.Location.long == long
+        )
+    if only_from_followed:
+        posts = (
+            db.query(models.Post.id)
+            .join(models.SocialProfile)
+            .filter(
+                models.SocialProfile.id.in_(
+                    [profile.id for profile in user.followed_profiles]
+                )
+            )
+            .subquery()
+        )
+        locations = locations.join(models.Post).filter(models.Post.id.in_(posts))
     locations = locations.all()
     return locations
 
