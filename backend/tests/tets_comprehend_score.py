@@ -28,9 +28,34 @@ class ScoringPost:
         self.faceScore = 0.0
         self.finalScore = 0.0
 
-with open(Path('MockupFiles/captionMOC_3.txt'), 'r') as f:
+
+captionPath = 'def'
+textOnPicturePath = 'def'
+def _chooseMOC():
+    global captionPath
+    global textOnPicturePath
+    moc = input('Scegliere MOC')
+    if moc == '1':
+        print('Scelto pizza lab ferragosto')
+        captionPath = 'MockupFiles/captionMOC_1_pizzaLab_ferragosto.txt'
+        textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
+    elif moc == '2':
+        print('Scelto corte dei ciliegi aperitivo')
+        captionPath = 'MockupFiles/captionMOC_2_laCorte_apericorte.txt'
+        textOnPicturePath = 'MockupFiles/textOnPictureMOC_2_laCorte_apericorte.json'
+    elif moc == '3':
+        print('Scelta caption riscritta, textOnPicture pizza lab ferragosto')
+        captionPath = 'MockupFiles/captionMOC_3.txt'
+        textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
+    else:
+        print('not valid')
+
+_chooseMOC()
+
+with open(Path(captionPath), 'r') as f:
     caption = f.read().replace('\n', '')
 sPost = ScoringPost('0', caption)
+
 
 def __unpack_post_for_comprehend(sPost: ScoringPost):
     return list([sPost.caption, *sPost.texts.values()])
@@ -39,9 +64,10 @@ def __unpack_post_for_comprehend(sPost: ScoringPost):
 
 #sPost.text OTTENUTI DA:
 def _parse_text_on_image(sPost: ScoringPost):
+    global textOnPicturePath
     print('##########################################')
     print('_parse_text_on_image')
-    with open(Path('MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'), 'r') as f:
+    with open(Path(textOnPicturePath), 'r') as f:
         textOnPicture = json.load(f)
     for line in textOnPicture['TextDetections']:
         if line['Type'] == 'LINE':
@@ -90,22 +116,7 @@ def _runComprehend(sPost: ScoringPost):
     print("response batch detect sentiment=", response)
     __parse_comprehend_response(sPost, response)
 
-'''def chooseMOC():
-    moc = input('Scegliere MOC')
-    if moc == 1:
-        print('Scelto pizza lab ferragosto')
-        captionPath = 'MockupFiles/captionMOC_1_pizzaLab_ferragosto.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
-    elif moc == 2:
-        print('Scelto corte dei ciliegi aperitivo')
-        captionPath = 'MockupFiles/captionMOC_2_laCorte_apericorte.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_2_laCorte_apericorte.json'
-    elif moc == 3:
-        print('Scelta caption riscritta, textOnPicture corte ciliegi')
-        captionPath = 'MockupFiles/captionMOC_3.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_2_laCorte_apericorte.json'
-    else:
-        print('not valid')'''
+
 
 _parse_text_on_image(sPost)
 __unpack_post_for_comprehend(sPost)
