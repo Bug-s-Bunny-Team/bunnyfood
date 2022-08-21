@@ -2,6 +2,7 @@ import { Filter, ResultsModel } from "../models/resultsModel";
 import { get, writable, Writable } from "svelte/store";
 import type { Location } from "../models"
 import * as L from 'leaflet';
+import { capitalizeFirstLetter } from "../utils";
 
 export class MapPresenter {
   rankedList: Writable<Promise<Location[]>> = writable(null);
@@ -44,7 +45,7 @@ export class MapPresenter {
 	}
 
   createPopup(location) {
-    return `<p><a href="./home?details_placeid=${location.id}">${location.name}</a></p>
+    return `<p><a href="./home?details_placeid=${location.id}">${capitalizeFirstLetter(location.name)}</a></p>
             <p>${Math.round((location.score+1.0)*25)/10.0}/5</p>`;
   }
 

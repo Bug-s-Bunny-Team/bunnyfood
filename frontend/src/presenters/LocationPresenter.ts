@@ -2,6 +2,7 @@ import type { Info } from "../models";
 import { LocationModel } from "../models/locationModel";
 import { get, Writable, writable } from "svelte/store";
 import { google_ready } from "../store";
+import { capitalizeFirstLetter } from "../utils";
 
 export class LocationPresenter {
     #id: number;
@@ -34,12 +35,8 @@ export class LocationPresenter {
 
     async adjustInfo(info: Promise<Info>) : Promise<Info> {
         let _info: Info = await info;
-        _info.name = this.capitalizeFirstLetter(_info.name);
-        _info.address = this.capitalizeFirstLetter(_info.address);
+        _info.name = capitalizeFirstLetter(_info.name);
+        _info.address = capitalizeFirstLetter(_info.address);
         return _info;
-    }
-
-    private capitalizeFirstLetter(string: string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 }
