@@ -25,11 +25,15 @@ def test_follow_profile(api_client, session):
 
 
 def test_unfollow_profile(api_client, session):
-    results = api_client.post(
-        '/followed/unfollow/', json={'username': 'testprofile3'}
-    )
+    results = api_client.post('/followed/unfollow/', json={'username': 'testprofile3'})
 
     assert results.status_code == 200
 
     unfollowed = session.query(models.SocialProfile).filter_by(id=3).first()
     assert len(unfollowed.followers) == 0
+
+
+def test_get_popular_profiles(api_client):
+    results = api_client.get('/profiles/popular/10')
+
+    assert results.status_code == 200

@@ -7,6 +7,7 @@ from starlette.status import HTTP_404_NOT_FOUND
 
 from api import schemas
 from api.dependencies import get_db, get_user
+from api.utils import flatten_results
 
 from db import models
 
@@ -64,11 +65,7 @@ def get_locations(
         locations = locations.filter(stmt.c.distance <= radius).order_by(stmt.c.distance)
 
     locations = locations.all()
-
-    # for idx, l in enumerate(locations):
-    #     distance = locations[idx][1]
-    #     locations[idx] = locations[idx][0]
-    #     locations[idx].distance = distance
+    # locations = flatten_results(locations, 'distance')
 
     return locations
 

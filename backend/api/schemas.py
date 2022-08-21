@@ -1,3 +1,5 @@
+from typing import Union
+
 from pydantic import BaseModel
 
 from db.models import GuideType
@@ -28,6 +30,7 @@ class FollowedSocialProfile(BaseModel):
 
 class SocialProfile(FollowedSocialProfile):
     id: int
+    followers_count: Union[int, None] = None
 
     class Config:
         orm_mode = True
