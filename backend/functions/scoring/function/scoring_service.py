@@ -50,26 +50,30 @@ class BasicScoringService(ScoringService):
     #SCORING FACE ANALYSIS
         faceCount = 0
         scoreSum = 0
-        for face in faceResult['FaceDetails']:
-            pose = face['Pose']
-            # SE VOLTO DRITTO
-            if (abs(pose['Yaw']) <= 50) and (abs(pose['Pitch']) <= 50):  # abs() perchè deve essere -50<pose<50
-                # CALCOLARE SCORE EMOZIONI
-                faceCount = faceCount + 1
-                faceSum = 0
-                disgusted = False
-                for emotion in face['Emotions']:
-                    if emotion['Type'] == 'HAPPY':
-                        faceSum = faceSum + emotion['Confidence']
-                    if emotion['Type'] == 'CALM':
-                        faceSum = faceSum + emotion['Confidence'] * 0.5  # ha peso minore di happy
-                    if emotion['Type'] == 'DISGUSTED':
-                        if emotion['Confidence'] >= 50:  # se disgust troppo elevato azzera il punteggio della faccia
-                            disgusted = True
-                if disgusted == False:
-                    scoreSum = scoreSum + faceSum  # se volto disgusted value >= allora face value = 0
-            # UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
-        sPost.faceScore = scoreSum / faceCount
+        if len(faceResult['FaceDetails']) > 0:
+            for face in faceResult['FaceDetails']:
+                pose = face['Pose']
+                # SE VOLTO DRITTO
+                if (abs(pose['Yaw']) <= 50) and (abs(pose['Pitch']) <= 50):  # abs() perchè deve essere -50<pose<50
+                    # CALCOLARE SCORE EMOZIONI
+                    faceCount = faceCount + 1
+                    faceSum = 0
+                    disgusted = False
+                    for emotion in face['Emotions']:
+                        if emotion['Type'] == 'HAPPY':
+                            faceSum = faceSum + emotion['Confidence']
+                        if emotion['Type'] == 'CALM':
+                            faceSum = faceSum + emotion['Confidence'] * 0.5  # ha peso minore di happy
+                        if emotion['Type'] == 'DISGUSTED':
+                            if emotion['Confidence'] >= 50:  # se disgust troppo elevato azzera il punteggio della faccia
+                                disgusted = True
+                    if disgusted == False:
+                        scoreSum = scoreSum + faceSum  # se volto disgusted value >= allora face value = 0
+                # UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
+            sPost.faceScore = scoreSum / faceCount
+        else:
+            sPost.faceScore = 0  #se num facce =0 si ignora nel calcolo di final Score
+
 
     def __unpack_post_for_comprehend(self, sPost: ScoringPost):
         return list([sPost.caption, *sPost.texts.values()])
@@ -136,10 +140,10 @@ class BasicScoringService(ScoringService):
     def _calcFinalScore(self, sPost: ScoringPost):
         # aggiungere sPost.faceScore
         # aggiornare sPost aggiungendoci faceScore
-        sPost.finalScore = (
+        sPost.finalScore = ( #TODO fix score
             (
                 sPost.captionScore
-                + sPost.faceScore
+                + sPost.faceScore #TODO what if no faces?
                 + sum(sPost.textsScore.values()) / len(sPost.textsScore)
             )
             / 2.0
