@@ -21,28 +21,44 @@
 {#await info}
     <progress/>
 {:then info} 
-    <h1>{info.name}</h1>
-    <img src={info.img.url} width={info.img.width} height={info.img.height} alt=""/>
-    <article>
-        <p>Address: {info.address}</p>
-        <p>Score: <StarRating rating={Math.round((info.score+1.0)*25)/10.0} {config} {style}/></p>
-    </article>
+    <div class="content">
+        <h1>{info.name}</h1>
+        <img src={info.img.url} width={info.img.width} height={info.img.height} alt=""/>
+        <article>
+            <p>Address: {info.address}</p>
+            <p>Score: <StarRating rating={Math.round((info.score+1.0)*25)/10.0} {config} {style}/></p>
+        </article>
+    </div>
 {/await}
 
 
 <style>
+    .content {
+        display: grid;
+        grid-template-rows: auto auto auto;
+        grid-template-columns: 40% 60%;
+        column-gap: 3em;
+        row-gap: 1em;
+        overflow: hidden;
+    }
+
     h1 {
+        text-align: center;
         margin: 0.6em 0em;
+        grid-row: 1;
+        grid-column: 1 / span 2;
     }
     article {
-        position: absolute;
-        z-index: 1;
-        max-width: 40%;
-        top: 8em;
-        left: 3.2em;
-        box-shadow: 5px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+        justify-content: space-evenly;
+        grid-row: 2 / span 2;    
+        grid-column: 1;    
     }
     img {
+        grid-row: 2 / span 2;
+        grid-column: 2;
         z-index: 0;
     }
 </style>

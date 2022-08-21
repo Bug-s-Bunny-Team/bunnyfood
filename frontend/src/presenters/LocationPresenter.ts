@@ -1,6 +1,7 @@
 import type { Info } from "../models";
 import { LocationModel } from "../models/locationModel";
-import { writable, Writable } from "svelte/store";
+import { get, Writable, writable } from "svelte/store";
+import { google_ready } from "../store";
 
 export class LocationPresenter {
     #id: number;
@@ -13,7 +14,22 @@ export class LocationPresenter {
     }
 
     getInfo() : void {
-        this.info.set(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id)))
+        if(get(google_ready)) {
+            this.info.set(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id)));
+        }
+        else {
+            this.info.set(new Promise(async resolve => {
+                let resolved = false;
+                google_ready.subscribe(_ready => {
+                    if(_ready) {
+                        resolved = true;
+                        resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id)));
+                    }
+                });
+                await new Promise(r => setTimeout(r, 10000));
+                if(!resolved) throw new Error("Couldn't load google api.");
+            }));
+        }
     }
 
     async adjustInfo(info: Promise<Info>) : Promise<Info> {

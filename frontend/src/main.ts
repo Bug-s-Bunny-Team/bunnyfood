@@ -6,8 +6,4 @@ const app = new App({
   target: document.getElementById('app')
 })
 
-window.initialize = function() { // compiler error to ignore
-  google_ready.set(true);
-}
-
 export default app

@@ -17,7 +17,7 @@ export class ResultsModel {
         let str = window.sessionStorage.getItem('ResultsModel.rankedList');
         if(str) {
             rankedList = JSON.parse(str);
-            if(rankedList) rankedList.forEach(location => {location.__proto__ = Location.prototype}); // errore del compilatore don't worry
+            if(rankedList) rankedList.forEach(location => {(location as any).__proto__ = Location.prototype});
         }
 
         let result = new ResultsModel();
