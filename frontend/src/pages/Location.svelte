@@ -1,14 +1,13 @@
 <script lang="ts">
     import type { Info } from "../models";
     import { LocationPresenter } from "../presenters/LocationPresenter";
-    export let currentRoute: any;
+    export let placeid: number;
 
-    let presenter = new LocationPresenter(parseInt(currentRoute.namedParams.id));
+    let presenter = new LocationPresenter(placeid);
     let info: Promise<Info>;
     presenter.info.subscribe(_info => {info = _info});
 
     import StarRating from 'svelte-star-rating';
-
     const config = {
         emptyColor: 'hsl(240, 80%, 85%)',
         fullColor: '#FFFF00',

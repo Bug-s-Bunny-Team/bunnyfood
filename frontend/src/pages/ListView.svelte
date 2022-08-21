@@ -32,7 +32,7 @@
                 {#each locations as location}
                     <article>
                         <header>
-                            <strong>Location</strong>: <a href="./location/{location.id}">{location.name}</a>
+                            <strong>Location</strong>: <a href="./home?details_placeid={location.id}">{location.name}</a>
                         </header>
                         <strong>Score</strong>: <StarRating rating={Math.round((location.score+1.0)*25)/10.0} {config} {style} />
                     </article>

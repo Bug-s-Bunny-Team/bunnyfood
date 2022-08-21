@@ -17,10 +17,13 @@
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin=""/>
     
-    <div style="height:80vh;width:100%" use:presenter.initMap/>
+    <div class="map" style="height:80vh;width:100%" use:presenter.initMap/>
 {/await}
 
 <style>
+    .map {
+        z-index: 0;
+    }
     :root[data-theme="light"] {
         --spinner-invert: 0%
     }

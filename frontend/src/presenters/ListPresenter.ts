@@ -3,7 +3,6 @@ import type { Location } from "../models";
 import { Filter, ResultsModel } from "../models/resultsModel";
 
 export class ListPresenter {
-
     rankedList: Writable<Promise<Location[]>> = writable(null);
     disableButtons: Writable<boolean> = writable(false);
 
@@ -18,5 +17,4 @@ export class ListPresenter {
         promise.finally(() => {this.disableButtons.set(false)});
         this.rankedList.set(promise);
     }
-
 }
