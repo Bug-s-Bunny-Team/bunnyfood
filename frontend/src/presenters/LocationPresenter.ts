@@ -16,7 +16,7 @@ export class LocationPresenter {
 
     getInfo() : void {
         if(get(google_ready)) {
-            this.info.set(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id)));
+            this.info.set(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
         }
         else {
             this.info.set(new Promise(async resolve => {
@@ -24,7 +24,7 @@ export class LocationPresenter {
                 google_ready.subscribe(_ready => {
                     if(_ready) {
                         resolved = true;
-                        resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id)));
+                        resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
                     }
                 });
                 await new Promise(r => setTimeout(r, 10000));

@@ -1,4 +1,3 @@
-import { google_ready } from '../store';
 import { Info, Location } from '../models'
 import { ResultsModel } from './resultsModel';
 
@@ -19,12 +18,14 @@ export class LocationModel {
 
     private static static_delay_ms = 200;
     
-    async getInfo(id: number) : Promise<Info> {
+    async getInfo(id: number, parentNode: HTMLElement) : Promise<Info> {
         await new Promise(r => setTimeout(r, LocationModel.static_delay_ms));
         const location: Location = ResultsModel.getInstance().getById(id);
+        const attribution_div = document.createElement('div');
+        parentNode.append(attribution_div);
 
         let latlng = new google.maps.LatLng(location.position.lat, location.position.long);
-        let service = new google.maps.places.PlacesService(document.createElement('div'));
+        let service = new google.maps.places.PlacesService(attribution_div);
         let fields = ['place_id', 'name', 'formatted_address', 'photos'];
 
         

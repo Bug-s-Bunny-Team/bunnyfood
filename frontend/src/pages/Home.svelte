@@ -22,7 +22,7 @@
 
 {#if currentRoute.queryParams.details_placeid}
     <article class="popup">
-        <a href="/home">Close</a>
+        <header><a href="/home">Close</a></header>
         <Location placeid={parseInt(currentRoute.queryParams.details_placeid)}/>
     </article>
 {/if}
@@ -35,8 +35,14 @@
         left: 10%;
         width: 80%;
         max-height: 80%;
-        overflow-y: scroll;
-        z-index: 99;
+        overflow-y: auto;
+        z-index: 50;
+        padding-top: 0;
+    }
+    .popup header {
+        position: sticky;
+        top: 0;
+        z-index: 51;
     }
 </style>
 
