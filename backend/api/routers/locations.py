@@ -2,6 +2,7 @@ from typing import List, Union
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
+from starlette.status import HTTP_404_NOT_FOUND
 
 from api import schemas
 from api.dependencies import get_db, get_user
@@ -42,5 +43,5 @@ def get_locations(
 def get_location(location_id: int, db: Session = Depends(get_db)):
     location = db.query(models.Location).filter_by(id=location_id).first()
     if not location:
-        raise HTTPException(status_code=404, detail='Location not found')
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail='Location not found')
     return location

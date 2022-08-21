@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
+from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
 
 from api import schemas
 from api.dependencies import get_db, get_user
@@ -32,7 +33,7 @@ def get_profile(
 ):
     profile = db.query(models.SocialProfile).filter_by(id=profile_id).first()
     if not profile:
-        raise HTTPException(status_code=404, detail='SocialProfile not found')
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found')
     return profile
 
 
@@ -44,7 +45,7 @@ def get_profile(
 def get_most_popular_profiles(limit: int, db: Session = Depends(get_db)):
     if limit > 50:
         raise HTTPException(
-            status_code=400, detail='Can provide at most 50 popular profiles'
+            status_code=HTTP_400_BAD_REQUEST, detail='Can provide at most 50 popular profiles'
         )
     return []
 
@@ -88,6 +89,6 @@ def unfollow_profile(
         db.query(models.SocialProfile).filter_by(username=profile.username).first()
     )
     if not db_profile:
-        raise HTTPException(status_code=404, detail='SocialProfile does not exist')
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail='SocialProfile does not exist')
     user.followed_profiles.remove(db_profile)
     db.commit()
