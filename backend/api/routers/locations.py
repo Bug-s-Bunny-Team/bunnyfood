@@ -16,7 +16,14 @@ router = APIRouter()
     response_model=List[schemas.Location],
     response_model_exclude_unset=True,
 )
-def get_locations(db: Session = Depends(get_db)):
+def get_locations(
+    db: Session = Depends(get_db),
+    only_followed: bool = True,
+    lat: float = None,
+    long: float = None,
+    radius: int = 0,
+    min_rating: float = None
+):
     return db.query(models.Location).all()
 
 

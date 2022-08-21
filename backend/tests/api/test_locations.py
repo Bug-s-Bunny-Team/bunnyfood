@@ -10,3 +10,9 @@ def test_get_location_by_id(api_client):
 
     assert response.status_code == 200
     assert response.json()['name'] == 'testlocation1'
+
+
+def test_get_locations_only_followed(api_client):
+    response = api_client.get('/locations/?only_followed=true')
+
+    assert response.status_code == 200
