@@ -1,10 +1,10 @@
-from typing import List
+from typing import List, Union
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 
 from api import schemas
-from api.dependencies import get_db
+from api.dependencies import get_db, get_user
 
 from db import models
 
@@ -18,13 +18,20 @@ router = APIRouter()
 )
 def get_locations(
     db: Session = Depends(get_db),
+    user: models.User = Depends(get_user),
     only_followed: bool = True,
-    lat: float = None,
-    long: float = None,
+    lat: Union[float, None] = None,
+    long: Union[float, None] = None,
     radius: int = 0,
-    min_rating: float = None
+    min_rating: Union[float, None] = None,
 ):
-    return db.query(models.Location).all()
+    locations = db.query(models.Location)
+    if min_rating:
+        locations = locations.filter(models.Location.score >= min_rating)
+    if lat and long:
+        locations = locations.filter(models.Location.lat == lat, models.Location.long == long)
+    locations = locations.all()
+    return locations
 
 
 @router.get(

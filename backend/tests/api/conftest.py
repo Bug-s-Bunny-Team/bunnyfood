@@ -20,7 +20,7 @@ def populate_db(session):
     users = [
         models.User(id=2, username='testuser1'),
         models.User(id=3, username='testuser2'),
-        models.User(id=4, username='testuser3')
+        models.User(id=4, username='testuser3'),
     ]
     session.add_all(users)
 
@@ -28,6 +28,16 @@ def populate_db(session):
         models.Location(id=1, name='testlocation1', description='some desc', score=1),
         models.Location(id=2, name='testlocation2', description='some desc', score=1),
         models.Location(id=3, name='testlocation3', description='some desc', score=1),
+        models.Location(id=4, name='testlocation4', description='some desc', score=4),
+        models.Location(id=5, name='testlocation5', description='some desc', score=4),
+        models.Location(
+            id=6,
+            name='testlocation6',
+            description='some desc',
+            score=4,
+            lat=43.5,
+            long=53.4,
+        ),
     ]
     session.add_all(locations)
 

@@ -11,6 +11,7 @@ class User(BaseModel):
 
 
 class Location(BaseModel):
+    id: int
     name: str
     description: str
     lat: float = 0
@@ -26,6 +27,8 @@ class FollowedSocialProfile(BaseModel):
 
 
 class SocialProfile(FollowedSocialProfile):
+    id: int
+
     class Config:
         orm_mode = True
 
