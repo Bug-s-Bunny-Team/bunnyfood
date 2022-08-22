@@ -70,9 +70,12 @@ class BasicScoringService(ScoringService):
                     if disgusted == False:
                         scoreSum = scoreSum + faceSum  # se volto disgusted value >= allora face value = 0
                 # UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
-            sPost.faceScore = (scoreSum / faceCount) / 100 #normalizzato a [0,1]
+            faceScore = (scoreSum / faceCount)  # =[0,100]
+            if faceScore < 0 or faceScore > 100:
+                raise Exception('faceScore invalid')
+            sPost.faceScore = faceScore / 100 #normalizzato a [0,1]
         else:
-            sPost.faceScore = 0  #se num facce =0 si ignora nel calcolo di final Score
+            sPost.faceScore = None  #se num facce =0 si ignora nel calcolo di final Score
 
 
     def __unpack_post_for_comprehend(self, sPost: ScoringPost):
@@ -99,8 +102,12 @@ class BasicScoringService(ScoringService):
                 else 0.0
             )
             if idx == 0:
+                if float_score < -1 or float_score > 1:
+                    raise Exception('captionScore invalid')
                 sPost.captionScore = float_score
             else:
+                if float_score < -1 or float_score > 1:
+                    raise Exception('textScore invalid')
                 sPost.textsScore[idx - 1] = float_score
 
     def __parse_dominant_language_response(self, domResponse):
@@ -138,15 +145,66 @@ class BasicScoringService(ScoringService):
         print('Successfully analized textual information')
 
     def _calcFinalScore(self, sPost: ScoringPost):
-        # aggiungere sPost.faceScore
-        # aggiornare sPost aggiungendoci faceScore
-        sPost.finalScore = ( #TODO fix score
-            (
-                sPost.captionScore
-                + sPost.faceScore #TODO what if no faces?
-                + sum(sPost.textsScore.values()) / len(sPost.textsScore)
+        # final score= [0,5] con scarti di 0.5     (se presenti tutti e tre i valori)
+        # composta così:   -2 punti per caption score
+        #                  -2 punti per face score
+        #                  -1 punto per text on image score
+
+        # se presente del text on screen normalizzo la sua (loro) score
+        if len(sPost.textsScore) != 0:
+            textScore = sum(sPost.textsScore.values()) / len(sPost.textsScore)  # =[-1,1]
+            normalizedTextScore = (textScore + 1) / 2  # =[0,1]
+
+        # se presente la caption normalizzo la sua score
+        if sPost.caption and not sPost.caption.isspace():
+            normalizedCaptionScore = (sPost.captionScore + 1) / 2  # =[0,1]
+
+        # face score è già =[0,1]
+
+
+        # CALCOLO DI FINAL SCORE
+        # F,T,C = faceScore, textScore, captionScore
+        # vuote = post analizzato non contiene: volti(F), testo a schermo(T), caption(C)
+        # SE TUTTE VUOTE
+        if not (sPost.caption and not sPost.caption.isspace()) and len(sPost.textsScore) == 0 and sPost.faceScore == None:
+            sPost.finalScore = None
+        # SE F,T VUOTE
+        elif sPost.faceScore == None and len(sPost.textsScore) == 0:
+            sPost.finalScore = (
+                    normalizedCaptionScore * 5
             )
-            / 2.0
-            if len(sPost.textsScore) != 0
-            else sPost.captionScore
-        )
+        # SE C,T VUOTE
+        elif not (sPost.caption and not sPost.caption.isspace()) and len(sPost.textsScore) == 0:
+            sPost.finalScore = (
+                    sPost.faceScore * 5
+            )
+        # SE F,C VUOTE
+        elif sPost.faceScore == None and not (sPost.caption and not sPost.caption.isspace()):
+            sPost.finalScore = (
+                    normalizedTextScore * 5
+            )
+        # SE T VUOTA
+        elif len(sPost.textsScore) == 0:
+            sPost.finalScore = (
+                    sPost.faceScore * 2.5
+                    + normalizedCaptionScore * 2.5
+            )
+        # SE F VUOTA
+        elif sPost.faceScore == None:
+            sPost.finalScore = (
+                    normalizedTextScore * 2
+                    + normalizedCaptionScore * 3
+            )
+        # SE C VUOTA
+        elif not (sPost.caption and not sPost.caption.isspace()):
+            sPost.finalScore = (
+                    sPost.faceScore * 3
+                    + normalizedTextScore * 2
+            )
+        # SE NESSUNA VUOTA
+        else:
+            sPost.finalScore = (
+                    normalizedCaptionScore * 2
+                    + sPost.faceScore * 2
+                    + normalizedTextScore
+            )
