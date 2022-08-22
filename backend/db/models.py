@@ -1,5 +1,6 @@
 from enum import unique, Enum
-from typing import Tuple, Optional
+from functools import cached_property
+from typing import Tuple, Optional, Set
 
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func
 from sqlalchemy.ext.hybrid import hybrid_method
@@ -114,6 +115,16 @@ class Post(Base):
 
     profile = relationship('SocialProfile', back_populates='posts')
     location = relationship('Location', back_populates='posts')
+
+    @cached_property
+    def media_filename(self) -> str:
+        extension = 'mp4' if self.media_type == MediaType.VIDEO else 'jpg'
+        return f'{self.shortcode}.{extension}'
+
+    @cached_property
+    def hashtags(self) -> Set[str]:
+        tags = [tag.strip('#') for tag in self.caption.split() if tag.startswith('#')]
+        return set(tags)
 
     @classmethod
     def from_instaloader_post(
