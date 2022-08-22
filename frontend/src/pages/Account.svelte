@@ -23,8 +23,6 @@
                 Map
             </label>
         </p>
-
-        <p><strong class="link"><Navigate to="/changepsw">Change your password</Navigate></strong></p>
         <p>
             <details>
                 <summary>Show Followees</summary>
