@@ -1,6 +1,6 @@
 # Dockerfile for API service
 
-FROM python:3.10-slimd
+FROM python:3.10-slim
 
 WORKDIR /backend
 
