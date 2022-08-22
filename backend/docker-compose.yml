@@ -48,6 +48,7 @@ services:
 
 networks:
   bunnyfood:
+    name: bunnyfood
     driver: bridge
     ipam:
       driver: default

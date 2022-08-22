@@ -46,3 +46,7 @@ def extract_insta_shortcode(url: str) -> Optional[str]:
         if shortcode:
             return shortcode
     return None
+
+
+def sns_extract_message(event):
+    return json.loads(event['Records'][0]['Sns']['Message'])

@@ -5,12 +5,6 @@ Description: >
 
   SAM Template for bunnyfood
 
-Parameters:
-  RegionName:
-    Type: String
-    Default: 'eu-central-1'
-    Description: Enter name of aws region since AWS::Region does not work
-
 Globals:
   Function:
     Timeout: 60
@@ -21,8 +15,28 @@ Globals:
     Layers:
       - !Ref CommonLayer
       - !Ref DbLayer
+    Environment:
+      Variables:
+        BUCKET_NAME: !Ref BackendBucket
+        DB_USER: 'user'
+        DB_PASSWORD: 'password'
+        DB_HOST: 'db'
+        DB_NAME: 'bunnyfood_dev'
 
 Resources:
+  #############################################################
+  # Buckets
+
+  BackendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: 'bunnyfood-backend'
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: 'bunnyfood-backend'
+
   #############################################################
   # Layers
 
@@ -63,3 +77,32 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/scraping/
+      Environment:
+        Variables:
+          INSTA_USERNAME: ''
+          INSTA_SESSIONS_TABLE: ''
+          SNS_SCORING_TOPIC: 'SNS_SCORING_TOPIC'
+
+  #############################################################
+  # Topics
+
+  # API -> ScrapingFunction
+  ScrapeTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: 'Scrape'
+      FifoTopic: False
+
+  # ScrapingFunction -> SortingFunction
+  SortTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: 'Sort'
+      FifoTopic: False
+
+  # SortingFunction -> ScoringFunction
+  ScoreTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: 'Score'
+      FifoTopic: False
