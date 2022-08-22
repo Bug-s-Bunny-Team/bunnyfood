@@ -13,7 +13,7 @@
     <form on:submit|preventDefault={presenter.search} autocomplete="off">
     <div class="grid">
     <label for="scrape-input">
-        Search a new profile
+        Search for a profile
                 <input
                     type="search"
                     id="scrape-input"
@@ -31,7 +31,7 @@
 
 {#if profiles} 
     {#await profiles}
-        Loading results...
+        Searching profile...
         <progress />
     {:then profiles} 
         {#if profiles.length > 0}
@@ -49,7 +49,7 @@
                 {/each}
             </div>
         {:else}
-            <p>No profiles found</p>
+            <p>Couldn't find profile. <strong>You must enter the correct and full username of the profile</strong></p>
         {/if}
     {/await}
 {/if}

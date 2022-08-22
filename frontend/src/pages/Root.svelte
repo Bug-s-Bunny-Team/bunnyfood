@@ -13,9 +13,9 @@
     
     completed.then(logged => {
         if(logged) {
-            window.location.pathname = '/home';
+            window.location.href = `${window.location.protocol}//${window.location.host}/home`;
         } else {
-            window.location.href = "https://aws.amazon.com/it/cognito/";
+            window.location.href = "https://bunnyfood-dev.auth.eu-central-1.amazoncognito.com";
         }
     });
 </script>

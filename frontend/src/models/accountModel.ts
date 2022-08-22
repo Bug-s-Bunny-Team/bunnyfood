@@ -1,5 +1,7 @@
 import { Writable, writable, get } from 'svelte/store';
 import { Account } from '../models'
+import 'jwt-decode'
+import jwtDecode from 'jwt-decode';
 
 export class AccountModel {
     private static accountModelInstance : AccountModel = AccountModel.construct_session();
@@ -49,14 +51,19 @@ export class AccountModel {
     account: Writable<Account> = writable();
     
     async createAccount(): Promise<void> {
-        // TODO get jwt token, then request map/list preference
         await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
+
+        const token = this.getToken();
+        if(!token) return;
+        const decoded: any = jwtDecode(token);
+        const account = new Account(decoded.accountname, decoded.email, null);
         
         const response = await fetch('dev-api/preferences', AccountModel.get_request_options);
         
         const res = await response.json();
         if(!response.ok) return;
-        this.account.set(new Account(res.accountname, res.email, res.preferenza == "list" ? true : false));
+        account.preference = res.default_guide_view == "list" ? true : false
+        this.account.set(account);
     }
 
     async cambiaPreferenza(newPref: boolean) : Promise<void> {
@@ -75,6 +82,12 @@ export class AccountModel {
 
     getAccount() {
         return get(this.account);
+    }
+
+    private getToken() : string {
+        const url = new URL(window.location.href);
+        return url.searchParams.get("accessToken");
+        // eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50bmFtZSI6ImRlZmF1bHQgYWNjb3VudCBuYW1lIiwiZW1haWwiOiJkZWZhdWx0IGVtYWlsIn0.yRdNdKhoNr7kiiDm9jRbuqRDlEQ7XTSe1MifIoIsi9c
     }
 
 }
