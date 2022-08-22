@@ -1,4 +1,4 @@
-import type { Account } from "../models";
+import { Account } from "../models";
 import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
 
@@ -22,6 +22,11 @@ export class AccountPresenter {
             this.email = account.email;
             this.preference = Number(account.preference);
         }
+    }
+
+    logout() {
+        window.location.href = "https://bunnyfood-dev.auth.eu-central-1.amazoncognito.com/logout?client_id=2k5d4g58072evbdqloqkuksd5u&response_type=token&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2F";
+        AccountModel.getInstance().logout();
     }
 
     changePreference() : void {

@@ -53,10 +53,11 @@ export class AccountModel {
     async createAccount(): Promise<void> {
         await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
 
-        const token = this.getToken();
-        if(!token) return;
-        const decoded: any = jwtDecode(token);
-        const account = new Account(decoded.accountname, decoded.email, null);
+        const params = this.getSearchParams();
+        if(!params.get('id_token') || !params.get('access_token')) return;
+        const id_decoded: any = jwtDecode(params.get('id_token'));
+        const access_decoded: any = jwtDecode(params.get('access_token'));
+        const account = new Account(access_decoded.username, id_decoded.email, null);
         
         const response = await fetch('dev-api/preferences', AccountModel.get_request_options);
         
@@ -80,14 +81,17 @@ export class AccountModel {
         this.account.update(() => { let account = this.getAccount(); account.preference = newPref; return account; });
     }
 
+    logout() : void {
+        this.account.set(null);
+    }
+
     getAccount() {
         return get(this.account);
     }
 
-    private getToken() : string {
-        const url = new URL(window.location.href);
-        return url.searchParams.get("accessToken");
-        // eyJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50bmFtZSI6ImRlZmF1bHQgYWNjb3VudCBuYW1lIiwiZW1haWwiOiJkZWZhdWx0IGVtYWlsIn0.yRdNdKhoNr7kiiDm9jRbuqRDlEQ7XTSe1MifIoIsi9c
+    private getSearchParams() : URLSearchParams {
+        const url = new URL(window.location.href.replace('#', '?'));
+        return url.searchParams;
     }
 
 }

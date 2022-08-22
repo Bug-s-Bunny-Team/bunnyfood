@@ -31,7 +31,7 @@
                 <span><Followees/></span>
             </details>
         </p>
-        <a href="https://aws.amazon.com/it/cognito/" role="button" id="logout">Logout</a>
+        <button on:click|preventDefault={presenter.logout} id="logout">Logout</button>
     </form>
 </article>
 
