@@ -1,5 +1,3 @@
 {
-    "accountname": "default name",
-    "email": "default email",
-    "preference": "list"
+    "default_guide_view": "list"
 }

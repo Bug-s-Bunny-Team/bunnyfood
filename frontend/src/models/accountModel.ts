@@ -63,7 +63,7 @@ export class AccountModel {
         
         const res = await response.json();
         if(!response.ok) return;
-        account.preference = res.default_guide_view == "list" ? true : false
+        account.preference = res.default_guide_view == "list" ? true : false;
         this.account.set(account);
     }
 
