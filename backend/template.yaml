@@ -57,4 +57,9 @@ Resources:
   SortingFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: functions/scoring/
+      CodeUri: functions/sorting/
+
+  ScrapingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/scraping/

@@ -1,0 +1,33 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[Local] scraping" type="aws.lambda" factoryName="Local">
+    <option name="credentialProviderId" value="profile:default" />
+    <option name="regionId" value="eu-central-1" />
+    <option name="debugHost" value="localhost" />
+    <option name="architecture" />
+    <option name="environmentVariables">
+      <map />
+    </option>
+    <option name="handler" />
+    <option name="image" value="false" />
+    <option name="logicalFunctionName" value="ScrapingFunction" />
+    <option name="memorySize" value="128" />
+    <option name="pathMappings">
+      <list />
+    </option>
+    <option name="platform" />
+    <option name="runtime" />
+    <option name="templateFile" value="$PROJECT_DIR$/backend/template.yaml" />
+    <option name="timeout" value="300" />
+    <option name="useTemplate" value="true" />
+    <option name="input" value="{&#10;  &quot;Records&quot;: [&#10;    {&#10;      &quot;EventSource&quot;: &quot;aws:sns&quot;,&#10;      &quot;EventVersion&quot;: &quot;1.0&quot;,&#10;      &quot;EventSubscriptionArn&quot;: &quot;arn:{partition}:sns:EXAMPLE&quot;,&#10;      &quot;Sns&quot;: {&#10;        &quot;Type&quot;: &quot;Notification&quot;,&#10;        &quot;MessageId&quot;: &quot;95df01b4-ee98-5cb9-9903-4c221d41eb5e&quot;,&#10;        &quot;TopicArn&quot;: &quot;arn:{partition}:sns:EXAMPLE&quot;,&#10;        &quot;Subject&quot;: &quot;TestInvoke&quot;,&#10;        &quot;Message&quot;: &quot;Hello from SNS!&quot;,&#10;        &quot;Timestamp&quot;: &quot;1970-01-01T00:00:00Z&quot;,&#10;        &quot;SignatureVersion&quot;: &quot;1&quot;,&#10;        &quot;Signature&quot;: &quot;EXAMPLE&quot;,&#10;        &quot;SigningCertUrl&quot;: &quot;EXAMPLE&quot;,&#10;        &quot;UnsubscribeUrl&quot;: &quot;EXAMPLE&quot;,&#10;        &quot;MessageAttributes&quot;: {&#10;          &quot;Test&quot;: {&#10;            &quot;Type&quot;: &quot;String&quot;,&#10;            &quot;Value&quot;: &quot;TestString&quot;&#10;          },&#10;          &quot;TestBinary&quot;: {&#10;            &quot;Type&quot;: &quot;Binary&quot;,&#10;            &quot;Value&quot;: &quot;TestBinary&quot;&#10;          }&#10;        }&#10;      }&#10;    }&#10;  ]&#10;}" />
+    <option name="inputIsFile" value="false" />
+    <sam>
+      <option name="additionalBuildArgs" value="" />
+      <option name="additionalLocalArgs" value="" />
+      <option name="buildInContainer" value="false" />
+      <option name="dockerNetwork" value="" />
+      <option name="skipImagePull" value="false" />
+    </sam>
+    <method v="2" />
+  </configuration>
+</component>

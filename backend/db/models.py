@@ -1,11 +1,12 @@
 from enum import unique, Enum
+from typing import Tuple, Optional
 
 from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func
 from sqlalchemy.ext.hybrid import hybrid_method
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Session
 
 from db import Base
-from db.utils import gc_distance
+from db.utils import gc_distance, get_or_create
 
 
 @unique
@@ -84,6 +85,20 @@ class Location(Base):
     def distance(cls, lat, lng):
         return gc_distance(lat, lng, cls.lat, cls.long, math_lib=func)
 
+    @classmethod
+    def from_instaloader_location(
+        cls, session: Session, location
+    ) -> Tuple['Location', bool]:
+        location = get_or_create(
+            session,
+            cls,
+            name=location.name,
+            lat=location.lat,
+            long=location.lng,
+            description='',
+        )
+        return location
+
 
 class Post(Base):
     __tablename__ = 'posts'
@@ -91,6 +106,31 @@ class Post(Base):
     id = Column(Integer, primary_key=True, index=True)
     profile_id = Column(Integer, ForeignKey('socialprofiles.id'))
     location_id = Column(Integer, ForeignKey('locations.id'))
+    shortcode = Column(String, unique=True)
+    caption = Column(Text)
+    media_type = Column(String)
+    media_url = Column(String(length=512))
+    media_s3_key = Column(String, nullable=True, unique=True)
 
     profile = relationship('SocialProfile', back_populates='posts')
     location = relationship('Location', back_populates='posts')
+
+    @classmethod
+    def from_instaloader_post(
+        cls, session: Session, insta_post, profile: SocialProfile, location: Location
+    ) -> Tuple['Post', bool]:
+        post = session.query(Post).filter_by(shortcode=insta_post.shortcode).first()
+        if post:
+            return post, False
+        post = Post(
+            shortcode=insta_post.shortcode,
+            caption=insta_post.caption,
+            media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
+            media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
+            social_profile=profile,
+            location=location,
+        )
+        session.add(post)
+        session.commit()
+        session.refresh(post)
+        return post, True
