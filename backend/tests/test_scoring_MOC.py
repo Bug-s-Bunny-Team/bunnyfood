@@ -137,7 +137,7 @@ def _scoreFaceRekognition(sPost: ScoringPost):
 
     print(len(response['FaceDetails']))
 
-    if len(response['FaceDetails']) > 0:
+    if len(response['FaceDetails']) > 0: #controlla ci siano volti nell'immagine
         for face in response['FaceDetails']:
             pose = face['Pose']
             #SE VOLTO DRITTO
@@ -157,9 +157,9 @@ def _scoreFaceRekognition(sPost: ScoringPost):
                 if disgusted == False:
                     scoreSum = scoreSum + faceSum #se volto disgusted value >= allora face value = 0
             #UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
-        sPost.faceScore = (scoreSum / faceCount) / 100
+        sPost.faceScore = (scoreSum / faceCount) / 100  # =[0,1]
     else:
-        sPost.faceScore = 0
+        sPost.faceScore = None #se non ci sono facce metto nullo il facescore
 
     print('Facce analizzate=', faceCount)
     print('Score Immagine=' ,sPost.faceScore)
@@ -170,50 +170,64 @@ def _set_sPost(sPost: ScoringPost):
     sPost.captionScore= 0.0 #[0,1]
 
 def _calcFinalScore(sPost: ScoringPost):
-    #final score= [0,5] con scarti di 0.5
+    #final score= [0,5] con scarti di 0.5     (se presenti tutti e tre i valori)
     #composta così:   -2 punti per caption score
     #                 -2 punti per face score
     #                 -1 punto per text on image score
-    #TODO possono esserci zero testi o zero facce o nessuna caption
-    #TODO siamo sicuri che reko sia [0,1] ?
 
-    #SE TUTTI E 3 GLI SCORE PRESENTI:
-    textScore = sum(sPost.textsScore.values()) / len(sPost.textsScore)
-    normalizedTextScore = (textScore + 1) / 2 # =[0,1]
-    normalizedCaptionScore = (sPost.captionScore +1) / 2 # =[0,1]
+    #se presente del text on screen normalizzo la sua (loro) score
+    if len(sPost.textsScore) != 0:
+        textScore = sum(sPost.textsScore.values()) / len(sPost.textsScore)  # =[-1,1]
+        normalizedTextScore = (textScore + 1) / 2  # =[0,1]
 
-    sPost.finalScore = (
-        normalizedCaptionScore * 2
-        + sPost.faceScore * 2
-        + normalizedTextScore
-    )
+    #se presente la caption normalizzo la sua score
+    if sPost.caption and not sPost.caption.isspace():
+        normalizedCaptionScore = (sPost.captionScore +1) / 2 # =[0,1]
 
-    #TODO varie possibilità
+    # face score è già =[0,1]
+
+    #CALCOLO DI FINAL SCORE
     #SE F,T VUOTE
-    if sPost.faceScore == 0 and sPost.textsScore == 0:
-        #
-    #SE C,T VUOTE
-    elif not sPost.caption and sPost.textsScore == 0:
-        #
-    #SE F,C VUOTE
-    elif sPost.faceScore == 0 and not sPost.caption
-    #SE T VUOTA
-    #SE F VUOTA
-    #SE C VUOTA
-    #SE NESSUNA VUOTA
-
-
-
-    sPost.finalScore = (
-        (
-                sPost.captionScore
-                + sPost.faceScore
-                + sum(sPost.textsScore.values()) / len(sPost.textsScore)
+    if sPost.faceScore == None and len(sPost.textsScore) == 0:
+        sPost.finalScore = (
+            normalizedCaptionScore * 5
         )
-        / 2.0
-        if len(sPost.textsScore) != 0
-        else sPost.captionScore
-    )
+    #SE C,T VUOTE
+    elif not(sPost.caption and not sPost.caption.isspace()) and len(sPost.textsScore) == 0:
+        sPost.finalScore = (
+            sPost.faceScore * 5
+        )
+    #SE F,C VUOTE
+    elif sPost.faceScore == None and not(sPost.caption and not sPost.caption.isspace()):
+        sPost.finalScore = (
+            normalizedTextScore * 5
+        )
+    #SE T VUOTA
+    elif len(sPost.textsScore) == 0:
+        sPost.finalScore = (
+            sPost.faceScore * 2.5
+            + normalizedCaptionScore * 2.5
+        )
+    #SE F VUOTA
+    elif sPost.faceScore == None:
+        sPost.finalScore = (
+            normalizedTextScore * 2
+            + normalizedCaptionScore * 3
+        )
+    #SE C VUOTA
+    elif not(sPost.caption and not sPost.caption.isspace()):
+        sPost.finalScore = (
+            sPost.faceScore * 3
+            + normalizedTextScore * 2
+        )
+    #SE NESSUNA VUOTA
+    else:
+        sPost.finalScore = (
+                normalizedCaptionScore * 2
+                + sPost.faceScore * 2
+                + normalizedTextScore
+        )
+
 
 def _printAllScores(sPost: ScoringPost):
     print('Print all scores: {')
