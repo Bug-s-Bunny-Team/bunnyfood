@@ -50,7 +50,7 @@ def _chooseMOC():
         captionPath = 'MockupFiles/captionMOC_3.txt'
         textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     elif moc == '4':
-        print('Scelta caption vuota, textOnPicture pizza lab ferragosto')
+        print('Scelta caption vuota (ma salta gli spazi), textOnPicture pizza lab ferragosto')
         captionPath = 'MockupFiles/captionMOC_empty.txt'
         textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     elif moc == '5':
@@ -237,6 +237,7 @@ def _calcFinalScore(sPost: ScoringPost):
         )
     #SE C VUOTA
     elif not(sPost.caption and not sPost.caption.isspace()):
+        #print('C vuota')
         sPost.finalScore = (
             sPost.faceScore * 3
             + normalizedTextScore * 2
