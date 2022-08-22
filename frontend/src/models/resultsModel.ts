@@ -1,13 +1,5 @@
 import { get, Writable, writable } from 'svelte/store';
-import { Location, Position } from '../models'
-
-export class Filter {
-    globale: boolean;
-    posizione: Position;
-    n_risultati: number;
-    raggio: number;
-    min_rating: number;
-}
+import { Filter, Location, Position } from '../models'
 
 export class ResultsModel {
     private static resultsModelInstance : ResultsModel = ResultsModel.construct_session();

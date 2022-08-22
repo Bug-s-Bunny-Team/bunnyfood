@@ -1,6 +1,6 @@
 import { writable, Writable } from "svelte/store";
-import type { Location } from "../models";
-import { Filter, ResultsModel } from "../models/resultsModel";
+import { Filter, Location } from "../models";
+import { ResultsModel } from "../models/resultsModel";
 
 export class ListPresenter {
     rankedList: Writable<Promise<Location[]>> = writable(null);

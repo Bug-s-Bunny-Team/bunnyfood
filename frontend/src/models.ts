@@ -64,3 +64,17 @@ export class Info {
 
     constructor(name: string, img: any, address:string, score:number) {this.name=name; this.img=img; this.address=address; this.score=score;}
 }
+
+export class Filter {
+    only_from_followed: boolean;
+    lat: number;
+    long: number;
+    current_lat: number;
+    current_long: number;
+    radius: number;
+    min_rating: number;
+
+    constructor(only_from_followed: boolean=false, lat: number=null, long: number=null, current_lat: number=null, current_long: number=null, radius: number=null, min_rating: number=0.0) {
+        this.only_from_followed=only_from_followed; this.lat=lat; this.long=long; this.current_lat=current_lat; this.current_long=current_long; this.radius=radius; this.min_rating=min_rating;
+    }
+}

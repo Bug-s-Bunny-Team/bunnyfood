@@ -1,6 +1,6 @@
-import { Filter, ResultsModel } from "../models/resultsModel";
+import { ResultsModel } from "../models/resultsModel";
 import { get, writable, Writable } from "svelte/store";
-import type { Location } from "../models"
+import { Filter, Location } from "../models"
 import * as L from 'leaflet';
 import { capitalizeFirstLetter } from "../utils";
 
