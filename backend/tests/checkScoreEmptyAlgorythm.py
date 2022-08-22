@@ -1,9 +1,5 @@
 from typing import Dict
 
-str1 = ''
-str2 = 'lorem ipsum'
-str3 = '  '
-
 class ScoringPost:
     id: int
     caption: str
