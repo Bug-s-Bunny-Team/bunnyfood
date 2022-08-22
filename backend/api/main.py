@@ -13,7 +13,7 @@ app.include_router(profiles.router)
 app.include_router(preferences.router)
 
 
-@app.get('/', status_code=HTTP_418_IM_A_TEAPOT)
+@app.get('/', status_code=HTTP_418_IM_A_TEAPOT, include_in_schema=False)
 def get_details():
     return {
         'title': API_TITLE,
