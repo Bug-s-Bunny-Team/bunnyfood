@@ -3,11 +3,13 @@ version: '3'
 services:
 #  api:
 #    container_name: api
-#    image: api
+#    image: bunnyfood-api
 #    depends_on:
 #      - db
+#    environment:
+#      - DB_HOST=db
 #    ports:
-#      - '8000:80'
+#      - '8000:8000'
 #    networks:
 #      - bunnyfood
 #    restart: unless-stopped
