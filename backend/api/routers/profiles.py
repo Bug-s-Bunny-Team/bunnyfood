@@ -30,7 +30,7 @@ def get_profiles(db: Session = Depends(get_db)):
     response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
 )
-def get_profile(
+def get_profile_by_id(
     profile_id: int,
     db: Session = Depends(get_db),
 ):
@@ -39,6 +39,28 @@ def get_profile(
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'
         )
+    return profile
+
+
+@router.get(
+    '/profiles/search/{profile_username}',
+    response_model=schemas.SocialProfile,
+    response_model_exclude_unset=True,
+)
+def get_profile_by_username(
+    profile_username: str,
+    db: Session = Depends(get_db),
+):
+    profile = db.query(models.SocialProfile).filter_by(username=profile_username).first()
+    if not profile:
+        # TODO: check if an actual social profile exists
+        exists = False
+        if exists:
+            profile = models.SocialProfile(username=profile_username)
+        else:
+            raise HTTPException(
+                status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'
+            )
     return profile
 
 

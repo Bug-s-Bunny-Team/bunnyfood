@@ -37,3 +37,14 @@ def test_get_popular_profiles(api_client):
     results = api_client.get('/profiles/popular/10')
 
     assert results.status_code == 200
+
+
+def test_profiles_search(api_client):
+    results = api_client.get('/profiles/search/testprofile1')
+
+    assert results.status_code == 200
+    assert results.json()['username'] == 'testprofile1'
+
+    results = api_client.get('/profiles/search/thissurelydoesnotexist')
+
+    assert results.status_code == 404
