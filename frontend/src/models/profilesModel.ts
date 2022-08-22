@@ -35,7 +35,9 @@ export class ProfilesModel {
 
     async getFollowees() {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
+        
         const response = await fetch('dev-api/followed', ProfilesModel.get_request_options);
+        
         const res = await response.json();
         if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
         return res;
@@ -43,7 +45,11 @@ export class ProfilesModel {
 
     async removeFollowee(profile: SocialProfile) : Promise<void> {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        const response = await fetch('dev-api/followed/unfollow', ProfilesModel.post_request_options);
+        
+        const options = ProfilesModel.post_request_options;
+        options.body = JSON.stringify({username: profile.username});
+        const response = await fetch('dev-api/followed/unfollow', options);
+        
         const res = await response.json();
         if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
         return res;
@@ -51,7 +57,9 @@ export class ProfilesModel {
 
     async getMostPopularProfiles(quantity: number = 20) : Promise<SocialProfile[]> {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        const response = await fetch(`dev-api/profiles/popular`, ProfilesModel.get_request_options);
+        
+        const response = await fetch(`dev-api/profiles/popular/${quantity}`, ProfilesModel.get_request_options);
+        
         const res = await response.json();
         if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
         return res;
@@ -59,7 +67,9 @@ export class ProfilesModel {
 
     async getProfiles(ricerca: String) : Promise<SocialProfile[]> {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        const response = await fetch('dev-api/profiles');
+        
+        const response = await fetch('dev-api/profiles'); // TODO
+        
         const res = await response.json();
         if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
         return res;
@@ -67,7 +77,11 @@ export class ProfilesModel {
 
     async followProfile(profile: SocialProfile) : Promise<void> {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        const response = await fetch('dev-api/followed', ProfilesModel.post_request_options);
+        
+        const options = ProfilesModel.post_request_options;
+        options.body = JSON.stringify({username: profile.username});
+        const response = await fetch('dev-api/followed', options);
+        
         const res = await response.json();
         if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
         return res;

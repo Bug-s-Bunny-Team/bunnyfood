@@ -48,7 +48,13 @@ export class ResultsModel {
     
     async getRankedList(filter: Filter) : Promise<Location[]> {
         await new Promise(r => setTimeout(r, ResultsModel.static_delay_ms))
-        const response = await fetch('dev-api/locations', ResultsModel.request_options);
+        
+        const url = new URL('dev-api/locations', window.location.protocol+'//'+window.location.host);
+        for (const field in filter) {
+            url.searchParams.append(field, filter[field]);
+        }
+        const response = await fetch(url, ResultsModel.request_options);
+        
         const res = await response.json();
         if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
         this.rankedList.set(this.fixLocations(res));

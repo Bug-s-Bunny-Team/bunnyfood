@@ -49,14 +49,27 @@ export class AccountModel {
     account: Writable<Account> = writable();
     
     async createAccount(): Promise<void> {
+        // TODO get jwt token, then request map/list preference
         await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
-        const response = await fetch('dev-api/account');
+        
+        const response = await fetch('dev-api/preferences', AccountModel.get_request_options);
+        
         const res = await response.json();
         if(!response.ok) return;
-        this.account.set(new Account(res.accountname, res.email, res.preferenza == "lista" ? true : false));
+        this.account.set(new Account(res.accountname, res.email, res.preferenza == "list" ? true : false));
     }
 
-    cambiaPreferenza(newPref: boolean) {
+    async cambiaPreferenza(newPref: boolean) : Promise<void> {
+        await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
+        
+        const options = AccountModel.post_request_options;
+        options.method = 'PUT';
+        options.body = JSON.stringify({default_guide_view: newPref == true ? 'list' : 'map'});
+        const response = await fetch('dev-api/preferences', options);
+        
+        const res = await response.json();
+        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+
         this.account.update(() => { let account = this.getAccount(); account.preference = newPref; return account; });
     }
 

@@ -7,6 +7,7 @@ export class AccountPresenter {
     email: string;
     preference: number;
     isLogged: boolean;
+    disableButtons: Writable<boolean> = writable(false);
 
     constructor() {
         this.changePreference = this.changePreference.bind(this);
@@ -24,8 +25,10 @@ export class AccountPresenter {
     }
 
     changePreference() : void {
-        if(this.isLogged)
-            AccountModel.getInstance().cambiaPreferenza(Boolean(!this.preference));
+        if(this.isLogged) {
+            this.disableButtons.set(true);
+            AccountModel.getInstance().cambiaPreferenza(Boolean(!this.preference)).then(() => {this.disableButtons.set(false)});
+        }
     }
 
 }

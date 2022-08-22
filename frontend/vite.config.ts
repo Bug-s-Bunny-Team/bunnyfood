@@ -24,15 +24,20 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/dev-api\/locations/, '')
             },
+            '/dev-api/followed/unfollow': {
+                target: 'http://127.0.0.1:5000/mock/followed.json',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/dev-api\/followed\/unfollow/, '')
+            },
             '/dev-api/followed': {
                 target: 'http://127.0.0.1:5000/mock/followed.json',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/dev-api\/followed/, '')
             },
-            '/dev-api/account': {
-                target: 'http://127.0.0.1:5000/mock/account.json',
+            '/dev-api/preferences': {
+                target: 'http://127.0.0.1:5000/mock/preferences.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/dev-api\/account/, '')
+                rewrite: (path) => path.replace(/^\/dev-api\/preferences/, '')
             },
         }
     }
