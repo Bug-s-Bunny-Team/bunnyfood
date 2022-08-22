@@ -53,6 +53,10 @@ def _chooseMOC():
         print('Scelta caption vuota, textOnPicture pizza lab ferragosto')
         captionPath = 'MockupFiles/captionMOC_empty.txt'
         textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
+    elif moc == '5':
+        print('Scelta caption riscritta, textOnPicture vuota')
+        captionPath = 'MockupFiles/captionMOC_3.txt'
+        textOnPicturePath = 'MockupFiles/textOnPictureMOC_empty.json'
     else:
         print('not valid')
 
@@ -170,9 +174,10 @@ def _scoreFaceRekognition(sPost: ScoringPost):
                 if disgusted == False:
                     scoreSum = scoreSum + faceSum #se volto disgusted value >= allora face value = 0
             #UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
-        if scoreSum < 0 or scoreSum > 100:
+        faceScore = (scoreSum / faceCount) # =[0,100]
+        if faceScore < 0 or faceScore > 100:
             raise Exception('faceScore invalid')
-        sPost.faceScore = (scoreSum / faceCount) / 100  # =[0,1]
+        sPost.faceScore = faceScore / 100  # =[0,1]
     else:
         sPost.faceScore = None #se non ci sono facce metto nullo il facescore
 
