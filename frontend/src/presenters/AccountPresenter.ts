@@ -1,4 +1,4 @@
-import { Account } from "../models";
+import type { Account } from "../models";
 import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
 
