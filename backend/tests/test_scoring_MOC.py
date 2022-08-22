@@ -35,6 +35,8 @@ def _chooseMOC():
     global captionPath
     global textOnPicturePath
     moc = input('Scegliere MOC')
+    #print('no input moc')
+    #moc = '1'
     if moc == '1':
         print('Scelto pizza lab ferragosto')
         captionPath = 'MockupFiles/captionMOC_1_pizzaLab_ferragosto.txt'
@@ -46,6 +48,10 @@ def _chooseMOC():
     elif moc == '3':
         print('Scelta caption riscritta, textOnPicture pizza lab ferragosto')
         captionPath = 'MockupFiles/captionMOC_3.txt'
+        textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
+    elif moc == '4':
+        print('Scelta caption vuota, textOnPicture pizza lab ferragosto')
+        captionPath = 'MockupFiles/captionMOC_empty.txt'
         textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     else:
         print('not valid')
@@ -102,9 +108,13 @@ def __parse_comprehend_response(sPost: ScoringPost, compResult):
             else 0.0
         )
         if idx == 0:
+            if float_score <-1 or float_score > 1:
+                raise Exception('captionScore invalid')
             sPost.captionScore = float_score
             print('captionScore=', float_score) #caption score è una sola
         else:
+            if float_score <-1 or float_score > 1:
+                raise Exception('textScore invalid')
             sPost.textsScore[idx - 1] = float_score #texts score fa una score per ogni pezzo di testo
             print('textsScore=', float_score)
     print('########################################')
@@ -160,6 +170,8 @@ def _scoreFaceRekognition(sPost: ScoringPost):
                 if disgusted == False:
                     scoreSum = scoreSum + faceSum #se volto disgusted value >= allora face value = 0
             #UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
+        if scoreSum < 0 or scoreSum > 100:
+            raise Exception('faceScore invalid')
         sPost.faceScore = (scoreSum / faceCount) / 100  # =[0,1]
     else:
         sPost.faceScore = None #se non ci sono facce metto nullo il facescore
@@ -167,10 +179,6 @@ def _scoreFaceRekognition(sPost: ScoringPost):
     print('Facce analizzate=', faceCount)
     print('Score Immagine=' ,sPost.faceScore)
 
-def _set_sPost(sPost: ScoringPost):
-    sPost.faceScore= 0.0#[0, 1]
-    sPost.textsScore= {0: 0.0, 1: 0.0}#[-1,1] * n
-    sPost.captionScore= 0.0 #[0,1]
 
 def _calcFinalScore(sPost: ScoringPost):
     #final score= [0,5] con scarti di 0.5     (se presenti tutti e tre i valori)
@@ -236,6 +244,10 @@ def _calcFinalScore(sPost: ScoringPost):
                 + normalizedTextScore
         )
 
+def _setScores(sPost: ScoringPost):
+    sPost.faceScore= 0.5                     #[0, 1]
+    sPost.textsScore= {0: 0.0, 1: 0.0}     #[-1,1] * n
+    sPost.captionScore= 0.0                 #[-1,1]
 
 def _printAllScores(sPost: ScoringPost):
     print('Print all scores: {')
@@ -252,5 +264,6 @@ _runComprehend(sPost)
 _calcComprehendScore(sPost)
 _scoreFaceRekognition(sPost)
 
+#_setScores(sPost)
 _calcFinalScore(sPost)
 _printAllScores(sPost)
