@@ -91,7 +91,7 @@ Resources:
       Environment:
         Variables:
           INSTA_USERNAME: ''
-          INSTA_SESSIONS_TABLE: !GetAtt InstaSessionsTable.TableName
+          INSTA_SESSIONS_TABLE: !Ref InstaSessionsTable
           SNS_SORTING_TOPIC: !Ref SortTopic
 
   #############################################################
