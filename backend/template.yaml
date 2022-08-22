@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  bunnyfood
+
+  SAM Template for bunnyfood
+
+Parameters:
+  RegionName:
+    Type: String
+    Default: 'eu-central-1'
+    Description: Enter name of aws region since AWS::Region does not work
+
+Globals:
+  Function:
+    Timeout: 60
+    Runtime: python3.9
+    Handler: function.app.lambda_handler
+    Architectures:
+      - x86_64
+    Layers:
+      - !Ref CommonLayer
+      - !Ref DbLayer
+
+Resources:
+  #############################################################
+  # Layers
+
+  CommonLayer:
+    Type: AWS::Serverless::LayerVersion
+    LayerName: CommonLayer
+    Properties:
+      ContentUri: common
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: makefile
+
+  DbLayer:
+    Type: AWS::Serverless::LayerVersion
+    LayerName: DBLayer
+    Properties:
+      ContentUri: db
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: makefile
+
+  #############################################################
+  # Functions
+
+  ScoringFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/scoring/
+
+  SortingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/scoring/
