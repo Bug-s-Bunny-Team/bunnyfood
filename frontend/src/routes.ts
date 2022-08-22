@@ -54,14 +54,6 @@ export const routes = [
         visible: true
     },
     {
-        name: '/location/:id',
-        title: '',
-        onlyIf: { guard: isLogged, redirect: '/'},
-        component: Location,
-        layout: MainLayout,
-        visible: false
-    },
-    {
         name: '404',
         onlyIf: { guard: isLogged, redirect: '/' },
         component: NotFound,
