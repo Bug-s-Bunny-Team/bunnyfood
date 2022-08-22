@@ -25,6 +25,17 @@ Globals:
 
 Resources:
   #############################################################
+  # Tables
+
+  InstaSessionsTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: 'username'
+        Type: 'String'
+      TableName: 'bunnyfood-instagram-sessions'
+
+  #############################################################
   # Buckets
 
   BackendBucket:
@@ -35,7 +46,7 @@ Resources:
   FrontendBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: 'bunnyfood-backend'
+      BucketName: 'bunnyfood-frontend'
 
   #############################################################
   # Layers
@@ -80,7 +91,7 @@ Resources:
       Environment:
         Variables:
           INSTA_USERNAME: ''
-          INSTA_SESSIONS_TABLE: ''
+          INSTA_SESSIONS_TABLE: !GetAtt InstaSessionsTable.TableName
           SNS_SORTING_TOPIC: !Ref SortTopic
 
   #############################################################
