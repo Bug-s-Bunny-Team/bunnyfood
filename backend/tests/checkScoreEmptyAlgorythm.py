@@ -29,7 +29,7 @@ sPost.faceScore =None           # F VUOTA
 #sPost.faceScore =7              # F
 
 
-#SE TUTTE VUOTE
+#SE TUTTE VUOTE ok
 if not (sPost.caption and not sPost.caption.isspace()) and len(sPost.textsScore) == 0 and sPost.faceScore == None:
     print('tutte vuote')
 #SE F,T VUOTE ok
