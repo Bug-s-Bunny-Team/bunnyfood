@@ -15,8 +15,8 @@ def test_get_all_locations_from_followed(api_client):
     assert len(response.json()) == 2
 
     locations = response.json()
-    assert locations[0]['id'] == 4
-    assert locations[1]['id'] == 5
+    assert locations[0]['name'] == 'testlocation4'
+    assert locations[1]['name'] == 'testlocation5'
 
 
 def test_get_location_by_id(api_client):
@@ -30,7 +30,7 @@ def test_get_locations_coords(api_client):
     response = api_client.get('/locations/?only_from_followed=false&lat=55.7255843&long=37.6243329')
 
     assert response.status_code == 200
-    assert response.json()[0]['id'] == 4
+    assert response.json()[0]['name'] == 'testlocation4'
 
 
 def test_get_locations_min_rating(api_client):

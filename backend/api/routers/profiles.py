@@ -1,13 +1,13 @@
 from typing import List
 
-from fastapi import APIRouter, status, Depends, HTTPException
+from fastapi import APIRouter, status, Depends, HTTPException, Response
 from sqlalchemy import func, column
 from sqlalchemy.orm import Session
-from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
+from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
 from api import schemas
 from api.dependencies import get_db, get_user
-from api.utils import flatten_results
+from api.utils import flatten_results, search_social_profile
 
 from db import models
 from db.models import profiles_users_association
@@ -49,14 +49,19 @@ def get_profile_by_id(
 )
 def get_profile_by_username(
     profile_username: str,
+    response: Response,
     db: Session = Depends(get_db),
 ):
-    profile = db.query(models.SocialProfile).filter_by(username=profile_username).first()
+    profile = (
+        db.query(models.SocialProfile).filter_by(username=profile_username).first()
+    )
     if not profile:
-        # TODO: check if an actual social profile exists
-        exists = False
-        if exists:
+        if search_social_profile(profile_username):
             profile = models.SocialProfile(username=profile_username)
+            db.add(profile)
+            db.commit()
+            db.refresh(profile)
+            response.status_code = HTTP_201_CREATED
         else:
             raise HTTPException(
                 status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'

@@ -16,7 +16,7 @@ def test_get_followed_profiles(api_client):
 
 
 def test_follow_profile(api_client, session):
-    results = api_client.post('/followed/', json={'username': 'testprofile2'})
+    results = api_client.post('/followed/', json={'username': 'antoniorazzi'})
 
     assert results.status_code == 201
 
@@ -39,12 +39,21 @@ def test_get_popular_profiles(api_client):
     assert results.status_code == 200
 
 
-def test_profiles_search(api_client):
+def test_profiles_search_existing(api_client):
     results = api_client.get('/profiles/search/testprofile1')
 
     assert results.status_code == 200
     assert results.json()['username'] == 'testprofile1'
 
-    results = api_client.get('/profiles/search/thissurelydoesnotexist')
+
+def test_profiles_search_not_existing(api_client):
+    results = api_client.get('/profiles/search/thissurelydoesnotexist43058')
 
     assert results.status_code == 404
+
+
+def test_profiles_search_existing_and_create(api_client):
+    results = api_client.get('/profiles/search/antoniorazzi')
+
+    assert results.status_code == 201
+    assert results.json()['username'] == 'antoniorazzi'

@@ -7,7 +7,7 @@ from .db import populate_db
 
 from api.dependencies import get_db
 from api.main import app
-from db.models import Base
+from db import models
 
 
 @pytest.fixture(scope='session')
@@ -15,11 +15,11 @@ def engine():
     return create_engine('postgresql://user:password@localhost/bunnyfood_test')
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture
 def tables(engine):
-    Base.metadata.create_all(engine)
+    models.Base.metadata.create_all(engine)
     yield
-    Base.metadata.drop_all(engine)
+    models.Base.metadata.drop_all(engine)
 
 
 @pytest.fixture
