@@ -50,16 +50,19 @@ def _chooseMOC():
     else:
         print('not valid')
 
+###SCEGLIE MOC################
 _chooseMOC()
+##############################
 
+
+###ISTANZIA sPost########################
 with open(Path(captionPath), 'r') as f:
     caption = f.read().replace('\n', '')
 sPost = ScoringPost('0', caption)
-
+#######################################
 
 def __unpack_post_for_comprehend(sPost: ScoringPost):
     return list([sPost.caption, *sPost.texts.values()])
-#BASTA CREARE MOCKS PER CAPTION E TEXTS
 
 
 #sPost.text OTTENUTI DA:
@@ -187,8 +190,13 @@ def _calcFinalScore(sPost: ScoringPost):
     # face score è già =[0,1]
 
     #CALCOLO DI FINAL SCORE
+    #F,T,C = faceScore, textScore, captionScore
+    #vuote = post analizzato non contiene: volti(F), testo a schermo(T), caption(C)
+    #SE TUTTE VUOTE
+    if not (sPost.caption and not sPost.caption.isspace()) and len(sPost.textsScore) == 0 and sPost.faceScore == None:
+        sPost.finalScore = None
     #SE F,T VUOTE
-    if sPost.faceScore == None and len(sPost.textsScore) == 0:
+    elif sPost.faceScore == None and len(sPost.textsScore) == 0:
         sPost.finalScore = (
             normalizedCaptionScore * 5
         )

@@ -19,19 +19,21 @@ class ScoringPost:
         self.finalScore = 0.0
 
 
-#sPost = ScoringPost('0', '')    # C VUOTA
-sPost = ScoringPost('0', 'uhs') # C
+sPost = ScoringPost('0', '')    # C VUOTA
+#sPost = ScoringPost('0', 'uhs') # C
 
-#sPost.textsScore ={}            # T VUOTA
-sPost.textsScore = {0: 0.1}     # T
+sPost.textsScore ={}            # T VUOTA
+#sPost.textsScore = {0: 0.1}     # T
 
-#sPost.faceScore =None           # F VUOTA
-sPost.faceScore =7              # F
+sPost.faceScore =None           # F VUOTA
+#sPost.faceScore =7              # F
 
 
-
+#SE TUTTE VUOTE
+if not (sPost.caption and not sPost.caption.isspace()) and len(sPost.textsScore) == 0 and sPost.faceScore == None:
+    print('tutte vuote')
 #SE F,T VUOTE ok
-if sPost.faceScore == None and len(sPost.textsScore) == 0:
+elif sPost.faceScore == None and len(sPost.textsScore) == 0:
     print('F,T vuote')
 # SE C,T VUOTE ok
 elif not (sPost.caption and not sPost.caption.isspace()) and len(sPost.textsScore) == 0:
