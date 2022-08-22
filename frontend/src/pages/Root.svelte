@@ -15,7 +15,7 @@
         if(logged) {
             window.location.href = `${window.location.protocol}//${window.location.host}/home`;
         } else {
-            window.location.href = "https://bunnyfood-dev.auth.eu-central-1.amazoncognito.com";
+            window.location.href = "https://bunnyfood-dev.auth.eu-central-1.amazoncognito.com/login?client_id=2k5d4g58072evbdqloqkuksd5u&response_type=token&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fd3s4n2jvlkzvmj.cloudfront.net%2F";
         }
     });
 </script>
