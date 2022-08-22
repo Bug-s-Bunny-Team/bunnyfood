@@ -1,34 +1,33 @@
 import json
-import os
 
 import boto3
 from instaloader import Post as InstaPost
+from sqlalchemy.orm import Session
 
-from common.utils import create_error_response
+from common.utils import create_error_response, create_response
 from db import models, SessionLocal
 from db.utils import get_or_create
-from .download import download_and_save_post
+from .download import Downloader
 from .models import ScrapingEvent
 from .scrapers import InstagramScraper
 
 
 class ScrapingService:
-    def __init__(self, scraper: InstagramScraper):
+    def __init__(
+        self,
+        scraper: InstagramScraper,
+        downloader: Downloader,
+        session: Session,
+        scoring_topic: str,
+    ):
         self._scraper = scraper
-        self._sns_topic = boto3.resource('sns').Topic(os.environ['SNS_SCORING_TOPIC'])
-        self._session = SessionLocal()
-
-    def _get_success_response(self, post: models.Post):
-        return {
-            'statusCode': 200,
-            'body': json.dumps(
-                {'post': {'shortcode': post.shortcode, 'media_url': post.media_url}}
-            ),
-        }
+        self._session = session
+        self._downloader = downloader
+        self._sns_topic = boto3.resource('sns').Topic(scoring_topic)
 
     def _download_post(self, post: models.Post) -> str:
         print(f'downloading post "{post.shortcode}"')
-        key = download_and_save_post(post)
+        key = self._downloader.download_and_save_post(post)
         return key
 
     def _scrape_last_post(self, username: str) -> InstaPost:
@@ -56,7 +55,9 @@ class ScrapingService:
         location = models.Location.from_instaloader_location(
             self._session, insta_location
         )
-        post, created = models.Post.from_instaloader_post(self._session, insta_post, profile, location)
+        post, created = models.Post.from_instaloader_post(
+            self._session, insta_post, profile, location
+        )
 
         if created:
             key = self._download_post(post)
@@ -69,4 +70,7 @@ class ScrapingService:
         print('publishing scoring message to topic')
         self._sns_topic.publish(Message=json.dumps({'post_id': post.id}))
 
-        return self._get_success_response(post)
+        return create_response(
+            data={'post': {'shortcode': post.shortcode, 'media_url': post.media_url}},
+            code=200,
+        )

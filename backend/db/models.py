@@ -89,7 +89,7 @@ class Location(Base):
     @classmethod
     def from_instaloader_location(
         cls, session: Session, location
-    ) -> Tuple['Location', bool]:
+    ) -> 'Location':
         location = get_or_create(
             session,
             cls,

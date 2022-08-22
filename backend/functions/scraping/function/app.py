@@ -6,8 +6,7 @@ from common.exceptions import ItemNotFoundException
 from common.utils import create_error_response
 
 from .models import ScrapingEvent
-from .service import ScrapingService
-from .utils import create_scraper
+from .utils import create_service
 
 
 def lambda_handler(event, context):
@@ -18,9 +17,8 @@ def lambda_handler(event, context):
         return create_error_response(str(e))
 
     try:
-        scraper = create_scraper()
+        service = create_service()
     except ItemNotFoundException as e:
         return create_error_response(str(e), 500)
 
-    service = ScrapingService(scraper)
     return service.process_event(event)

@@ -1,7 +1,10 @@
 import os
 
+from db import SessionLocal
 from .custom import CustomInstaloader
+from .download import Downloader
 from .scrapers import InstagramScraper
+from .service import ScrapingService
 from .sessions import InstagramSessionProvider
 
 
@@ -23,3 +26,18 @@ def create_scraper() -> InstagramScraper:
         session_provider.refresh_session(insta_username, insta.export_session_as_dict())
 
     return InstagramScraper(client=insta)
+
+
+def create_service() -> ScrapingService:
+    scraper = create_scraper()
+    downloader = Downloader(bucket_name=os.environ['BUCKET_NAME'])
+    session = SessionLocal()
+
+    service = ScrapingService(
+        scraper=scraper,
+        downloader=downloader,
+        session=session,
+        scoring_topic=os.environ['SNS_SCORING_TOPIC'],
+    )
+
+    return service
