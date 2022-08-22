@@ -43,7 +43,7 @@
                         </header>
                         <strong>Followers</strong>: {profile.followers}
                         <footer>
-                            <button on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
+                            <button disabled={disableButtons} on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
                         </footer>            
                     </article>
                 {/each}

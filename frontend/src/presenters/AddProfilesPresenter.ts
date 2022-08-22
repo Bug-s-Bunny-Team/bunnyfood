@@ -22,6 +22,7 @@ export class AddProfilesPresenter {
     }
 
     addProfile(profile: SocialProfile) : void {
-        ProfilesModel.getInstance().followProfile(profile).then(this.search);
+        this.disableButtons.set(true);
+        ProfilesModel.getInstance().followProfile(profile).finally(this.search);
     }
 }

@@ -5,6 +5,8 @@
 
     let presenter = new FolloweesPresenter();
     let followees: Promise<SocialProfile[]>;
+    let disableButtons: boolean;
+    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
     presenter.profiles.subscribe(_profiles => {followees = _profiles});
 </script>
 
@@ -22,7 +24,7 @@
                         </header>
                         <strong>Followers</strong>: {followee.followers}
                         <footer>
-                            <button on:click|preventDefault={() => {presenter.removeFollowee(followee)}}><strong>Rimuovi</strong></button>
+                            <button disabled={disableButtons} on:click|preventDefault={() => {presenter.removeFollowee(followee)}}><strong>Rimuovi</strong></button>
                         </footer>  
                     </article>
                 {/each}

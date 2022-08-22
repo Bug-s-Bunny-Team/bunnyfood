@@ -6,6 +6,7 @@ import { writable, Writable } from "svelte/store";
 export class FolloweesPresenter {
 
     profiles: Writable<Promise<SocialProfile[]>> = writable(null);
+    disableButtons: Writable<boolean> = writable(false);
 
     constructor() {
         this.refresh = this.refresh.bind(this);
@@ -14,11 +15,14 @@ export class FolloweesPresenter {
     }
 
     refresh() : void {
+        this.disableButtons.set(true);
         let promise = ProfilesModel.getInstance().getFollowees();
+        promise.finally(() => {this.disableButtons.set(false)});
         this.profiles.set(promise);    
     }
 
     removeFollowee(followee: SocialProfile) : void {
-        ProfilesModel.getInstance().removeFollowee(followee).then(this.refresh);
+        this.disableButtons.set(true);
+        ProfilesModel.getInstance().removeFollowee(followee).finally(this.refresh);
     }
 }

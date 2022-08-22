@@ -21,6 +21,7 @@ export class ExplorePresenter {
     }
 
     addProfile(profile: SocialProfile) : void {
-        ProfilesModel.getInstance().followProfile(profile).then(this.refresh);
+        this.disableButtons.set(true);
+        ProfilesModel.getInstance().followProfile(profile).finally(this.refresh);
     }
 }
