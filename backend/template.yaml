@@ -63,15 +63,15 @@ Resources:
   #############################################################
   # Functions
 
-  ScoringFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: functions/scoring/
-
-  SortingFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: functions/sorting/
+#  ScoringFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: functions/scoring/
+#
+#  SortingFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: functions/sorting/
 
   ScrapingFunction:
     Type: AWS::Serverless::Function
@@ -81,7 +81,7 @@ Resources:
         Variables:
           INSTA_USERNAME: ''
           INSTA_SESSIONS_TABLE: ''
-          SNS_SCORING_TOPIC: 'SNS_SCORING_TOPIC'
+          SNS_SORTING_TOPIC: !Ref SortTopic
 
   #############################################################
   # Topics

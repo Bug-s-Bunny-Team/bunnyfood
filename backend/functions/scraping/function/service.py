@@ -18,12 +18,12 @@ class ScrapingService:
         scraper: InstagramScraper,
         downloader: Downloader,
         session: Session,
-        scoring_topic: str,
+        sorting_topic: str,
     ):
         self._scraper = scraper
         self._session = session
         self._downloader = downloader
-        self._sns_topic = boto3.resource('sns').Topic(scoring_topic)
+        self._sns_topic = boto3.resource('sns').Topic(sorting_topic)
 
     def _download_post(self, post: models.Post) -> str:
         print(f'downloading post "{post.shortcode}"')
