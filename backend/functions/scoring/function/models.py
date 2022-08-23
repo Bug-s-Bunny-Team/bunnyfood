@@ -1,7 +1,15 @@
 import json
 from enum import Enum, unique
 from typing import Dict
+
+from common.models import LambdaEvent
 from common.utils import key_present_in_dict
+
+
+# TODO: define the event
+class ScoringEvent(LambdaEvent):
+    posts: list
+
 
 @unique
 class Score(str, Enum):

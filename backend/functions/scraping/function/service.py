@@ -3,6 +3,7 @@ from typing import List, Optional
 from instaloader import Post as InstaPost
 from sqlalchemy.orm import Session
 
+from common.service import BaseService
 from db import models
 from db.utils import get_or_create
 from .download import Downloader
@@ -10,7 +11,7 @@ from .models import ScrapingEvent
 from .scrapers import BaseScraper
 
 
-class ScrapingService:
+class ScrapingService(BaseService):
     def __init__(self, scraper: BaseScraper, downloader: Downloader, session: Session):
         self._scraper = scraper
         self._session = session

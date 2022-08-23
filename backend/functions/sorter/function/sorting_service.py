@@ -1,17 +1,22 @@
 import os
-from abc import ABC
 from typing import Optional
 
 import boto3
 
+from common.models import LambdaEvent
+from common.service import BaseService
 from entity.post import Post
 from entity.sentiment_comprehend import SentimentComprehend
 
 
-class SorterService(ABC):
+class SorterService(BaseService):
     def __init__(self, aws_region='eu-central-1'):
-        self._rekognition = boto3.client(service_name='rekognition', region_name=aws_region)
-        self._comprehend = boto3.client(service_name='comprehend', region_name=aws_region)
+        self._rekognition = boto3.client(
+            service_name='rekognition', region_name=aws_region
+        )
+        self._comprehend = boto3.client(
+            service_name='comprehend', region_name=aws_region
+        )
 
     def detect_language_text(self, text: str) -> str:
         # Detect language of a text with Comprehend and return (str).
@@ -30,7 +35,9 @@ class SorterService(ABC):
         language = languages['LanguageCode']
         return language
 
-    def detect_sentiment_text(self, post: Post, language) -> Optional[SentimentComprehend]:
+    def detect_sentiment_text(
+        self, post: Post, language
+    ) -> Optional[SentimentComprehend]:
         # Detect sentiment of a post with Comprehend and return score
         # post: post to analyze with Comprehend
         # param language: language of the caption
@@ -38,9 +45,24 @@ class SorterService(ABC):
         print('detect_sentiment_text')
 
         # Below we check all the languages supported by AWS Comprehend
-        if language in ['ar', 'hi', 'ko', 'zh-TW', 'ja', 'zh', 'de', 'pt', 'en', 'it', 'fr', 'es']:
+        if language in [
+            'ar',
+            'hi',
+            'ko',
+            'zh-TW',
+            'ja',
+            'zh',
+            'de',
+            'pt',
+            'en',
+            'it',
+            'fr',
+            'es',
+        ]:
             # result of comprehend
-            json_result = self._comprehend.detect_sentiment(Text=post.caption, LanguageCode=language)
+            json_result = self._comprehend.detect_sentiment(
+                Text=post.caption, LanguageCode=language
+            )
 
             # get sentiment
             array = json_result["SentimentScore"]
@@ -68,8 +90,10 @@ class SorterService(ABC):
         print("\n-------------------")
         print('detect_person')
 
-        response = self._rekognition.detect_labels(Image={'S3Object': {'Bucket': os.environ[bucket], 'Name': name_image}},
-                                                   MaxLabels=10)
+        response = self._rekognition.detect_labels(
+            Image={'S3Object': {'Bucket': os.environ[bucket], 'Name': name_image}},
+            MaxLabels=10,
+        )
         print('Detecting person for ' + name_image)
 
         contain_person = False
@@ -90,8 +114,10 @@ class SorterService(ABC):
 
         print(name_image)
 
-        response = self._rekognition.detect_faces(Image={'S3Object': {'Bucket': os.environ[bucket], 'Name': name_image}},
-                                                  Attributes=['ALL'])
+        response = self._rekognition.detect_faces(
+            Image={'S3Object': {'Bucket': os.environ[bucket], 'Name': name_image}},
+            Attributes=['ALL'],
+        )
         contain_emotion = False
         emotions_dict = {}
         emotions_confid = []
@@ -131,7 +157,11 @@ class SorterService(ABC):
         if contain_person:
             print("There is a person")
 
-            emotions, contain_emotion, emotions_confidence = self.detect_sentiment_person(name_image, bucket)
+            (
+                emotions,
+                contain_emotion,
+                emotions_confidence,
+            ) = self.detect_sentiment_person(name_image, bucket)
             if contain_emotion:
                 print("Emotion detected")
             else:
@@ -144,7 +174,9 @@ class SorterService(ABC):
 
     def calculate_text_score(self, post: Post) -> float:
         if post.caption:
-            score = self.detect_sentiment_text(post, self.detect_language_text(post.caption))
+            score = self.detect_sentiment_text(
+                post, self.detect_language_text(post.caption)
+            )
             post.set_caption_score(score)
             post.calculate_final_score()
 
@@ -175,7 +207,11 @@ class SorterService(ABC):
 
         text_score = self.calculate_text_score(post)
 
-        print("\ncomprehend score: " + str(text_score) if text_score else 'no text found' + "\n-------------------\n")
+        print(
+            "\ncomprehend score: " + str(text_score)
+            if text_score
+            else 'no text found' + "\n-------------------\n"
+        )
 
         # get image score with Rekognition
         self.calculate_image_score(post)
@@ -187,3 +223,6 @@ class SorterService(ABC):
         else:
             print("\n-------------------")
             print('delete post')
+
+    def process_event(self, event: LambdaEvent) -> dict:
+        return {'message': 'Hi from sorter'}

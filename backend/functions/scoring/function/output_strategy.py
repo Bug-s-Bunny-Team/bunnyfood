@@ -12,7 +12,8 @@ class OutputStrategy(ABC):
     def output(self, sPost: ScoringPost):
         pass
 
-class S3OutputStrategy:
+
+class S3OutputStrategy(OutputStrategy):
     outputBucket = os.environ['ENV_BUCKET_NAME']
     s3 = boto3.resource('s3')
 
@@ -22,7 +23,8 @@ class S3OutputStrategy:
         outputObject.put(Body=sPost.toString())
         print(f'Successfully written output to {self.outputBucket} S3 Bucket')
 
-class DBOutputStrategy:
+
+class DBOutputStrategy(OutputStrategy):
     def output(self, sPost: ScoringPost):
         print(f'Writing output to Database')
         # TODO: write the final score to the location
