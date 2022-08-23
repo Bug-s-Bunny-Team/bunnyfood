@@ -20,6 +20,10 @@ class BaseScraper(ABC):
     def get_post_from_url(self, url: str):
         pass
 
+    @abstractmethod
+    def get_last_posts(self, username: str, limit: int):
+        pass
+
 
 class InstagramScraper(BaseScraper):
     def __init__(self, client: Instaloader):

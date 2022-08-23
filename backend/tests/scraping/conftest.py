@@ -1,8 +1,11 @@
+import json
 from typing import Optional
+from pathlib import Path
 
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from instaloader import load_structure, Instaloader
 
 from db import models
 from db.models import Post
@@ -14,11 +17,17 @@ from tests.api.db import populate_db
 
 
 class DummyScraper(BaseScraper):
+    def __init__(self):
+        self._client = Instaloader()
+        with open(Path(__file__).parent.absolute().joinpath('fixtures/posts.json'), 'r') as f:
+            posts = json.load(f)
+        self._posts = [load_structure(self._client.context, p) for p in posts]
+
     def get_last_post(self, username: str):
-        return None
+        return self._posts[0]
 
     def get_last_posts(self, username: str, limit: int):
-        return []
+        return self._posts
 
     def get_post_from_url(self, url: str):
         return None
@@ -62,4 +71,6 @@ def session(engine, tables):
 
 @pytest.fixture
 def service(session):
-    return ScrapingService(scraper=DummyScraper(), downloader=DummyDownloader(), session=session)
+    return ScrapingService(
+        scraper=DummyScraper(), downloader=DummyDownloader(), session=session
+    )
