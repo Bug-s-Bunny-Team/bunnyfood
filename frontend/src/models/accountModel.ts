@@ -78,7 +78,7 @@ export class AccountModel {
         const res = await response.json();
         if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
 
-        this.account.update(() => { let account = this.getAccount(); account.preference = newPref; return account; });
+        this.account.update(account => { account.preference = newPref; return account; });
     }
 
     logout() : void {

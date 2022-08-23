@@ -24,7 +24,7 @@
                         </header>
                         <strong>Followers</strong>: {followee.followers}
                         <footer>
-                            <button disabled={disableButtons} on:click|preventDefault={() => {presenter.removeFollowee(followee)}}><strong>Rimuovi</strong></button>
+                            <button disabled={disableButtons} on:click|preventDefault={presenter.removeFollowee.bind(followee)}><strong>Rimuovi</strong></button>
                         </footer>  
                     </article>
                 {/each}

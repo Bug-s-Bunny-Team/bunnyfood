@@ -1,7 +1,6 @@
 <script>
     import Followees from './Followees.svelte';
     import { AccountPresenter } from '../presenters/AccountPresenter';
-    import { Navigate } from 'svelte-router-spa'
     let presenter = new AccountPresenter();
 </script>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
-    import type { SocialProfile } from "../models";
+    import { bind } from "svelte/types/runtime/internal/Component";
+import type { SocialProfile } from "../models";
     import { AddProfilesPresenter } from "../presenters/AddProfilesPresenter";
 
     let presenter = new AddProfilesPresenter();
@@ -43,7 +44,7 @@
                         </header>
                         <strong>Followers</strong>: {profile.followers}
                         <footer>
-                            <button disabled={disableButtons} on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
+                            <button disabled={disableButtons} on:click={presenter.addProfile.bind(profile)}><strong>Segui</strong></button>
                         </footer>            
                     </article>
                 {/each}

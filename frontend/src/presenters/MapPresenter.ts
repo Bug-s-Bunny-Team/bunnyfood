@@ -46,7 +46,7 @@ export class MapPresenter {
 
   createPopup(location) {
     return `<p><a href="./home?details_placeid=${location.id}">${capitalizeFirstLetter(location.name)}</a></p>
-            <p>${Math.round((location.score+1.0)*25)/10.0}/5</p>`;
+            <p>${Math.round(location.score*10.0)/10.0}/5</p>`;
   }
 
   initMap(container: any) {
