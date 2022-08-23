@@ -1,39 +1,9 @@
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-
-from .db import populate_db
 
 from api.dependencies import get_db
 from api.main import app
-from db import models
-
-
-@pytest.fixture(scope='session')
-def engine():
-    return create_engine('postgresql://user:password@localhost/bunnyfood_test')
-
-
-@pytest.fixture
-def tables(engine):
-    models.Base.metadata.create_all(engine)
-    yield
-    models.Base.metadata.drop_all(engine)
-
-
-@pytest.fixture
-def session(engine, tables):
-    connection = engine.connect()
-    transaction = connection.begin()
-    session = Session(bind=connection)
-    populate_db(session)
-
-    yield session
-
-    session.close()
-    transaction.rollback()
-    connection.close()
 
 
 @pytest.fixture

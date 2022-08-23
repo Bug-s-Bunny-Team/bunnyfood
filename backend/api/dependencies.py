@@ -4,10 +4,11 @@ from starlette.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 from api.auth import auth
 from api.auth.jwt import JWTAuthorizationCredentials
-from db import SessionLocal, models
+from db import SessionLocal, models, configure_session
 
 
 def get_db():
+    configure_session()
     db = SessionLocal()
     try:
         yield db
