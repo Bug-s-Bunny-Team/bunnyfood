@@ -25,7 +25,7 @@
             </label>
         </p>
         <p>
-            <details disabled={disableButtons}>
+            <details>
                 <summary>Show Followees</summary>
                 <span><Followees/></span>
             </details>
