@@ -35,12 +35,12 @@ Resources:
   #############################################################
   # CloudFront
 
-  Api:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: !Ref ApiStageName
-      EndpointConfiguration:
-        Type: REGIONAL
+#  Api:
+#    Type: AWS::Serverless::Api
+#    Properties:
+#      StageName: !Ref ApiStageName
+#      EndpointConfiguration:
+#        Type: REGIONAL
 
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution

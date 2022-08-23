@@ -34,7 +34,7 @@
         "external_url": null,
         "external_url_linkshimmed": null,
         "edge_followed_by": {
-          "count": 200921
+          "count": 200920
         },
         "fbid": "17841401349784550",
         "followed_by_viewer": false,
@@ -103,21 +103,23 @@
         ]
       },
       "edge_media_to_comment": {
-        "count": 23
+        "count": 24
       },
       "comments_disabled": false,
       "taken_at_timestamp": 1661253628,
       "edge_liked_by": {
-        "count": 337
+        "count": 340
       },
       "edge_media_preview_like": {
         "count": -1
       },
       "location": {
-        "id": "244300930",
-        "has_public_page": true,
+        "id": 244300930,
         "name": "Senato della Repubblica",
-        "slug": "senato-della-repubblica"
+        "slug": "senato-della-repubblica",
+        "has_public_page": true,
+        "lat": 41.8991509092,
+        "lng": 12.4748724092
       },
       "nft_asset_info": null,
       "thumbnail_src": "https://instagram.fvce2-2.fna.fbcdn.net/v/t51.2885-15/301168653_783796909742196_3968744693412682841_n.jpg?stp=c0.132.1440.1440a_dst-jpg_e35_s640x640_sh0.08&_nc_ht=instagram.fvce2-2.fna.fbcdn.net&_nc_cat=100&_nc_ohc=Hv4DI-qisjIAX81a3f4&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MjkxMTEyODg4ODQ2ODgyOTY0Mg%3D%3D.2.c-ccb7-5&oh=00_AT_rMUdBy1D4Bw6geDVOkIzZ0tqO2JvQKXHGkwPmM8xUiQ&oe=630CC3D3&_nc_sid=8fd12b",
@@ -191,7 +193,7 @@
         "external_url": null,
         "external_url_linkshimmed": null,
         "edge_followed_by": {
-          "count": 200921
+          "count": 200920
         },
         "fbid": "17841401349784550",
         "followed_by_viewer": false,
@@ -256,9 +258,9 @@
         "number_of_qualities": 6
       },
       "has_audio": true,
-      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNzIwOWNkMjQxMTgxNDg4MWI3YjM1MDMyNWQ0NzI5ODIyOTEwNDUzMjA5MzY0MTgwODIwIiwic2VydmVyX3Rva2VuIjoiMTY2MTI2NjU4MzY4M3wyOTEwNDUzMjA5MzY0MTgwODIwfDUzNDQ1OTY0ODY2fDgwNGYxNzJmYTg5OWI5OGRkN2IwMWE3N2U4NzExYjRkMzA1YmJkZDYwYzU1ZTI1YmRkNjExNWVjZDFhZWNkYzMifSwic2lnbmF0dXJlIjoiIn0=",
+      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNmQ0MmNiZTQ4OGI0NDQ4ZGIzZTk1YTc1OWQ2ZWE1ODMyOTEwNDUzMjA5MzY0MTgwODIwIiwic2VydmVyX3Rva2VuIjoiMTY2MTI2Njg5MTE0NXwyOTEwNDUzMjA5MzY0MTgwODIwfDUzNDQ1OTY0ODY2fDZhM2NmMGE0YmNlMTZlMzYxZGQ2MzRkY2NhYjFlZTVjOGQ4YTZmNzM0ZTM0MjMzZjFmNDE5NjgxMWRmMGM5NDQifSwic2lnbmF0dXJlIjoiIn0=",
       "video_url": "https://instagram.fvce2-1.fna.fbcdn.net/v/t50.2886-16/300357908_404814291794522_7397999733262960463_n.mp4?_nc_ht=instagram.fvce2-1.fna.fbcdn.net&_nc_cat=102&_nc_ohc=HCIBazd0j80AX8y8O6q&edm=AOQ1c0wBAAAA&ccb=7-5&oe=6306F000&oh=00_AT8qzu1408ble5K5d57CXHU0sLcK3zJlqe9Dh7ZtDzn4iw&_nc_sid=8fd12b",
-      "video_view_count": 5803,
+      "video_view_count": 5808,
       "edge_media_to_caption": {
         "edges": [
           {
@@ -362,7 +364,7 @@
         "external_url": null,
         "external_url_linkshimmed": null,
         "edge_followed_by": {
-          "count": 200921
+          "count": 200920
         },
         "fbid": "17841401349784550",
         "followed_by_viewer": false,
@@ -427,9 +429,9 @@
         "number_of_qualities": 5
       },
       "has_audio": true,
-      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNzIwOWNkMjQxMTgxNDg4MWI3YjM1MDMyNWQ0NzI5ODIyOTEwMzYxNTQ4Mzk1MjIyNTI2Iiwic2VydmVyX3Rva2VuIjoiMTY2MTI2NjU4MzY4NnwyOTEwMzYxNTQ4Mzk1MjIyNTI2fDUzNDQ1OTY0ODY2fGFhN2ZiNTEzZTU1NTA1ODM4ZTgwYjI4NjVlMjViYjRkODdkNGVjZWQ1NTEwMjE2Zjk0MWI2NjI1ZWEzYmUxOWEifSwic2lnbmF0dXJlIjoiIn0=",
+      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNmQ0MmNiZTQ4OGI0NDQ4ZGIzZTk1YTc1OWQ2ZWE1ODMyOTEwMzYxNTQ4Mzk1MjIyNTI2Iiwic2VydmVyX3Rva2VuIjoiMTY2MTI2Njg5MTE0N3wyOTEwMzYxNTQ4Mzk1MjIyNTI2fDUzNDQ1OTY0ODY2fDcyNjViMmNjOGJhMzJkMmU0MzBkODgwMjA4YjVhMjc2N2Y4YTAwYWViYjBmOGRmNDhjNjMyZjU2NzhhYzM1MWQifSwic2lnbmF0dXJlIjoiIn0=",
       "video_url": "https://instagram.fvce2-1.fna.fbcdn.net/v/t50.2886-16/300968172_172839221925273_5906370046507286340_n.mp4?_nc_ht=instagram.fvce2-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=uFaT_nX_exgAX9rQjM4&edm=AOQ1c0wBAAAA&ccb=7-5&oe=63072633&oh=00_AT_i033KzMqGKwc2TS2jm03csjywejsh1DnY9bwx5ibBAA&_nc_sid=8fd12b",
-      "video_view_count": 2862,
+      "video_view_count": 2865,
       "edge_media_to_caption": {
         "edges": [
           {
@@ -445,16 +447,18 @@
       "comments_disabled": false,
       "taken_at_timestamp": 1661162488,
       "edge_liked_by": {
-        "count": 467
+        "count": 468
       },
       "edge_media_preview_like": {
-        "count": 467
+        "count": 468
       },
       "location": {
-        "id": "246044943",
-        "has_public_page": true,
+        "id": 246044943,
         "name": "Catedral de Le\u00f3n",
-        "slug": "catedral-de-leon"
+        "slug": "catedral-de-leon",
+        "has_public_page": true,
+        "lat": 42.5993435176,
+        "lng": -5.5669972301
       },
       "nft_asset_info": null,
       "thumbnail_src": "https://instagram.fvce2-1.fna.fbcdn.net/v/t51.2885-15/300555782_803760204134156_6924129063167885561_n.jpg?stp=c0.420.1080.1080a_dst-jpg_e35_s640x640_sh0.08&_nc_ht=instagram.fvce2-1.fna.fbcdn.net&_nc_cat=108&_nc_ohc=tghblWgRlBMAX_V8Ll-&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AT8m45K8AlDv_ucE-f-4uUVCSpKKDnEqBGfiE9Gyo9WPOg&oe=6306EECE&_nc_sid=8fd12b",
@@ -538,7 +542,7 @@
         "external_url": null,
         "external_url_linkshimmed": null,
         "edge_followed_by": {
-          "count": 200921
+          "count": 200920
         },
         "fbid": "17841401349784550",
         "followed_by_viewer": false,
@@ -603,9 +607,9 @@
         "number_of_qualities": 6
       },
       "has_audio": true,
-      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNzIwOWNkMjQxMTgxNDg4MWI3YjM1MDMyNWQ0NzI5ODIyOTA5NzExNzYyMzA2NTMzMDMyIiwic2VydmVyX3Rva2VuIjoiMTY2MTI2NjU4MzY4N3wyOTA5NzExNzYyMzA2NTMzMDMyfDUzNDQ1OTY0ODY2fDZhNTU2M2I0M2RmZDY3N2RiODI0ZmNjMDgwZTU3MjA0Mzk3NzQ5MWMxMDI2ZmVhNGJhZjNiYjYxMTM4ZjhkODIifSwic2lnbmF0dXJlIjoiIn0=",
+      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNmQ0MmNiZTQ4OGI0NDQ4ZGIzZTk1YTc1OWQ2ZWE1ODMyOTA5NzExNzYyMzA2NTMzMDMyIiwic2VydmVyX3Rva2VuIjoiMTY2MTI2Njg5MTE0OHwyOTA5NzExNzYyMzA2NTMzMDMyfDUzNDQ1OTY0ODY2fDY0OGRjNzFhZTg3ZmEzNmVhM2M2MzAyYWQyNzg3MWJjZjg0ZmUzOTczZGEzOGM4MDY5Mzk4YzI2YTgyZmVjZDQifSwic2lnbmF0dXJlIjoiIn0=",
       "video_url": "https://instagram.fvce2-2.fna.fbcdn.net/v/t50.2886-16/299771305_1216509522525209_3108278892849838319_n.mp4?_nc_ht=instagram.fvce2-2.fna.fbcdn.net&_nc_cat=105&_nc_ohc=A5cwfPZ2EIQAX_ORlSo&edm=AOQ1c0wBAAAA&ccb=7-5&oe=630770B1&oh=00_AT-XtisYoAKvq2qkPiEkIA7CYmFB456fi1etyEB4pWQEqQ&_nc_sid=8fd12b",
-      "video_view_count": 9335,
+      "video_view_count": 9337,
       "edge_media_to_caption": {
         "edges": [
           {
@@ -627,10 +631,12 @@
         "count": 423
       },
       "location": {
-        "id": "215880846",
-        "has_public_page": true,
+        "id": 215880846,
         "name": "Astorga, Castilla y Le\u00f3n, Spain",
-        "slug": "astorga-castilla-y-leon-spain"
+        "slug": "astorga-castilla-y-leon-spain",
+        "has_public_page": true,
+        "lat": 42.45766,
+        "lng": -6.05325
       },
       "nft_asset_info": null,
       "thumbnail_src": "https://instagram.fvce2-1.fna.fbcdn.net/v/t51.2885-15/300206578_772396280472964_8949948746964017490_n.jpg?stp=c0.280.720.720a_dst-jpg_e15_s640x640&_nc_ht=instagram.fvce2-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=6fTc4JbwOy4AX9oC4-N&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AT-Wr8yqCWHOc1ECwxbg1p-lpxJkpeICJGsVcPTO1dPHuQ&oe=63076D29&_nc_sid=8fd12b",
@@ -714,7 +720,7 @@
         "external_url": null,
         "external_url_linkshimmed": null,
         "edge_followed_by": {
-          "count": 200921
+          "count": 200920
         },
         "fbid": "17841401349784550",
         "followed_by_viewer": false,
@@ -779,9 +785,9 @@
         "number_of_qualities": 4
       },
       "has_audio": true,
-      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNzIwOWNkMjQxMTgxNDg4MWI3YjM1MDMyNWQ0NzI5ODIyOTA5NTc1ODkzMTk3MjEyNjQ1Iiwic2VydmVyX3Rva2VuIjoiMTY2MTI2NjU4MzY4N3wyOTA5NTc1ODkzMTk3MjEyNjQ1fDUzNDQ1OTY0ODY2fGI0ZmVjYmU2MWY4Nzc5YTI0NDAyY2M5ZmMxNTAyY2Y4MTIwYzlmNjBkZTdhOTVmYTI4ZTYyMzA0YjA0YmIyZTEifSwic2lnbmF0dXJlIjoiIn0=",
+      "tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjp0cnVlLCJ1dWlkIjoiNmQ0MmNiZTQ4OGI0NDQ4ZGIzZTk1YTc1OWQ2ZWE1ODMyOTA5NTc1ODkzMTk3MjEyNjQ1Iiwic2VydmVyX3Rva2VuIjoiMTY2MTI2Njg5MTE0OHwyOTA5NTc1ODkzMTk3MjEyNjQ1fDUzNDQ1OTY0ODY2fGZiZWYwMWMxMzJlNDYxNmM5ZGEzNTA3NGUwYzg0ZDA0MTc2MjEwMWM4ZDk5OWJhMzM2YWYxNzA5MWZmNjIwYjYifSwic2lnbmF0dXJlIjoiIn0=",
       "video_url": "https://instagram.fvce2-2.fna.fbcdn.net/v/t50.2886-16/300543083_2311742288978232_4412583932917256886_n.mp4?_nc_ht=instagram.fvce2-2.fna.fbcdn.net&_nc_cat=100&_nc_ohc=UbI6t5jfRPUAX8ak7zw&edm=AOQ1c0wBAAAA&ccb=7-5&oe=63071C9B&oh=00_AT8G73oQtnxIFEuEs4UIPluujvvu8SS2otxtDeyRELPkpg&_nc_sid=8fd12b",
-      "video_view_count": 9045,
+      "video_view_count": 9051,
       "edge_media_to_caption": {
         "edges": [
           {
@@ -803,10 +809,12 @@
         "count": 851
       },
       "location": {
-        "id": "219558731",
-        "has_public_page": true,
+        "id": 219558731,
         "name": "Le\u00f3n, Spain",
-        "slug": "leon-spain"
+        "slug": "leon-spain",
+        "has_public_page": true,
+        "lat": 42.6056,
+        "lng": -5.57
       },
       "nft_asset_info": null,
       "thumbnail_src": "https://instagram.fvce2-2.fna.fbcdn.net/v/t51.2885-15/300853789_640740490513743_8681485820741107725_n.jpg?stp=c0.420.1080.1080a_dst-jpg_e35_s640x640_sh0.08&_nc_ht=instagram.fvce2-2.fna.fbcdn.net&_nc_cat=103&_nc_ohc=3J5D08_emnwAX-VLNTq&edm=AOQ1c0wBAAAA&ccb=7-5&oh=00_AT-VSYIWFXJ-0cNh5j02mapISqP2jkEi9qdkP_7vwmrC3g&oe=63075ABA&_nc_sid=8fd12b",
@@ -890,7 +898,7 @@
         "external_url": null,
         "external_url_linkshimmed": null,
         "edge_followed_by": {
-          "count": 200921
+          "count": 200920
         },
         "fbid": "17841401349784550",
         "followed_by_viewer": false,
@@ -970,10 +978,12 @@
         "count": -1
       },
       "location": {
-        "id": "127963847",
-        "has_public_page": true,
+        "id": 127963847,
         "name": "Madrid, Spain",
-        "slug": "madrid-spain"
+        "slug": "madrid-spain",
+        "has_public_page": true,
+        "lat": 40.4,
+        "lng": -3.68333
       },
       "nft_asset_info": null,
       "thumbnail_src": "https://instagram.fvce2-1.fna.fbcdn.net/v/t51.2885-15/299939676_592814572552984_2547956520663189924_n.jpg?stp=c0.180.1440.1440a_dst-jpg_e35_s640x640_sh0.08&_nc_ht=instagram.fvce2-1.fna.fbcdn.net&_nc_cat=104&_nc_ohc=nktTeT-gQaMAX_OOf1K&edm=AOQ1c0wBAAAA&ccb=7-5&ig_cache_key=MjkwODk5OTgxMTQ5ODY3NzI1Mw%3D%3D.2.c-ccb7-5&oh=00_AT_aw78DkkpDBG9DmE-Eh6pnqUbRkGmHdGjz-Ybn1i1jkQ&oe=630C4927&_nc_sid=8fd12b",
