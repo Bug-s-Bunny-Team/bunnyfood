@@ -1,5 +1,5 @@
 import { Writable, writable, get } from 'svelte/store';
-import { Account } from '../models'
+import { Account, RequestError } from '../models'
 import 'jwt-decode'
 import jwtDecode from 'jwt-decode';
 
@@ -76,7 +76,7 @@ export class AccountModel {
         const response = await fetch('dev-api/preferences', options);
         
         const res = await response.json();
-        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        if(!response.ok) throw new RequestError(res.code, res.msg);
 
         this.account.update(account => { account.preference = newPref; return account; });
     }

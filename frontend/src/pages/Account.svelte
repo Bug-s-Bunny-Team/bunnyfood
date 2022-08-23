@@ -6,6 +6,8 @@
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
 </script>
 
+<div id="error"></div>
+
 <h2>My Account</h2>
 <h3> Your personal information </h3>
 <article>

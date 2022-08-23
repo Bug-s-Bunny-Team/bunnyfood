@@ -78,3 +78,10 @@ export class Filter {
         this.only_from_followed=only_from_followed; this.lat=lat; this.long=long; this.current_lat=current_lat; this.current_long=current_long; this.radius=radius; this.min_rating=min_rating;
     }
 }
+
+export class RequestError extends Error {
+    code: number;
+    message: string;
+
+    constructor(code: number, message: string) {super(message); this.code=code; this.message=message;}
+}

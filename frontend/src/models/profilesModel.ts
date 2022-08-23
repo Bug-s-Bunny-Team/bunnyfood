@@ -1,4 +1,4 @@
-import type { Account, SocialProfile } from '../models'
+import { Account, RequestError, SocialProfile } from '../models'
 
 export class ProfilesModel {
     private static profilesModelInstance : ProfilesModel = ProfilesModel.construct_session();
@@ -39,7 +39,7 @@ export class ProfilesModel {
         const response = await fetch('dev-api/followed', ProfilesModel.get_request_options);
         
         const res = await response.json();
-        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        if(!response.ok) throw new RequestError(res.code, res.msg);
         return res;
     }
 
@@ -51,7 +51,7 @@ export class ProfilesModel {
         const response = await fetch('dev-api/followed/unfollow', options);
         
         const res = await response.json();
-        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        if(!response.ok) throw new RequestError(res.code, res.msg);
         return res;
     }
 
@@ -61,7 +61,7 @@ export class ProfilesModel {
         const response = await fetch(`dev-api/profiles/popular/${quantity}`, ProfilesModel.get_request_options);
         
         const res = await response.json();
-        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        if(!response.ok) throw new RequestError(res.code, res.msg);
         return res;
     }
 
@@ -71,7 +71,7 @@ export class ProfilesModel {
         const response = await fetch('dev-api/profiles'); // TODO
         
         const res = await response.json();
-        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        if(!response.ok) throw new RequestError(res.code, res.msg);
         return res;
     }
 
@@ -83,7 +83,7 @@ export class ProfilesModel {
         const response = await fetch('dev-api/followed', options);
         
         const res = await response.json();
-        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        if(!response.ok) throw new RequestError(res.code, res.msg);
         return res;
     }
 }  

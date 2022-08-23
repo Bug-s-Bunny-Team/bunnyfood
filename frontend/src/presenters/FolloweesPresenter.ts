@@ -1,7 +1,8 @@
 import { ProfilesModel } from "../models/profilesModel";
 import { AccountModel } from "../models/accountModel";
-import type { Account, SocialProfile } from "../models";
+import type { RequestError, SocialProfile } from "../models";
 import { writable, Writable } from "svelte/store";
+import ErrorSvelte from "../components/Error.svelte";
 
 export class FolloweesPresenter {
 
@@ -23,6 +24,6 @@ export class FolloweesPresenter {
 
     removeFollowee(followee: SocialProfile) : void {
         this.disableButtons.set(true);
-        ProfilesModel.getInstance().removeFollowee(followee).finally(this.refresh);
+        ProfilesModel.getInstance().removeFollowee(followee).catch((e: RequestError) => {new ErrorSvelte({props: {error: e}, target: document.getElementById('error')})}).finally(this.refresh);
     }
 }

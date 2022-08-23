@@ -9,6 +9,8 @@
     presenter.profiles.subscribe(_profiles => {profiles = _profiles});
 </script>
 
+<div id="error"></div>
+
 <div>
     <h2 class="title">Explore</h2>
     <button class="refresh outline" disabled={disableButtons} on:click={presenter.refresh}>Refresh</button>

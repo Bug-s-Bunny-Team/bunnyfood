@@ -9,6 +9,8 @@
     presenter.profiles.subscribe(_profiles => { profiles = _profiles; });
 </script>
 
+<div id="error"></div>
+
 <article> 
     <form on:submit|preventDefault={presenter.search} autocomplete="off">
     <div class="grid">

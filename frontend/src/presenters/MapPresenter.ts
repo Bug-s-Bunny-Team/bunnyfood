@@ -1,8 +1,9 @@
 import { ResultsModel } from "../models/resultsModel";
 import { get, writable, Writable } from "svelte/store";
-import { Filter, Location } from "../models"
+import { Filter, Location, RequestError } from "../models"
 import * as L from 'leaflet';
 import { capitalizeFirstLetter } from "../utils";
+import ErrorSvelte from "../components/Error.svelte";
 
 export class MapPresenter {
   rankedList: Writable<Promise<Location[]>> = writable(null);
@@ -44,7 +45,7 @@ export class MapPresenter {
 		return marker;
 	}
 
-  createPopup(location) {
+  createPopup(location: Location) {
     return `<p><a href="./home?details_placeid=${location.id}">${capitalizeFirstLetter(location.name)}</a></p>
             <p>${Math.round(location.score*10.0)/10.0}/5</p>`;
   }
@@ -65,7 +66,7 @@ export class MapPresenter {
         return {
           destroy: () => { this.map.remove(); this.map=null; }
         };
-		})
+		}).catch((e: RequestError) => {new ErrorSvelte({props: {error: e}, target: document.getElementById('error')})});
 	}
 
   resizeMap() {

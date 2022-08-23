@@ -1,4 +1,4 @@
-import type { Info } from "../models";
+import { Info, RequestError } from "../models";
 import { LocationModel } from "../models/locationModel";
 import { get, Writable, writable } from "svelte/store";
 import { google_ready } from "../store";
@@ -28,7 +28,7 @@ export class LocationPresenter {
                     }
                 });
                 await new Promise(r => setTimeout(r, 10000));
-                if(!resolved) throw new Error("Couldn't load google api.");
+                if(!resolved) throw new RequestError(404, "Timeout on loading google api");
             }));
         }
     }

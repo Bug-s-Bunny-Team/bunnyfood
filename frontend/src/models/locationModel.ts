@@ -1,4 +1,4 @@
-import { Info, Location } from '../models'
+import { Info, Location, RequestError } from '../models'
 import { ResultsModel } from './resultsModel';
 
 export class LocationModel {
@@ -38,7 +38,7 @@ export class LocationModel {
                                             results[0].formatted_address,
                                             location.score));
                         } else {
-                            throw new Error("Error with request to G_API");
+                            throw new RequestError(400, "Error with request to G_API");
                         }
                 });
         });

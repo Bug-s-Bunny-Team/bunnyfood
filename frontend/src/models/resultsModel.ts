@@ -1,5 +1,5 @@
 import { get, Writable, writable } from 'svelte/store';
-import { Filter, Location, Position } from '../models'
+import { Filter, Location, Position, RequestError } from '../models'
 
 export class ResultsModel {
     private static resultsModelInstance : ResultsModel = ResultsModel.construct_session();
@@ -48,7 +48,7 @@ export class ResultsModel {
         const response = await fetch(url, ResultsModel.request_options);
         
         const res = await response.json();
-        if(!response.ok) throw new Error(`Error ${res.code}: ${res.msg}`);
+        if(!response.ok) throw new RequestError(res.code, res.msg);
         this.rankedList.set(this.fixLocations(res));
         return get(this.rankedList);
     }

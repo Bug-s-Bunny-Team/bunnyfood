@@ -24,11 +24,11 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/dev-api\/locations/, '')
             },
-            '/dev-api/followed/unfollow': {
+            /*'/dev-api/followed/unfollow': {
                 target: 'http://127.0.0.1:5000/mock/followed.json',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/dev-api\/followed\/unfollow/, '')
-            },
+            },*/
             '/dev-api/followed': {
                 target: 'http://127.0.0.1:5000/mock/followed.json',
                 changeOrigin: true,

@@ -1,6 +1,7 @@
-import type { Account } from "../models";
+import type { Account, RequestError } from "../models";
 import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
+import ErrorSvelte from "../components/Error.svelte";
 
 export class AccountPresenter {
     name: string;
@@ -33,7 +34,7 @@ export class AccountPresenter {
     changePreference() : void {
         if(this.isLogged) {
             this.disableButtons.set(true);
-            AccountModel.getInstance().cambiaPreferenza(Boolean(!this.preference)).then(() => {this.disableButtons.set(false)});
+            AccountModel.getInstance().cambiaPreferenza(Boolean(!this.preference)).catch((e: RequestError) => {new ErrorSvelte({props: {error: e}, target: document.getElementById('error')})}).finally(() => {this.disableButtons.set(false)});
         }
     }
 

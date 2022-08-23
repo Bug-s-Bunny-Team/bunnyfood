@@ -1,6 +1,7 @@
-import type { SocialProfile } from "../models";
+import type { RequestError, SocialProfile } from "../models";
 import { writable, Writable } from "svelte/store";
 import { ProfilesModel } from "../models/profilesModel";
+import ErrorSvelte from "../components/Error.svelte";
 
 export class ExplorePresenter {
 
@@ -22,6 +23,6 @@ export class ExplorePresenter {
 
     addProfile(profile: SocialProfile) : void {
         this.disableButtons.set(true);
-        ProfilesModel.getInstance().followProfile(profile).finally(this.refresh);
+        ProfilesModel.getInstance().followProfile(profile).catch((e: RequestError) => {new ErrorSvelte({props: {error: e}, target: document.getElementById('error')})}).finally(this.refresh);
     }
 }

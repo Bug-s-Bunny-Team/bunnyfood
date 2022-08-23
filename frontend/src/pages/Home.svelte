@@ -8,6 +8,8 @@
     let presenter = new HomePresenter();
 </script>
 
+<div id="error"></div>
+
 <label for="choose view"> 
     View as Map
     <input type="checkbox" id="choose" role="switch" bind:checked={presenter.mapView}> 
