@@ -1,6 +1,7 @@
+import itertools
 import re
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, List
 
 from instaloader import Instaloader, Profile
 from instaloader import Post as InstaPost
@@ -36,6 +37,13 @@ class InstagramScraper(BaseScraper):
         profile = self.get_profile(username)
         post = next(profile.get_posts())
         return post
+
+    def get_last_posts(self, username: str, limit: int) -> List[InstaPost]:
+        profile = self.get_profile(username)
+        post_iterator = profile.get_posts()
+        if post_iterator.count <= limit:
+            return list(post_iterator)
+        return [post for post in itertools.islice(post_iterator, limit)]
 
     def get_post_from_url(self, url: str) -> InstaPost:
         shortcode = self.extract_shortcode(url)

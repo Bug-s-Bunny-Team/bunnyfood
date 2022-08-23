@@ -92,28 +92,3 @@ Resources:
         Variables:
           INSTA_USERNAME: ''
           INSTA_SESSIONS_TABLE: !Ref InstaSessionsTable
-          SNS_SORTING_TOPIC: !Ref SortTopic
-
-  #############################################################
-  # Topics
-
-  # API -> ScrapingFunction
-  ScrapeTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      TopicName: 'Scrape'
-      FifoTopic: False
-
-  # ScrapingFunction -> SortingFunction
-  SortTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      TopicName: 'Sort'
-      FifoTopic: False
-
-  # SortingFunction -> ScoringFunction
-  ScoreTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      TopicName: 'Score'
-      FifoTopic: False

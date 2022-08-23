@@ -36,8 +36,7 @@ def create_service() -> ScrapingService:
     service = ScrapingService(
         scraper=scraper,
         downloader=downloader,
-        session=session,
-        sorting_topic=os.environ['SNS_SORTING_TOPIC'],
+        session=session
     )
 
     return service
