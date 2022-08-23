@@ -1,3 +1,5 @@
+import os
+
 from pydantic import ValidationError
 
 from common.exceptions import ItemNotFoundException

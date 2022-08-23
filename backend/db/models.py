@@ -138,7 +138,7 @@ class Post(Base):
             caption=insta_post.caption,
             media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
             media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
-            social_profile=profile,
+            profile=profile,
             location=location,
         )
         session.add(post)

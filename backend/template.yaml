@@ -17,7 +17,7 @@ Globals:
       - !Ref DbLayer
     Environment:
       Variables:
-        BUCKET_NAME: !Ref BackendBucket
+        BUCKET_NAME: 'bunnyfood-backend'
         DB_USER: 'user'
         DB_PASSWORD: 'password'
         DB_HOST: 'db'
