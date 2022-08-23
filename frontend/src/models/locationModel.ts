@@ -24,6 +24,7 @@ export class LocationModel {
         const attribution_div = document.createElement('div');
         parentNode.append(attribution_div);
 
+        // google will be defined once the application runs
         let latlng = new google.maps.LatLng(location.position.lat, location.position.long);
         let service = new google.maps.places.PlacesService(attribution_div);
         let fields = ['place_id', 'name', 'formatted_address', 'photos'];
