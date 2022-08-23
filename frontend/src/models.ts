@@ -33,12 +33,14 @@ export class Location implements Model {
 }
 
 export class Account {
+    idtoken: string;
+    accesstoken: string;
     accountname: string;
     email: string;
     preference: boolean;
 
-    constructor(accountname: string = 'default name', email: string = 'default email', preference: boolean = true) {
-        this.accountname = accountname; this.email=email; this.preference = preference;
+    constructor(idtoken: string, accesstoken: string, accountname: string = 'default name', email: string = 'default email', preference: boolean = true) {
+        this.idtoken=idtoken; this.accesstoken=accesstoken; this.accountname = accountname; this.email=email; this.preference = preference;
     }
 }
 
