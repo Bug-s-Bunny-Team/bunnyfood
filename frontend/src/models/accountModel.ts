@@ -32,18 +32,22 @@ export class AccountModel {
 
     private static static_delay_ms = 200;
 
-    static get_request_options: RequestInit = {
+    #get_request_options: RequestInit = {
         method: 'GET',
         mode: 'same-origin',
-        credentials: 'same-origin'
+        credentials: 'include',
+        headers: {
+            'Authorization': "",
+        }
     };
 
-    static post_request_options: RequestInit = {
+    #post_request_options: RequestInit = {
         method: 'POST',
         mode: 'same-origin',
-        credentials: 'same-origin',
+        credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+            'Authorization': "",
+            'Content-Type': 'application/json'
         },
         body: ""
     };
@@ -54,12 +58,15 @@ export class AccountModel {
         await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
 
         const params = this.getSearchParams();
-        if(!params.get('id_token') || !params.get('access_token')) return;
-        const id_decoded: any = jwtDecode(params.get('id_token'));
-        const access_decoded: any = jwtDecode(params.get('access_token'));
-        const account = new Account(access_decoded.username, id_decoded.email, null);
+        const idtoken = params.get('id_token');
+        const accesstoken = params.get('access_token');
         
-        const response = await fetch('dev-api/preferences', AccountModel.get_request_options);
+        if(!idtoken || !accesstoken) return;
+        const id_decoded: any = jwtDecode(idtoken);
+        const access_decoded: any = jwtDecode(accesstoken);
+        const account = new Account(idtoken, accesstoken, access_decoded.username, id_decoded.email, null);
+        
+        const response = await fetch('dev-api/preferences', this.getRequestOptions(account));
         
         const res = await response.json();
         if(!response.ok) return;
@@ -70,7 +77,7 @@ export class AccountModel {
     async cambiaPreferenza(newPref: boolean) : Promise<void> {
         await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
         
-        const options = AccountModel.post_request_options;
+        const options = this.postRequestOptions();
         options.method = 'PUT';
         options.body = JSON.stringify({default_guide_view: newPref == true ? 'list' : 'map'});
         const response = await fetch('dev-api/preferences', options);
@@ -94,4 +101,17 @@ export class AccountModel {
         return url.searchParams;
     }
 
+    postRequestOptions(account: Account = null) : RequestInit {
+        if(!account) account = this.getAccount();
+        const options = this.#post_request_options;
+        options.headers['Authorization'] = account.idtoken;
+        return options;
+    }
+
+    getRequestOptions(account: Account = null) : RequestInit {
+        if(!account) account = this.getAccount();
+        const options = this.#get_request_options;
+        options.headers['Authorization'] = account.idtoken;
+        return options;
+    }
 }
