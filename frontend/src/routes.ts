@@ -6,7 +6,6 @@ import AddProfile from "./pages/AddProfile.svelte";
 import Home from "./pages/Home.svelte";
 import NotFound from "./pages/NotFound.svelte";
 import Root from "./pages/Root.svelte";
-import Location from "./pages/Location.svelte";
 
 function isLogged() : boolean {
     return AccountModel.getInstance().getAccount() ? true : false;

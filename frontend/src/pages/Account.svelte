@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Followees from './Followees.svelte';
+    import Followees from '../components/Followees.svelte';
     import { AccountPresenter } from '../presenters/AccountPresenter';
     let presenter = new AccountPresenter();
     let disableButtons: boolean;

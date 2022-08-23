@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Map from "./Map.svelte";
-    import ListView from "./ListView.svelte";
+    import Map from "../components/Map.svelte";
+    import ListView from "../components/ListView.svelte";
     import { HomePresenter } from "../presenters/HomePresenter";
-    import Location from "./Location.svelte";
+    import Location from "../components/Location.svelte";
     export let currentRoute: any;
     currentRoute.queryParams = {};
     let presenter = new HomePresenter();
