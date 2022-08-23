@@ -31,7 +31,7 @@ import { onMount } from "svelte";
                 <img src={info.img.url} width={info.img.width} height={info.img.height} alt=""/>
                 <article>
                     <p>Address: {info.address}</p>
-                    <p>Score: <StarRating rating={Math.round((info.score+1.0)*25)/10.0} {config} {style}/></p>
+                    <p>Score: <StarRating rating={Math.round(info.score*10.0)/10.0} {config} {style}/></p>
                 </article>
             </div>
         {/await}

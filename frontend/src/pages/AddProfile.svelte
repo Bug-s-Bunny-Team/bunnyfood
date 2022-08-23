@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { bind } from "svelte/types/runtime/internal/Component";
-import type { SocialProfile } from "../models";
+    import type { SocialProfile } from "../models";
     import { AddProfilesPresenter } from "../presenters/AddProfilesPresenter";
 
     let presenter = new AddProfilesPresenter();

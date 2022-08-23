@@ -25,7 +25,8 @@ export class AccountPresenter {
     }
 
     logout() {
-        window.location.href = `https://bunnyfood-dev.auth.eu-central-1.amazoncognito.com/logout?client_id=2k5d4g58072evbdqloqkuksd5u&response_type=token&redirect_uri=${window.location.protocol}//${window.location.host}`;
+        const redirect_url = encodeURIComponent(`${window.location.protocol}//${window.location.host}/`);
+        window.location.href = `https://bunnyfood-dev.auth.eu-central-1.amazoncognito.com/logout?client_id=2k5d4g58072evbdqloqkuksd5u&response_type=token&redirect_uri=${redirect_url}`;
         AccountModel.getInstance().logout();
     }
 
