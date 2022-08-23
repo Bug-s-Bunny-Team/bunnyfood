@@ -50,7 +50,7 @@ def _chooseMOC():
         captionPath = 'MockupFiles/captionMOC_3.txt'
         textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     elif moc == '4':
-        print('Scelta caption vuota (ma salta gli spazi), textOnPicture pizza lab ferragosto')
+        print('Scelta caption vuota, textOnPicture pizza lab ferragosto')
         captionPath = 'MockupFiles/captionMOC_empty.txt'
         textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     elif moc == '5':
@@ -72,6 +72,8 @@ sPost = ScoringPost('0', caption)
 #######################################
 
 def __unpack_post_for_comprehend(sPost: ScoringPost):
+    if not sPost.caption:
+        sPost.caption = ' '  #empty caption diventa maneggiabile da comprehend
     return list([sPost.caption, *sPost.texts.values()])
 
 
@@ -252,8 +254,8 @@ def _calcFinalScore(sPost: ScoringPost):
 
 def _setScores(sPost: ScoringPost):
     sPost.faceScore= 0.5                     #[0, 1]
-    sPost.textsScore= {0: 0.0, 1: 0.0}     #[-1,1] * n
-    sPost.captionScore= 0.0                 #[-1,1]
+    sPost.textsScore= {0: 0.0, 1: 0.0}       #[-1,1] * n
+    sPost.captionScore= 0.0                  #[-1,1]
 
 def _printAllScores(sPost: ScoringPost):
     print('Print all scores: {')
