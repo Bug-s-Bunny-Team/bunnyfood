@@ -11,7 +11,7 @@
     })
 
     import StarRating from 'svelte-star-rating';
-import { onMount } from "svelte";
+    import { onMount } from "svelte";
     const config = {
         emptyColor: 'hsl(240, 80%, 85%)',
         fullColor: '#FFFF00',

@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { Location } from '../models'
     import { MapPresenter } from '../presenters/MapPresenter.js';
-    
     let presenter=new MapPresenter();
     let locations: Promise<Location[]>;
     presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});

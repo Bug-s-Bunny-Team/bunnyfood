@@ -5,7 +5,6 @@
     import Location from "./Location.svelte";
     export let currentRoute: any;
     currentRoute.queryParams = {};
-
     let presenter = new HomePresenter();
 </script>
 
