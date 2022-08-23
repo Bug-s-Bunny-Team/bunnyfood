@@ -10,12 +10,12 @@ from db import models, SessionLocal
 from db.utils import get_or_create
 from .download import Downloader
 from .models import ScrapingEvent
-from .scrapers import InstagramScraper
+from .scrapers import BaseScraper
 
 
 class ScrapingService:
     def __init__(
-        self, scraper: InstagramScraper, downloader: Downloader, session: Session
+        self, scraper: BaseScraper, downloader: Downloader, session: Session
     ):
         self._scraper = scraper
         self._session = session
