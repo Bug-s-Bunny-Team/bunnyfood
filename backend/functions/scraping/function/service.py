@@ -1,12 +1,9 @@
-import json
 from typing import List, Optional
 
-import boto3
 from instaloader import Post as InstaPost
 from sqlalchemy.orm import Session
 
-from common.utils import create_error_response, create_response
-from db import models, SessionLocal
+from db import models
 from db.utils import get_or_create
 from .download import Downloader
 from .models import ScrapingEvent
@@ -14,9 +11,7 @@ from .scrapers import BaseScraper
 
 
 class ScrapingService:
-    def __init__(
-        self, scraper: BaseScraper, downloader: Downloader, session: Session
-    ):
+    def __init__(self, scraper: BaseScraper, downloader: Downloader, session: Session):
         self._scraper = scraper
         self._session = session
         self._downloader = downloader
@@ -58,6 +53,7 @@ class ScrapingService:
             profile = get_or_create(
                 self._session, models.SocialProfile, username=event.username
             )
+            downloaded_posts = []
 
             for insta_post in posts:
                 location = self._extract_location(insta_post)
@@ -73,47 +69,13 @@ class ScrapingService:
                         post.media_s3_key = key
                         self._session.add(post)
                         self._session.commit()
+                        downloaded_posts.append(post)
                     else:
                         print('post already in db, skipping download')
+            downloaded_posts = [
+                {'id': post.id, 'media_s3_key': post.media_s3_key}
+                for post in downloaded_posts
+            ]
+            return {'posts_count': len(downloaded_posts), 'posts': downloaded_posts}
         else:
-            # TODO: adapt responses for use in step function
-            return create_response('no posts', 200)
-
-        return create_response('ok', 200)
-
-    # def process_event_old(self, event: ScrapingEvent) -> dict:
-    #     insta_post = self._scrape_last_post(event.username)
-    #
-    #     profile = get_or_create(
-    #         self._session, models.SocialProfile, username=insta_post.owner_username
-    #     )
-    #
-    #     insta_location = insta_post.location
-    #     if not insta_location:
-    #         print('post has no location data, skipping')
-    #         return create_error_response('Post does not have location data')
-    #
-    #     location = models.Location.from_instaloader_location(
-    #         self._session, insta_location
-    #     )
-    #     post, created = models.Post.from_instaloader_post(
-    #         self._session, insta_post, profile, location
-    #     )
-    #
-    #     if created:
-    #         key = self._download_post(post)
-    #         post.media_s3_key = key
-    #         self._session.add(post)
-    #         self._session.commit()
-    #     else:
-    #         print('post already in db, skipping download')
-    #
-    #     # print('publishing scoring message to topic')
-    #     # self._sns_topic.publish(Message=json.dumps({'post_id': post.id}))
-    #
-    #     # TODO: adapt response for use in step function
-    #
-    #     return create_response(
-    #         data={'post': {'shortcode': post.shortcode, 'media_url': post.media_url}},
-    #         code=200,
-    #     )
+            return {'posts_count': 0}

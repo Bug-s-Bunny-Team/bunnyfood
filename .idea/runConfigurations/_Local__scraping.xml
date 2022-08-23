@@ -22,7 +22,7 @@
     <option name="templateFile" value="$PROJECT_DIR$/backend/template.yaml" />
     <option name="timeout" value="300" />
     <option name="useTemplate" value="true" />
-    <option name="input" value="$PROJECT_DIR$/backend/functions/events/scrape_username.json" />
+    <option name="input" value="$PROJECT_DIR$/backend/functions/events/scrape_username_last_post.json" />
     <option name="inputIsFile" value="true" />
     <sam>
       <option name="additionalBuildArgs" value="--cached --parallel" />
