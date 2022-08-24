@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onDestroy } from 'svelte/internal';
     import { FolloweesPresenter } from '../presenters/FolloweesPresenter';
     import { Navigate } from 'svelte-router-spa'
     import type { SocialProfile } from '../models';
@@ -8,6 +9,8 @@
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
     presenter.profiles.subscribe(_profiles => {followees = _profiles});
+
+    onDestroy(presenter.destroy);
 </script>
 
 <div>    
@@ -24,7 +27,7 @@
                         </header>
                         <strong>Followers</strong>: {followee.followers}
                         <footer>
-                            <button disabled={disableButtons} on:click|preventDefault={presenter.removeFollowee.bind(followee)}><strong>Rimuovi</strong></button>
+                            <button disabled={disableButtons} on:click|preventDefault={() => {presenter.removeFollowee(followee)}}><strong>Rimuovi</strong></button>
                         </footer>  
                     </article>
                 {/each}

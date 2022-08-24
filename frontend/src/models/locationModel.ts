@@ -2,7 +2,7 @@ import { Info, Location, RequestError } from '../models'
 import { ResultsModel } from './resultsModel';
 
 export class LocationModel {
-    private static resultsModelInstance : LocationModel = LocationModel.construct_session();
+    private static locationModelInstance : LocationModel = LocationModel.construct_session();
 
     private static construct_session() : LocationModel {
         let result = new LocationModel();
@@ -10,7 +10,7 @@ export class LocationModel {
     }
 
     static getInstance() : LocationModel {
-        return this.resultsModelInstance;
+        return this.locationModelInstance;
     }
 
     private constructor() { 

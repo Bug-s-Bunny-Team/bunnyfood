@@ -2,6 +2,7 @@ import type { Account, RequestError } from "../models";
 import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
 import ErrorSvelte from "../components/Error.svelte";
+import { error_duration, removeChildren } from "../utils";
 
 export class AccountPresenter {
     name: string;
@@ -9,10 +10,12 @@ export class AccountPresenter {
     preference: number;
     isLogged: boolean;
     disableButtons: Writable<boolean> = writable(false);
+    errorTimeout: NodeJS.Timeout = null;
 
     constructor() {
         this.changePreference = this.changePreference.bind(this);
         this.updateAccount = this.updateAccount.bind(this);
+        this.destroy = this.destroy.bind(this);
         AccountModel.getInstance().account.subscribe(this.updateAccount);
     }
 
@@ -34,8 +37,18 @@ export class AccountPresenter {
     changePreference() : void {
         if(this.isLogged) {
             this.disableButtons.set(true);
-            AccountModel.getInstance().cambiaPreferenza(Boolean(!this.preference)).catch((e: RequestError) => {new ErrorSvelte({props: {error: e}, target: document.getElementById('error')})}).finally(() => {this.disableButtons.set(false)});
+            AccountModel.getInstance().cambiaPreferenza(Boolean(!this.preference))
+                .catch((e: RequestError) => { 
+                    removeChildren(document.getElementById('error')); 
+                    const message = 'An error occurred, please try again';
+                    new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
+                    this.errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
+                })
+                .finally(() => {this.disableButtons.set(false)});
         }
     }
 
+    destroy() {
+        if(this.errorTimeout) clearTimeout(this.errorTimeout);
+    }
 }

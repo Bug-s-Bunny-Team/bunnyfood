@@ -1,4 +1,4 @@
-import { Account, RequestError, SocialProfile } from '../models'
+import { RequestError, SocialProfile } from '../models'
 import { AccountModel } from './accountModel';
 
 export class ProfilesModel {
