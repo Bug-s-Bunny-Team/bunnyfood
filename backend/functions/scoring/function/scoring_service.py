@@ -74,7 +74,7 @@ class BasicScoringService(ScoringService):
                                 emotion['Confidence'] >= 50
                             ):  # se disgust troppo elevato azzera il punteggio della faccia
                                 disgusted = True
-                    if disgusted == False:
+                    if not disgusted:
                         scoreSum = (
                             scoreSum + faceSum
                         )  # se volto disgusted value >= allora face value = 0
@@ -184,11 +184,11 @@ class BasicScoringService(ScoringService):
         if (
             not (sPost.caption and not sPost.caption.isspace())
             and len(sPost.textsScore) == 0
-            and sPost.faceScore == None
+            and sPost.faceScore is None
         ):
             sPost.finalScore = None
         # SE F,T VUOTE
-        elif sPost.faceScore == None and len(sPost.textsScore) == 0:
+        elif sPost.faceScore is None and len(sPost.textsScore) == 0:
             sPost.finalScore = normalizedCaptionScore * 5
         # SE C,T VUOTE
         elif (
@@ -197,7 +197,7 @@ class BasicScoringService(ScoringService):
         ):
             sPost.finalScore = sPost.faceScore * 5
         # SE F,C VUOTE
-        elif sPost.faceScore == None and not (
+        elif sPost.faceScore is None and not (
             sPost.caption and not sPost.caption.isspace()
         ):
             sPost.finalScore = normalizedTextScore * 5
@@ -205,7 +205,7 @@ class BasicScoringService(ScoringService):
         elif len(sPost.textsScore) == 0:
             sPost.finalScore = sPost.faceScore * 2.5 + normalizedCaptionScore * 2.5
         # SE F VUOTA
-        elif sPost.faceScore == None:
+        elif sPost.faceScore is None:
             sPost.finalScore = normalizedTextScore * 2 + normalizedCaptionScore * 3
         # SE C VUOTA
         elif not (sPost.caption and not sPost.caption.isspace()):
