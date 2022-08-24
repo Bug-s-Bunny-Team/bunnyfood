@@ -24,7 +24,7 @@ class DummyScraper(BaseScraper):
         return self._posts[0]
 
     def get_last_posts(self, username: str, limit: int):
-        return self._posts
+        return self._posts[-limit:]
 
     def get_post_from_url(self, url: str):
         return None
@@ -37,7 +37,7 @@ class DummyDownloader(Downloader):
     def download_and_save_post(
         self, post: Post, overwrite: bool = True
     ) -> Optional[str]:
-        return 'key'
+        return post.shortcode
 
 
 @pytest.fixture

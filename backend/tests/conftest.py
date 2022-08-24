@@ -8,7 +8,9 @@ from db import create_connection_url, models
 
 @pytest.fixture(scope='session')
 def engine():
-    return create_engine(create_connection_url('user', 'password', 'localhost', 'bunnyfood_test'))
+    return create_engine(
+        create_connection_url('user', 'password', 'localhost', 'bunnyfood_test')
+    )
 
 
 @pytest.fixture

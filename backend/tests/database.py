@@ -52,10 +52,10 @@ def populate_db(session: Session):
     session.add_all(locations)
 
     posts = [
-        models.Post(id=1, profile_id=1, location_id=4),
-        models.Post(id=2, profile_id=1, location_id=5),
-        models.Post(id=3, profile_id=2, location_id=4),
-        models.Post(id=4, profile_id=2, location_id=5),
+        models.Post(profile_id=1, location_id=4),
+        models.Post(profile_id=1, location_id=5),
+        models.Post(profile_id=2, location_id=4),
+        models.Post(profile_id=2, location_id=5),
     ]
     session.add_all(posts)
 
