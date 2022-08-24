@@ -1,9 +1,12 @@
 <script lang="ts">
+    import { onDestroy } from 'svelte/internal';
     import Followees from '../components/Followees.svelte';
     import { AccountPresenter } from '../presenters/AccountPresenter';
     let presenter = new AccountPresenter();
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
+
+    onDestroy(presenter.destroy);
 </script>
 
 <div id="error"></div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onDestroy } from 'svelte/internal';
     import type { SocialProfile } from "../models";
     import { ExplorePresenter } from "../presenters/ExplorePresenter";
 
@@ -7,6 +8,8 @@
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => {disableButtons = _disableButtons});
     presenter.profiles.subscribe(_profiles => {profiles = _profiles});
+
+    onDestroy(presenter.destroy);
 </script>
 
 <div id="error"></div>
@@ -36,6 +39,8 @@
         {:else}
             <p>No profiles found</p>
         {/if}
+    {:catch}
+        <p>There has been an error, please try again</p>
     {/await}
 </div>
 

@@ -42,6 +42,8 @@
         {:else}
             <p>No locations</p>
         {/if}
+    {:catch}
+        <p>There has been an error, please try again</p>
     {/await}
     
 </div>

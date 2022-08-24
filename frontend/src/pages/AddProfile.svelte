@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onDestroy } from 'svelte/internal';
     import type { SocialProfile } from "../models";
     import { AddProfilesPresenter } from "../presenters/AddProfilesPresenter";
 
@@ -7,6 +8,8 @@
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
     presenter.profiles.subscribe(_profiles => { profiles = _profiles; });
+
+    onDestroy(presenter.destroy);
 </script>
 
 <div id="error"></div>
@@ -45,7 +48,7 @@
                         </header>
                         <strong>Followers</strong>: {profile.followers}
                         <footer>
-                            <button disabled={disableButtons} on:click={presenter.addProfile.bind(profile)}><strong>Segui</strong></button>
+                            <button disabled={disableButtons} on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
                         </footer>            
                     </article>
                 {/each}
@@ -53,6 +56,8 @@
         {:else}
             <p>Couldn't find profile. <strong>You must enter the correct and full username of the profile</strong></p>
         {/if}
+    {:catch}
+        <p>There has been an error, please try again</p>
     {/await}
 {/if}
 

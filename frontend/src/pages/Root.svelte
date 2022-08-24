@@ -30,8 +30,8 @@
     {:else}
         <p>Not Logged, Redirecting...</p>
     {/if}
-{:catch error}
-    <p>{error}</p>
+{:catch}
+    <p>There has been an error, please try again</p>
 {/await}
 
 <style>

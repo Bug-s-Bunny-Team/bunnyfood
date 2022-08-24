@@ -1,9 +1,12 @@
 <script lang="ts">
+    import { onDestroy } from 'svelte/internal';
     import type { Location } from '../models'
     import { MapPresenter } from '../presenters/MapPresenter.js';
     let presenter=new MapPresenter();
     let locations: Promise<Location[]>;
     presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
+
+    onDestroy(presenter.destroy);
 </script>
 
 <svelte:window on:resize={presenter.resizeMap} />
@@ -17,6 +20,8 @@
         crossorigin=""/>
     
     <div class="map" style="height:80vh;width:100%" use:presenter.initMap/>
+{:catch}
+    <p>There has been an error, please try again</p>
 {/await}
 
 <style>

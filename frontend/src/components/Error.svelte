@@ -1,10 +1,9 @@
 <script lang="ts">
-    import type { RequestError } from "../models";
-    export let error: RequestError;
+    export let message: string;
 </script>
 
 <article>
-    <p>Error {error.code}: {error.message}</p>
+    <p>{message}</p>
 </article>
 
 <style>

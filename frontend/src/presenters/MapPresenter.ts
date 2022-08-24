@@ -1,17 +1,19 @@
 import { ResultsModel } from "../models/resultsModel";
 import { get, writable, Writable } from "svelte/store";
 import { Filter, Location, RequestError } from "../models"
-import * as L from 'leaflet';
-import { capitalizeFirstLetter } from "../utils";
+import { capitalizeFirstLetter, error_duration, removeChildren } from "../utils";
 import ErrorSvelte from "../components/Error.svelte";
+import * as L from 'leaflet';
 
 export class MapPresenter {
   rankedList: Writable<Promise<Location[]>> = writable(null);
   map: any;
+  errorTimeout: NodeJS.Timeout = null;
 
   constructor() {
     this.resizeMap = this.resizeMap.bind(this);
     this.initMap = this.initMap.bind(this);
+    this.destroy = this.destroy.bind(this);
     this.rankedList.set(ResultsModel.getInstance().getRankedList(new Filter()));
   }
 
@@ -51,23 +53,33 @@ export class MapPresenter {
   }
 
   initMap(container: any) {
-		get(this.rankedList).then(locations => {
-        this.map = this.createMap(container); 
-        let markerLayers = L.layerGroup();
-        
-			  locations.forEach(location => {
-				  let m = this.createMarker([location.position.lat, location.position.long]);
-          m.bindPopup(this.createPopup(location));
-          markerLayers.addLayer(m);
-			  });
+		get(this.rankedList)
+      .then(locations => {
+          this.map = this.createMap(container); 
+          let markerLayers = L.layerGroup();
+          
+          locations.forEach(location => {
+            let m = this.createMarker([location.position.lat, location.position.long]);
+            m.bindPopup(this.createPopup(location));
+            markerLayers.addLayer(m);
+          });
 
-        markerLayers.addTo(this.map);
-        
-        return {
-          destroy: () => { this.map.remove(); this.map=null; }
-        };
-		}).catch((e: RequestError) => {new ErrorSvelte({props: {error: e}, target: document.getElementById('error')})});
+          markerLayers.addTo(this.map);
+          
+          return {
+            destroy: () => { this.map.remove(); this.map=null; }
+          };
+      }).catch((e: RequestError) => { 
+        removeChildren(document.getElementById('error')); 
+        const message = 'An error occurred, please try again';
+        new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
+        this.errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
+      });
 	}
+
+  destroy() {
+    if(this.errorTimeout) clearTimeout(this.errorTimeout);
+  }
 
   resizeMap() {
     if(this.map) this.map.invalidateSize();

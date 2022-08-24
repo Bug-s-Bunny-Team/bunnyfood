@@ -104,14 +104,14 @@ export class AccountModel {
     postRequestOptions(account: Account = null) : RequestInit {
         if(!account) account = this.getAccount();
         const options = this.#post_request_options;
-        options.headers['Authorization'] = account.idtoken;
+        options.headers['Authorization'] = 'Bearer ' + account.idtoken;
         return options;
     }
 
     getRequestOptions(account: Account = null) : RequestInit {
         if(!account) account = this.getAccount();
         const options = this.#get_request_options;
-        options.headers['Authorization'] = account.idtoken;
+        options.headers['Authorization'] = 'Bearer ' + account.idtoken;
         return options;
     }
 }
