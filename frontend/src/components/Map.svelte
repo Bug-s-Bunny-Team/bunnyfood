@@ -20,6 +20,8 @@
         crossorigin=""/>
     
     <div class="map" style="height:80vh;width:100%" use:presenter.initMap/>
+{:catch}
+    <p>There has been an error, please try again</p>
 {/await}
 
 <style>

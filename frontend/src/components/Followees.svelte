@@ -35,6 +35,8 @@
         {:else}
             <p>You don't follow any accounts yet. <strong class="link"><Navigate to="/add">Search for profiles</Navigate></strong> or <strong class="link"><Navigate to="/explore">Explore most followed ones</Navigate></strong>.</p>
         {/if}
+    {:catch}
+        <p>There has been an error, please try again</p>
     {/await}
 </div>
 

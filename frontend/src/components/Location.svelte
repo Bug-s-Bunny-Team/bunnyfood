@@ -34,6 +34,8 @@
                     <p>Score: <StarRating rating={Math.round(info.score*10.0)/10.0} {config} {style}/></p>
                 </article>
             </div>
+        {:catch}
+            <p>There has been an error, please try again</p>
         {/await}
     {/if}
 </div>
