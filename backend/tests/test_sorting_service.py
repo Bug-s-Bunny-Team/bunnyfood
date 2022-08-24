@@ -1,7 +1,6 @@
 from unittest import TestCase
 
-from entity.image import Image
-from entity.post import Post
+from functions.sorter.function.models import Post, Image
 from functions.sorter.function.sorting_service import SorterService
 
 img = Image("15.jpg")

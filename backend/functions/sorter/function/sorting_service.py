@@ -5,8 +5,8 @@ import boto3
 
 from common.models import LambdaEvent
 from common.service import BaseService
-from entity.post import Post
-from entity.sentiment_comprehend import SentimentComprehend
+
+from .models import Post, SentimentComprehend
 
 
 class SorterService(BaseService):
