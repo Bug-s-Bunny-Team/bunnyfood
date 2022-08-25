@@ -48,9 +48,13 @@
 
     nav {
         display: block;
+        position: fixed;
     }
 
     #bar {
+        position: fixed;
+        top:0;
+        width: 100%;
         border: 2px solid rgb(1, 96, 17);
         border-left: none;
         border-right: none;
@@ -73,8 +77,7 @@
         padding: 0.5em 2em;
         font-size: 1em;
         font-weight: bold;
-    }
-
+    } 
     
 
 </style>

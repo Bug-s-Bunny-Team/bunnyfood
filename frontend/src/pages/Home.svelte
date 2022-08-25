@@ -6,8 +6,15 @@
     export let currentRoute: any;
     currentRoute.queryParams = {};
     let presenter = new HomePresenter();
-</script>
 
+    function okayPopUp(param: boolean):void {
+        if (param == true) 
+           document.getElementById("overlay").style.display = "block";
+        else 
+            document.getElementById("overlay").style.display = "none";
+    }
+</script>
+<div id="overlay" > </div>
 <div id="error"></div>
 
 <label for="choose view"> 
@@ -21,15 +28,31 @@
     <ListView/>
 {/if}
 
-{#if currentRoute.queryParams.details_placeid}
+{#if currentRoute.queryParams.details_placeid } 
     <article class="popup">
-        <header><a href="/home">Close</a></header>
+        {okayPopUp(true)}
+        <header> <a href="/home" on:click={() => {okayPopUp(false)} }> Close </a> </header>
         <Location placeid={parseInt(currentRoute.queryParams.details_placeid)}/>
     </article>
-{/if}
+{/if} 
+
 
 
 <style>
+    #overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+
     .popup {
         position: absolute;
         top: 2em;
@@ -38,13 +61,15 @@
         max-height: 80%;
         overflow-y: auto;
         z-index: 50;
-        padding-top: 0;
+        padding: 0.2em;
+        
     }
     .popup header {
         position: sticky;
         top: 0;
         z-index: 51;
     }
+
 </style>
 
 
