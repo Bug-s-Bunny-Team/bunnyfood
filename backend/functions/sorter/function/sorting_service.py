@@ -2,15 +2,18 @@ import os
 from typing import Optional
 
 import boto3
+from sqlalchemy.orm import Session
 
 from common.models import LambdaEvent
 from common.service import BaseService
+from db import models
 
-from .models import Post, SentimentComprehend
+from .models import SortingPost, SentimentComprehend, SortEvent
 
 
 class SorterService(BaseService):
-    def __init__(self, aws_region='eu-central-1'):
+    def __init__(self, session: Session, aws_region='eu-central-1'):
+        self._session = session
         self._rekognition = boto3.client(
             service_name='rekognition', region_name=aws_region
         )
@@ -36,7 +39,7 @@ class SorterService(BaseService):
         return language
 
     def detect_sentiment_text(
-        self, post: Post, language
+        self, post: SortingPost, language
     ) -> Optional[SentimentComprehend]:
         # Detect sentiment of a post with Comprehend and return score
         # post: post to analyze with Comprehend
@@ -172,7 +175,7 @@ class SorterService(BaseService):
         print("-------------------\n")
         return emotions, emotions_confidence
 
-    def calculate_text_score(self, post: Post) -> float:
+    def calculate_text_score(self, post: SortingPost) -> float:
         if post.caption:
             score = self.detect_sentiment_text(
                 post, self.detect_language_text(post.caption)
@@ -182,7 +185,7 @@ class SorterService(BaseService):
 
         return post.finalScore
 
-    def calculate_image_score(self, post: Post):
+    def calculate_image_score(self, post: SortingPost):
         if post.list_images:
             for image in post.list_images:
                 image_name = image.name
@@ -197,32 +200,41 @@ class SorterService(BaseService):
 
         post.calculate_and_set_image_score()
 
-    def sort(self, post: Post):
+    def sort(self, post: SortingPost) -> Optional[SortingPost]:
         # Analyze a post with Rekognition and Comprehend for save or delete it
         # post: Post to analyze
         print("\n-------------------")
         print('sorting')
 
         # calculate score caption with comprehend
-
-        text_score = self.calculate_text_score(post)
-
-        print(
-            "\ncomprehend score: " + str(text_score)
-            if text_score
-            else 'no text found' + "\n-------------------\n"
-        )
+        #
+        # text_score = self.calculate_text_score(post)
+        #
+        # print(
+        #     "\ncomprehend score: " + str(text_score)
+        #     if text_score
+        #     else 'no text found' + "\n-------------------\n"
+        # )
 
         # get image score with Rekognition
         self.calculate_image_score(post)
-        image_score = post.imageScore
 
-        if image_score is not None:
+        if post.imageScore is not None:
             print("\n-------------------")
             print('save post')
+            return post
         else:
             print("\n-------------------")
             print('delete post')
+            return None
 
-    def process_event(self, event: LambdaEvent) -> dict:
-        return {'message': 'Hi from sorter'}
+    def process_event(self, event: SortEvent) -> dict:
+        valid_posts = []
+        for p in event.posts:
+            db_post = self._session.query(models.Post).filter_by(id=p['id']).first()
+            sorting_post = SortingPost.fromPost(db_post)
+            sorting_post = self.sort(sorting_post)
+            if sorting_post:
+                valid_posts.append({'id': sorting_post.id})
+
+        return {'posts_count': len(valid_posts), 'posts': valid_posts}

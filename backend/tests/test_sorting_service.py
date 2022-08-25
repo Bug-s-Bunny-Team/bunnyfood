@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from functions.sorter.function.models import Post, Image
+from functions.sorter.function.models import SortingPost, Image
 from functions.sorter.function.sorting_service import SorterService
 
 img = Image("15.jpg")
@@ -26,7 +26,7 @@ class TestSorterService(TestCase):
     def test_detect_sentiment_text(self):
         print('start test_detect_sentiment_text')
         language = 'it'
-        post = Post(id=5, caption="bel posto e buon cibo ma sono rimasto deluso dal servizio. Primi fantastici, "
+        post = SortingPost(id=5, caption="bel posto e buon cibo ma sono rimasto deluso dal servizio. Primi fantastici, "
                                   "secondi un po meno. Prezzo nella mdedia", list_images=[img])
 
         score = self.sorting_service.detect_sentiment_text(post, language)
@@ -192,7 +192,7 @@ class TestSorterService(TestCase):
 
     def test_calculate_text_score(self):
         print('start test_calculate_text_score')
-        post = Post(id=5, caption="bel posto e buon cibo", list_images=[img])
+        post = SortingPost(id=5, caption="bel posto e buon cibo", list_images=[img])
 
         if post.caption:
             score = self.sorting_service.detect_sentiment_text(post,
@@ -213,7 +213,7 @@ class TestSorterService(TestCase):
 
     def test_calculate_image_score(self):
         print('start test_calculate_image_score')
-        post = Post(id=5, caption="bel posto e buon cibo", list_images=[img])
+        post = SortingPost(id=5, caption="bel posto e buon cibo", list_images=[img])
         if post.list_images:
             for image in post.list_images:
                 image_name = image.name

@@ -1,4 +1,5 @@
 from db import configure_session, SessionLocal
+
 from .models import ScoringEvent
 from .scoring_service import BasicScoringService
 

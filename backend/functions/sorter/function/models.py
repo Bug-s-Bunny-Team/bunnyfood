@@ -3,12 +3,11 @@ from enum import Enum
 from typing import List, Dict
 
 from common.models import LambdaEvent
-
-# TODO: define the event
 from common.utils import key_present_in_dict
 
 
 class SortEvent(LambdaEvent):
+    posts_count: int
     posts: list
 
 
@@ -117,13 +116,13 @@ class Image:
     #  return json.dumps(self.__dict__)
 
 
-class Post:
+class SortingPost:
     id: int
     caption: str
     list_images: List[Image]
     texts: Dict[int, str]
     hashtags: Dict[int, str]
-    captionScore: SentimentComprehend
+    # captionScore: SentimentComprehend
     imageScore: float
     textsScore: Dict[int, float]
     finalScore: float
@@ -134,7 +133,7 @@ class Post:
         self.list_images = list_images
         self.texts = dict()
         self.hashtags = dict()
-        self.captionScore = None
+        # self.captionScore = None
         self.imageScore = 0.0
         self.textsScore = dict()
         self.finalScore = 0.0
@@ -174,19 +173,7 @@ class Post:
         return cls(
             id=p.id,
             caption=p.caption,
-            image_key=p.media_s3_key,
-            hashtags={idx: string for idx, string in enumerate(p.hashtags)},
-        )
-
-    @classmethod
-    def fromString(cls, string):
-        in_json = json.loads(string)
-        assert Post.__validate_input_json(in_json)
-        return cls(
-            id=in_json["id"],
-            caption=in_json["caption"],
-            image_key=in_json["image"],
-            hashtags=in_json["hashtags"],
+            list_images=[Image(p.media_s3_key)]
         )
 
     def toString(self):
