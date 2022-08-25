@@ -22,7 +22,7 @@ class Downloader:
     def download_and_save_post(
         self, post: Post, overwrite: bool = True
     ) -> Optional[str]:
-        post_key = f'media/instagram/{post.media_filename}'
+        post_key = f'media/{post.media_filename}'
 
         if not overwrite and s3_key_exists(self._bucket_name, post_key):
             print('post already downloaded, skipping')
