@@ -112,6 +112,7 @@ class Post(Base):
     media_type = Column(String)
     media_url = Column(String(length=512))
     media_s3_key = Column(String, nullable=True, unique=True)
+    score = Column(Float, nullable=True, default=None)
 
     profile = relationship('SocialProfile', back_populates='posts')
     location = relationship('Location', back_populates='posts')
