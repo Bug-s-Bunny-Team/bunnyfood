@@ -19,6 +19,10 @@ export class Position {
     constructor(lat: number = 0.0, long: number = 0.0) {
         this.lat = lat; this.long = long;
     }
+
+    distance(other: Position) {
+        return Math.sqrt(Math.pow(this.lat-other.lat, 2) + Math.pow(this.long-other.long, 2));
+    }
 }
 
 export class Location implements Model {

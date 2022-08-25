@@ -1,6 +1,6 @@
 import { ResultsModel } from "../models/resultsModel";
 import { get, writable, Writable } from "svelte/store";
-import { Filter, Location, RequestError } from "../models"
+import { Filter, Location, Position, RequestError } from "../models"
 import { capitalizeFirstLetter, error_duration, removeChildren } from "../utils";
 import ErrorSvelte from "../components/Error.svelte";
 import * as L from 'leaflet';
@@ -8,28 +8,40 @@ import * as L from 'leaflet';
 export class MapPresenter {
   rankedList: Writable<Promise<Location[]>> = writable(null);
   map: any;
+  markerLayers: any;
   errorTimeout: NodeJS.Timeout = null;
+
+  lastRefreshPosition: Position = null;
+  lastRefreshZoom: number = null;
+  treshold_a: number = 100000.0;
+  treshold_b: number = 6.2;
+
+  defaultPosition: Position = new Position(45.420, 11.895);
+  defaultZoom: number = 13;
 
   constructor() {
     this.resizeMap = this.resizeMap.bind(this);
     this.initMap = this.initMap.bind(this);
     this.destroy = this.destroy.bind(this);
-    this.rankedList.set(ResultsModel.getInstance().getRankedList(new Filter()));
+    this.refresh = this.refresh.bind(this);
+    this.createAllMarkers = this.createAllMarkers.bind(this);
+    this.createMarker = this.createMarker.bind(this);
   }
 
   createMap(container: any) {
-    let m = L.map(container).setView([45.420, 11.895], 13);
+    let map = L.map(container).setView([this.defaultPosition.lat, this.defaultPosition.long], this.defaultZoom);
     L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
       {
         attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
           &copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
         subdomains: 'abcd',
+        minZoom: 4,
         maxZoom: 18,
       }
-    ).addTo(m);
+    ).addTo(map);
 
-    return m;
+    return map;
   }
 
   makeIcon() {
@@ -53,29 +65,32 @@ export class MapPresenter {
   }
 
   initMap(container: any) {
-		get(this.rankedList)
-      .then(locations => {
-          this.map = this.createMap(container); 
-          let markerLayers = L.layerGroup();
-          
-          locations.forEach(location => {
-            let m = this.createMarker([location.position.lat, location.position.long]);
-            m.bindPopup(this.createPopup(location));
-            markerLayers.addLayer(m);
-          });
+    this.map = this.createMap(container); 
+    this.markerLayers = L.layerGroup();
+    this.markerLayers.addTo(this.map);
+    this.refresh();
+    this.rankedList.subscribe(this.createAllMarkers);
+    this.map.on("moveend", this.refresh);
+    return {
+      destroy: () => { this.map.remove(); this.map=null; }
+    };
+	}
 
-          markerLayers.addTo(this.map);
-          
-          return {
-            destroy: () => { this.map.remove(); this.map=null; }
-          };
+  createAllMarkers(rankedList: Promise<Location[]>) {
+      rankedList.then(locations => {
+        this.markerLayers.clearLayers();
+        locations.forEach(location => {
+          let marker = this.createMarker([location.position.lat, location.position.long]);
+          marker.bindPopup(this.createPopup(location));
+          this.markerLayers.addLayer(marker);
+        });
       }).catch((e: RequestError) => { 
         removeChildren(document.getElementById('error')); 
         const message = 'An error occurred, please try again';
         new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
         this.errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
       });
-	}
+  }
 
   destroy() {
     if(this.errorTimeout) clearTimeout(this.errorTimeout);
@@ -83,5 +98,22 @@ export class MapPresenter {
 
   resizeMap() {
     if(this.map) this.map.invalidateSize();
+  }
+
+  refresh() {
+    const bounds = this.map.getBounds();
+    const zoom = this.map.getZoom();
+    const center = bounds.getCenter();
+    const width = bounds.getEast()-bounds.getWest();
+    const height = bounds.getNorth()-bounds.getSouth();
+
+    const currentPosition = new Position(center.lat, center.lng);
+
+    if(!this.lastRefreshPosition || currentPosition.distance(this.lastRefreshPosition)>Math.min(width, height)/2.0 || Math.abs(zoom-this.lastRefreshZoom)>1) {
+      const filter = new Filter(false, currentPosition.lat, currentPosition.long, currentPosition.lat, currentPosition.long, Math.max(width, height), 0.0);
+      this.rankedList.set(ResultsModel.getInstance().getRankedList(filter));
+      this.lastRefreshPosition = currentPosition;
+      this.lastRefreshZoom = zoom;
+    }
   }
 }

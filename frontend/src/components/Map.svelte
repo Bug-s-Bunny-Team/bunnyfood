@@ -2,6 +2,8 @@
     import { onDestroy } from 'svelte/internal';
     import type { Location } from '../models'
     import { MapPresenter } from '../presenters/MapPresenter.js';
+import Error from './Error.svelte';
+import ThemeSwitch from './ThemeSwitch.svelte';
     let presenter=new MapPresenter();
     let locations: Promise<Location[]>;
     presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
@@ -12,19 +14,29 @@
 <svelte:window on:resize={presenter.resizeMap} />
 
 {#await locations}
-    <p>Loading locations...</p>
-    <progress />
-{:then _} 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-        crossorigin=""/>
-    
-    <div class="map" style="height:80vh;width:100%" use:presenter.initMap/>
-{:catch}
-    <p>There has been an error, please try again</p>
+    <article id="loadingbar">
+        <progress/>
+    </article>
 {/await}
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+
+<div class="map" style="height:80vh;width:100%" use:presenter.initMap/>
+
 <style>
+    #loadingbar {
+        position: fixed;
+        top: 1em;
+        left: 10%;
+        width: 80%;
+        padding: 1em;
+        z-index: 1;
+    }
+    #loadingbar progress {
+        margin-bottom: 0.2em;
+    }
     .map {
         z-index: 0;
     }
