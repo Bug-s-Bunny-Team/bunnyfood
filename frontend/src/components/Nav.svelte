@@ -48,11 +48,11 @@
 
     nav {
         display: block;
-        position: fixed;
     }
 
     #bar {
-        position: fixed;
+        position: sticky;
+        background-color: #11191f;
         top:0;
         width: 100%;
         border: 2px solid rgb(1, 96, 17);
