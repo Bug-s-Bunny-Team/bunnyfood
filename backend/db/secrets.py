@@ -1,11 +1,11 @@
-import boto3
-import base64
-from botocore.exceptions import ClientError
-import os
 import json
+import os
+
+import boto3
+from botocore.exceptions import ClientError
 
 
-def get_db_secret():
+def get_db_secret() -> dict:
     secret_name = "test-db-secret"
 
     # Create a Secrets Manager client

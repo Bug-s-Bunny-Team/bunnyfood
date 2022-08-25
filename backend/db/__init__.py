@@ -6,6 +6,8 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from db.secrets import get_db_secret
+
 SessionLocal = sessionmaker()
 Base = declarative_base()
 
@@ -26,3 +28,13 @@ def configure_session(
     SessionLocal.configure(autocommit=False, autoflush=False, bind=engine)
 
     return SessionLocal
+
+
+def configure_session_from_secrets():
+    secrets_dict = get_db_secret()
+    return configure_session(
+        user=secrets_dict['username'],
+        password=secrets_dict['password'],
+        host=secrets_dict['host'],
+        db=secrets_dict['database'],
+    )
