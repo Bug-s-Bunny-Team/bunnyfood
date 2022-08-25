@@ -53,5 +53,6 @@
   position: fixed;
   top: 0;
   width: 40%;
-  left: 30%;
+  margin-left: 30%;
+  margin-right: 30%;
 }
