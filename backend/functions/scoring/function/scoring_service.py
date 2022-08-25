@@ -72,9 +72,8 @@ class BasicScoringService(ScoringService):
                 raise Exception('faceScore invalid')
             sPost.faceScore = faceScore / 100  # normalizzato a [0,1]
         else:
-            sPost.faceScore = (
-                None  # se num facce =0 si ignora nel calcolo di final Score
-            )
+            sPost.faceScore = None  # se num facce =0 si ignora nel calcolo di final Score
+            
 
     def __unpack_post_for_comprehend(self, sPost: ScoringPost):
         if not sPost.caption:
