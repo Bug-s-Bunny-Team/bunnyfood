@@ -68,8 +68,6 @@ class BasicScoringService(ScoringService):
                         )  # se volto disgusted value >= allora face value = 0
                 # UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
             faceScore = scoreSum / faceCount  # =[0,100]
-            if faceScore < 0 or faceScore > 100:
-                raise Exception('faceScore invalid')
             sPost.faceScore = faceScore / 100  # normalizzato a [0,1]
         else:
             sPost.faceScore = None  # se num facce =0 si ignora nel calcolo di final Score
@@ -101,12 +99,8 @@ class BasicScoringService(ScoringService):
                 else 0.0
             )
             if idx == 0:
-                if float_score < -1 or float_score > 1:
-                    raise Exception('captionScore invalid')
                 sPost.captionScore = float_score
             else:
-                if float_score < -1 or float_score > 1:
-                    raise Exception('textScore invalid')
                 sPost.textsScore[idx - 1] = float_score
 
     def __parse_dominant_language_response(self, domResponse):
