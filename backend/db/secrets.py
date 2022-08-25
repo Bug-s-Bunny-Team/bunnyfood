@@ -11,7 +11,7 @@ def get_db_secret() -> dict:
     # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
-        service_name='secretsmanager', region_name=os.environ['REGION_NAME']
+        service_name='secretsmanager', region_name=os.environ.get('REGION_NAME', 'eu-central-1')
     )
 
     # In this sample we only handle the specific exceptions for the 'GetSecretValue' API.
