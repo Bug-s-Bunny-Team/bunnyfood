@@ -48,20 +48,6 @@ export class Account {
     }
 }
 
-class PostScore {
-    media_score: number;
-    caption_score: number;
-}
-
-export class Post implements Model {
-    id: number;
-    caption: string;
-    media_url: string;
-    profile: SocialProfile;
-    location: Location | null;
-    score: PostScore | null;
-}
-
 export class Info {
     name: string; 
     img: any;
