@@ -9,7 +9,7 @@ services:
 #    environment:
 #      - DB_HOST=db
 #    ports:
-#      - '8000:8000'
+#      - '8000:80'
 #    networks:
 #      - bunnyfood
 #    restart: unless-stopped
