@@ -1,34 +1,18 @@
 import boto3
 import os
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 
-from common.models import LambdaEvent
+from sqlalchemy.orm import Session
+
 from common.service import BaseService
-from .models import ScoringPost, Score
-from .event_adapter import EventAdapter
-from .output_strategy import OutputStrategy
+from db import models
+from .models import ScoringPost, Score, ScoringEvent
 
 
 class ScoringService(BaseService):
-    __e: EventAdapter
-    __o: OutputStrategy
-    _rekognition = boto3.client(
-        service_name='rekognition', region_name=os.environ['ENV_REGION_NAME']
-    )
-    _comprehend = boto3.client(
-        service_name='comprehend', region_name=os.environ['ENV_REGION_NAME']
-    )
-
-    def __init__(self, e: EventAdapter, o: OutputStrategy):
-        self.__e = e
-        self.__o = o
-
-    def score(self, event):
-        sPost = self.__e.processEvent(event)
-        self._runRekognition(sPost)
-        self._runComprehend(sPost)
-        self._calcFinalScore(sPost)
-        self.__o.output(sPost)
+    def __init__(self):
+        self._rekognition = boto3.client(service_name='rekognition')
+        self._comprehend = boto3.client(service_name='comprehend')
 
     @abstractmethod
     def _runRekognition(self, sPost: ScoringPost):
@@ -44,6 +28,10 @@ class ScoringService(BaseService):
 
 
 class BasicScoringService(ScoringService):
+    def __init__(self, session: Session):
+        super().__init__()
+        self._session = session
+
     def __parse_rekognition_response(self, sPost: ScoringPost, textResult, faceResult):
         for line in textResult['TextDetections']:
             if line['Type'] == 'LINE':
@@ -216,5 +204,22 @@ class BasicScoringService(ScoringService):
                 normalizedCaptionScore * 2 + sPost.faceScore * 2 + normalizedTextScore
             )
 
-    def process_event(self, event: LambdaEvent) -> dict:
-        return {'message': 'Hi from scoring'}
+    def _save_to_db(self, db_post: models.Post, scoring_post: ScoringPost):
+        db_post.score = scoring_post.finalScore
+        self._session.add(db_post)
+        self._session.commit()
+
+    def process_event(self, event: ScoringEvent) -> dict:
+        scored_posts = []
+        for post in event.posts:
+            db_post = self._session.query(models.Post).filter_by(id=post['id']).first()
+            sPost = ScoringPost.fromPost(db_post)
+
+            self._runRekognition(sPost)
+            self._runComprehend(sPost)
+            self._calcFinalScore(sPost)
+            self._save_to_db(db_post, sPost)
+
+            scored_posts.append({'id': sPost.id, 'score': sPost.finalScore})
+
+        return {'scored_posts_count': len(scored_posts), 'score_posts': scored_posts}

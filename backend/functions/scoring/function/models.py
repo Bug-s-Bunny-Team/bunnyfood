@@ -8,6 +8,7 @@ from common.utils import key_present_in_dict
 
 # TODO: define the event
 class ScoringEvent(LambdaEvent):
+    posts_count: int
     posts: list
 
 
