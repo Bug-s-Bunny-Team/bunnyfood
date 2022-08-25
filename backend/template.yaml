@@ -233,7 +233,7 @@ Resources:
       CodeUri: functions/scraping/
       Environment:
         Variables:
-          INSTA_USERNAME: ''
+          INSTA_USERNAME: 'notabbotswe'
           INSTA_SESSIONS_TABLE: !Ref InstaSessionsTable
       Policies:
         - DynamoDBCrudPolicy:

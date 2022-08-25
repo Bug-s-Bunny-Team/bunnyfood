@@ -58,7 +58,7 @@
           "Comment": "posts_count is 0"
         }
       ],
-      "Default": "Lambda Invoke",
+      "Default": "Scoring",
       "Comment": "posts_count is > 0"
     },
     "Fail": {
@@ -67,7 +67,7 @@
       "Comment": "there are 0 posts to score",
       "Cause": "sorter didn't keep any post"
     },
-    "Lambda Invoke": {
+    "Scoring": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "OutputPath": "$.Payload",
