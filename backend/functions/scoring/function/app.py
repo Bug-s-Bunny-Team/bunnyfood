@@ -1,4 +1,4 @@
-from db import configure_session, SessionLocal
+from db import get_session
 
 from .models import ScoringEvent
 from .scoring_service import BasicScoringService
@@ -7,8 +7,7 @@ from .scoring_service import BasicScoringService
 def lambda_handler(event, context):
     event = ScoringEvent(**event)
 
-    configure_session()
-    session = SessionLocal()
+    session = get_session()
     service = BasicScoringService(session)
 
     return service.process_event(event)

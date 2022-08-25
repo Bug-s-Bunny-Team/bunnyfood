@@ -7,12 +7,11 @@ from api.auth.jwt import JWTAuthorizationCredentials
 from api.crud.locations import LocationsCRUD
 from api.crud.profiles import ProfilesCRUD
 from api.crud.preferences import PreferencesCRUD
-from db import SessionLocal, models, configure_session
+from db import models, get_session
 
 
 def get_db():
-    configure_session()
-    db = SessionLocal()
+    db = get_session()
     try:
         yield db
     finally:

@@ -11,6 +11,7 @@
         <entry key="DB_NAME" value="bunnyfood_dev" />
         <entry key="DB_PASSWORD" value="password" />
         <entry key="DB_USER" value="user" />
+        <entry key="ENV" value="dev" />
       </map>
     </option>
     <option name="handler" />

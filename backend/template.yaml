@@ -25,7 +25,9 @@ Globals:
       - !Ref DbLayer
     Environment:
       Variables:
+        ENV: 'prod'
         BUCKET_NAME: 'bunnyfood-backend'
+        REGION_NAME: !Ref RegionName
         DB_USER: 'user'
         DB_PASSWORD: 'password'
         DB_HOST: 'db'

@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 
 from db.secrets import get_db_secret
 
@@ -38,3 +38,14 @@ def configure_session_from_secrets():
         host=secrets_dict['host'],
         db=secrets_dict['database'],
     )
+
+
+def get_session() -> Session:
+    env = os.environ.get('ENV', 'dev')
+    if env == 'dev':
+        configure_session()
+    elif env == 'prod':
+        configure_session_from_secrets()
+    else:
+        raise ValueError(f'ENV "{env}" not recognized')
+    return SessionLocal()

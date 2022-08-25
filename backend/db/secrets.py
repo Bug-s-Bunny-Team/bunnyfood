@@ -11,7 +11,7 @@ def get_db_secret() -> dict:
     # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
-        service_name='secretsmanager', region_name=os.environ['ENV_REGION_NAME']
+        service_name='secretsmanager', region_name=os.environ['REGION_NAME']
     )
 
     # In this sample we only handle the specific exceptions for the 'GetSecretValue' API.
@@ -47,5 +47,5 @@ def get_db_secret() -> dict:
         if 'SecretString' in get_secret_value_response:
             return json.loads(get_secret_value_response['SecretString'])  # dict
         else:
-            raise Exception("Unsupported secret format")
+            raise Exception('Unsupported secret format')
             # return base64.b64decode(get_secret_value_response['SecretBinary'])

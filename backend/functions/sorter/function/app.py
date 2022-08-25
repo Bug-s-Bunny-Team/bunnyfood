@@ -1,14 +1,12 @@
-from db import configure_session, SessionLocal
-
-from .sorting_service import SorterService
+from db import get_session
 from .models import SortEvent
+from .sorting_service import SorterService
 
 
 def lambda_handler(event, context):
     event = SortEvent(**event)
 
-    configure_session()
-    session = SessionLocal()
+    session = get_session()
     service = SorterService(session)
 
     return service.process_event(event)
