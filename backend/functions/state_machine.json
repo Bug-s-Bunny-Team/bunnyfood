@@ -51,25 +51,29 @@
       "Choices": [
         {
           "Not": {
-            "Variable": "$.stateInput.postsCount",
+            "Variable": "$.stateInput.posts_count",
             "NumericGreaterThan": 0
           },
-          "Next": "Fail"
+          "Next": "Fail",
+          "Comment": "posts_count is 0"
         }
       ],
-      "Default": "Scoring",
-      "Comment": "check if sorter has kept posts to score"
+      "Default": "Lambda Invoke",
+      "Comment": "posts_count is > 0"
     },
     "Fail": {
-      "Type": "Fail"
+      "Type": "Fail",
+      "Error": "NoPosts",
+      "Comment": "there are 0 posts to score",
+      "Cause": "sorter didn't keep any post"
     },
-    "Scoring": {
+    "Lambda Invoke": {
       "Type": "Task",
       "Resource": "arn:aws:states:::lambda:invoke",
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:eu-central-1:104582034671:function:bunnyfood-ScoringFunction-WJzPDhitCKrG:$LATEST"
+        "FunctionName": "arn:aws:lambda:eu-central-1:104582034671:function:bunnyfood-SortingFunction-bSAtiI3WiQMZ:$LATEST"
       },
       "Retry": [
         {
@@ -86,7 +90,8 @@
       "Next": "Success"
     },
     "Success": {
-      "Type": "Succeed"
+      "Type": "Succeed",
+      "Comment": "all posts have been scored"
     }
   }
 }
