@@ -4,10 +4,8 @@ from typing import Optional
 import boto3
 from sqlalchemy.orm import Session
 
-from common.models import LambdaEvent
 from common.service import BaseService
 from db import models
-
 from .models import SortingPost, SentimentComprehend, SortEvent
 
 

@@ -4,6 +4,9 @@ from starlette.status import HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
 
 from api.auth import auth
 from api.auth.jwt import JWTAuthorizationCredentials
+from api.crud.locations import LocationsCRUD
+from api.crud.profiles import ProfilesCRUD
+from api.crud.preferences import PreferencesCRUD
 from db import SessionLocal, models, configure_session
 
 
@@ -30,3 +33,15 @@ def get_user(username: str = Depends(get_username), db: Session = Depends(get_db
     if not user:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail='User not found')
     return user
+
+
+def get_prefs_crud(db: Session = Depends(get_db)) -> PreferencesCRUD:
+    return PreferencesCRUD(db)
+
+
+def get_locations_crud(db: Session = Depends(get_db)) -> LocationsCRUD:
+    return LocationsCRUD(db)
+
+
+def get_profiles_crud(db: Session = Depends(get_db)) -> ProfilesCRUD:
+    return ProfilesCRUD(db)

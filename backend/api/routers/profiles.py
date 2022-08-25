@@ -1,17 +1,13 @@
 from typing import List
 
 from fastapi import APIRouter, status, Depends, HTTPException, Response
-from sqlalchemy import func, column
-from sqlalchemy.orm import Session
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
 from api import schemas
-from api.dependencies import get_db, get_user
-from api.utils import flatten_results, search_social_profile
-
+from api.crud.profiles import ProfilesCRUD
+from api.dependencies import get_user, get_profiles_crud
+from api.utils import search_social_profile
 from db import models
-from db.models import profiles_users_association
-from db.utils import get_or_create
 
 router = APIRouter()
 
@@ -21,8 +17,10 @@ router = APIRouter()
     response_model=List[schemas.SocialProfile],
     response_model_exclude_unset=True,
 )
-def get_profiles(db: Session = Depends(get_db)):
-    return db.query(models.SocialProfile).all()
+def get_profiles(
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+):
+    return profiles.get_all()
 
 
 @router.get(
@@ -32,9 +30,9 @@ def get_profiles(db: Session = Depends(get_db)):
 )
 def get_profile_by_id(
     profile_id: int,
-    db: Session = Depends(get_db),
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
 ):
-    profile = db.query(models.SocialProfile).filter_by(id=profile_id).first()
+    profile = profiles.get_by_id(profile_id)
     if not profile:
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'
@@ -50,17 +48,12 @@ def get_profile_by_id(
 def get_profile_by_username(
     profile_username: str,
     response: Response,
-    db: Session = Depends(get_db),
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
 ):
-    profile = (
-        db.query(models.SocialProfile).filter_by(username=profile_username).first()
-    )
+    profile = profiles.get_by_username(profile_username)
     if not profile:
         if search_social_profile(profile_username):
-            profile = models.SocialProfile(username=profile_username)
-            db.add(profile)
-            db.commit()
-            db.refresh(profile)
+            profile = profiles.create_profile(profile_username)
             response.status_code = HTTP_201_CREATED
         else:
             raise HTTPException(
@@ -74,27 +67,16 @@ def get_profile_by_username(
     response_model=List[schemas.SocialProfile],
     response_model_exclude_unset=True,
 )
-def get_most_popular_profiles(limit: int, db: Session = Depends(get_db)):
+def get_most_popular_profiles(
+    limit: int, profiles: ProfilesCRUD = Depends(get_profiles_crud)
+):
     if limit > 20:
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
             detail='Can provide at most 20 popular profiles',
         )
 
-    profiles = (
-        db.query(
-            models.SocialProfile,
-            func.count(profiles_users_association.c.right_id).label('followers_count'),
-        )
-        .join(profiles_users_association)
-        .group_by(models.SocialProfile)
-        .order_by(column('followers_count').desc())
-        .all()
-    )
-
-    profiles = flatten_results(profiles, 'followers_count')
-
-    return profiles
+    return profiles.get_most_popular(limit)
 
 
 @router.get(
@@ -115,13 +97,10 @@ def get_followed_profiles(user: models.User = Depends(get_user)):
 )
 def follow_profile(
     profile: schemas.FollowedSocialProfile,
-    db: Session = Depends(get_db),
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
     user: models.User = Depends(get_user),
 ):
-    db_profile = get_or_create(db, models.SocialProfile, username=profile.username)
-    user.followed_profiles.append(db_profile)
-    db.add(user)
-    db.commit()
+    profiles.follow_profile(profile, user)
 
 
 @router.post(
@@ -129,15 +108,12 @@ def follow_profile(
 )
 def unfollow_profile(
     profile: schemas.FollowedSocialProfile,
-    db: Session = Depends(get_db),
     user: models.User = Depends(get_user),
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
 ):
-    db_profile = (
-        db.query(models.SocialProfile).filter_by(username=profile.username).first()
-    )
+    db_profile = profiles.get_by_username(profile.username)
     if not db_profile:
         raise HTTPException(
             status_code=HTTP_404_NOT_FOUND, detail='SocialProfile does not exist'
         )
-    user.followed_profiles.remove(db_profile)
-    db.commit()
+    profiles.unfollow_profile(db_profile, user)

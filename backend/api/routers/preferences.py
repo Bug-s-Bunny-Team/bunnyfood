@@ -1,10 +1,8 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
 
-from api.dependencies import get_db, get_user
 from api import schemas
-
-from db.utils import get_or_create
+from api.crud.preferences import PreferencesCRUD
+from api.dependencies import get_user, get_prefs_crud
 from db import models
 
 router = APIRouter()
@@ -16,10 +14,10 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_user_prefs(
-    user: models.User = Depends(get_user), db: Session = Depends(get_db)
+    user: models.User = Depends(get_user),
+    prefs: PreferencesCRUD = Depends(get_prefs_crud),
 ):
-    prefs = get_or_create(db, models.UserPreferences, user=user)
-    return prefs
+    return prefs.get_from_user(user)
 
 
 @router.put(
@@ -30,10 +28,6 @@ def get_user_prefs(
 def update_user_prefs(
     updated_prefs: schemas.UserPreferences,
     user: models.User = Depends(get_user),
-    db: Session = Depends(get_db),
+    prefs: PreferencesCRUD = Depends(get_prefs_crud),
 ):
-    prefs = get_or_create(db, models.UserPreferences, user=user)
-    prefs.default_guide_view = updated_prefs.default_guide_view
-    db.add(prefs)
-    db.commit()
-    return prefs
+    return prefs.update(updated_prefs, user)
