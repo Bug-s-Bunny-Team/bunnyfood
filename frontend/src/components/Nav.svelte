@@ -11,7 +11,7 @@
     export let currentRoute;
 
 </script>
-<img class="pic" src="./src/sfondo.png" alt="sfondo" />
+<img class="pic" src="/sfondo.png" alt="" />
 
 <nav id="bar">
     <ul>

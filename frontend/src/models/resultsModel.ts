@@ -1,5 +1,6 @@
 import { get, Writable, writable } from 'svelte/store';
 import { Filter, Location, Position, RequestError } from '../models'
+import { RequestOptions } from './requestOptions';
 
 export class ResultsModel {
     private static resultsModelInstance : ResultsModel = ResultsModel.construct_session();
@@ -28,12 +29,6 @@ export class ResultsModel {
         });
     }
 
-    static request_options: RequestInit = {
-        method: 'GET',
-        mode: 'same-origin',
-        credentials: 'same-origin'
-    };
-
     rankedList: Writable<Location[]> = writable();
 
     private static static_delay_ms = 200;
@@ -45,7 +40,7 @@ export class ResultsModel {
         for (const field in filter) {
             url.searchParams.append(field, filter[field]);
         }
-        const response = await fetch(url, ResultsModel.request_options);
+        const response = await fetch(url, RequestOptions.getRequestOptions());
         
         const res = await response.json();
         if(!response.ok) throw new RequestError(res.code, res.msg);
