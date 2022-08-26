@@ -16,5 +16,6 @@ def get_random_proxy() -> str:
 
 def set_random_proxy():
     proxy = get_random_proxy()
+    proxy = f'http://{proxy}/'
     print(f'setting {proxy} as proxy')
     os.environ['http_proxy'] = proxy
