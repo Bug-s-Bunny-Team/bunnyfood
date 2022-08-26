@@ -2,11 +2,13 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from starlette.status import HTTP_418_IM_A_TEAPOT
 
-from . import API_TITLE, API_DESCRIPTION, __version__
-
+from . import API_TITLE, API_DESCRIPTION, __version__, ENV
 from .routers import locations, profiles, preferences
 
-app = FastAPI()
+if ENV == 'prod':
+    app = FastAPI(root_path='/api')
+else:
+    app = FastAPI()
 
 app.include_router(locations.router)
 app.include_router(profiles.router)
@@ -19,6 +21,7 @@ def get_details():
         'title': API_TITLE,
         'version': __version__,
         'description': API_DESCRIPTION,
+        'env': ENV,
     }
 
 
