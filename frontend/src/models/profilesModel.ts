@@ -53,9 +53,7 @@ export class ProfilesModel {
     async getProfiles(ricerca: string) : Promise<SocialProfile[]> {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
         
-        const url = new URL('api/profiles/', `${window.location.protocol}//${window.location.host}`);
-        url.searchParams.append('username', encodeURIComponent(ricerca));
-        const response = await fetch(url, RequestOptions.getRequestOptions());
+        const response = await fetch(`api/profiles/search/${encodeURIComponent(ricerca)}`, RequestOptions.getRequestOptions());
         
         const res = await response.json();
         if(!response.ok) throw new RequestError(res.code, res.msg);
