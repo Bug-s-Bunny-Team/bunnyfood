@@ -75,7 +75,7 @@ Resources:
             CachePolicyId: !Ref S3CachePolicy
             ViewerProtocolPolicy: redirect-to-https
             Compress: true
-          - PathPattern: '*'
+          - PathPattern: 'api/*'
             TargetOriginId: ApiOrigin
             CachePolicyId: !Ref ApiCachePolicy
             ViewerProtocolPolicy: redirect-to-https
@@ -89,8 +89,8 @@ Resources:
               - POST
               - DELETE
         DefaultCacheBehavior:
-          TargetOriginId: S3Origin
-          CachePolicyId: !Ref S3CachePolicy
+          TargetOriginId: ApiOrigin
+          CachePolicyId: !Ref ApiCachePolicy
           ViewerProtocolPolicy: redirect-to-https
           Compress: true
 
