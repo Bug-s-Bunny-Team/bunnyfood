@@ -2,6 +2,8 @@
 
     import { NavPresenter } from "../presenters/NavPresenter";
     import ThemeSwitch from "./ThemeSwitch.svelte";
+    import wallpaperUrl from "../assets/sfondo.png";
+
     const presenter = new NavPresenter();
     let routes;
     presenter.routes.subscribe(new_routes => {
@@ -11,7 +13,7 @@
     export let currentRoute;
 
 </script>
-<img class="pic" src="./src/sfondo.png" alt="sfondo" />
+<img class="pic" src="{wallpaperUrl}" alt="sfondo" />
 
 <nav id="bar">
     <ul>
