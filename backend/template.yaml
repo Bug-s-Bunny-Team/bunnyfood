@@ -70,19 +70,19 @@ Resources:
             S3OriginConfig:
               OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
         CacheBehaviors:
-          #          - PathPattern: !Sub '${ApiStageName}/*'
-          #            TargetOriginId: ApiOrigin
-          #            CachePolicyId: !Ref ApiCachePolicy
-          #            ViewerProtocolPolicy: redirect-to-https
-          #            Compress: true
-          #            AllowedMethods:
-          #              - GET
-          #              - HEAD
-          #              - OPTIONS
-          #              - PUT
-          #              - PATCH
-          #              - POST
-          #              - DELETE
+          - PathPattern: !Sub 'api/*'
+            TargetOriginId: ApiOrigin
+            CachePolicyId: !Ref ApiCachePolicy
+            ViewerProtocolPolicy: redirect-to-https
+            Compress: true
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+              - PUT
+              - PATCH
+              - POST
+              - DELETE
           - PathPattern: 'media/*'
             TargetOriginId: S3BackendOrigin
             CachePolicyId: !Ref S3CachePolicy
@@ -118,23 +118,23 @@ Resources:
             QueryStringBehavior: none
           EnableAcceptEncodingGzip: true
 
-  #  ApiCachePolicy:
-  #    Type: AWS::CloudFront::CachePolicy
-  #    Properties:
-  #      CachePolicyConfig:
-  #        Comment: Cache policy used when accessing API
-  #        Name: ApiCachePolicy
-  #        DefaultTTL: 0
-  #        MaxTTL: 0
-  #        MinTTL: 0
-  #        ParametersInCacheKeyAndForwardedToOrigin:
-  #          CookiesConfig:
-  #            CookieBehavior: none
-  #          HeadersConfig:
-  #            HeaderBehavior: none
-  #          QueryStringsConfig:
-  #            QueryStringBehavior: none
-  #          EnableAcceptEncodingGzip: false
+    ApiCachePolicy:
+      Type: AWS::CloudFront::CachePolicy
+      Properties:
+        CachePolicyConfig:
+          Comment: Cache policy used when accessing API
+          Name: ApiCachePolicy
+          DefaultTTL: 0
+          MaxTTL: 0
+          MinTTL: 0
+          ParametersInCacheKeyAndForwardedToOrigin:
+            CookiesConfig:
+              CookieBehavior: none
+            HeadersConfig:
+              HeaderBehavior: none
+            QueryStringsConfig:
+              QueryStringBehavior: none
+            EnableAcceptEncodingGzip: false
 
   #############################################################
   # Tables
