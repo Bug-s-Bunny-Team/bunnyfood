@@ -1,5 +1,5 @@
 import { ResultsModel } from "../models/resultsModel";
-import { get, writable, Writable } from "svelte/store";
+import { writable, Writable } from "svelte/store";
 import { Filter, Location, Position, RequestError } from "../models"
 import { capitalizeFirstLetter, error_duration, removeChildren } from "../utils";
 import ErrorSvelte from "../components/Error.svelte";
