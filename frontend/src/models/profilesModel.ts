@@ -21,7 +21,7 @@ export class ProfilesModel {
     async getFollowees() {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
         
-        const response = await fetch('api/followed', RequestOptions.getRequestOptions());
+        const response = await fetch('api/followed/', RequestOptions.getRequestOptions());
         
         const res = await response.json();
         if(!response.ok) throw new RequestError(res.code, res.msg);

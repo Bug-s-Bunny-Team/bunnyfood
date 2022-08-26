@@ -46,7 +46,7 @@ export class AccountModel {
         const access_decoded: any = jwtDecode(accesstoken);
         const account = new Account(idtoken, accesstoken, access_decoded.username, id_decoded.email, null);
         
-        const response = await fetch('api/preferences', RequestOptions.getRequestOptions(account));
+        const response = await fetch('api/preferences/', RequestOptions.getRequestOptions(account));
         
         const res = await response.json();
         if(!response.ok) return;
