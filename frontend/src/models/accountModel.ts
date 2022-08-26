@@ -66,7 +66,7 @@ export class AccountModel {
         const access_decoded: any = jwtDecode(accesstoken);
         const account = new Account(idtoken, accesstoken, access_decoded.username, id_decoded.email, null);
         
-        const response = await fetch('dev-api/preferences', this.getRequestOptions(account));
+        const response = await fetch('api/preferences', this.getRequestOptions(account));
         
         const res = await response.json();
         if(!response.ok) return;
@@ -80,7 +80,7 @@ export class AccountModel {
         const options = this.postRequestOptions();
         options.method = 'PUT';
         options.body = JSON.stringify({default_guide_view: newPref == true ? 'list' : 'map'});
-        const response = await fetch('dev-api/preferences', options);
+        const response = await fetch('api/preferences', options);
         
         const res = await response.json();
         if(!response.ok) throw new RequestError(res.code, res.msg);
