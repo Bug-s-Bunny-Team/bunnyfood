@@ -118,23 +118,28 @@ Resources:
             QueryStringBehavior: none
           EnableAcceptEncodingGzip: true
 
-    ApiCachePolicy:
-      Type: AWS::CloudFront::CachePolicy
-      Properties:
-        CachePolicyConfig:
-          Comment: Cache policy used when accessing API
-          Name: ApiCachePolicy
-          DefaultTTL: 0
-          MaxTTL: 0
-          MinTTL: 0
-          ParametersInCacheKeyAndForwardedToOrigin:
-            CookiesConfig:
-              CookieBehavior: none
-            HeadersConfig:
-              HeaderBehavior: none
-            QueryStringsConfig:
-              QueryStringBehavior: none
-            EnableAcceptEncodingGzip: false
+  ApiCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Comment: Cache policy used when accessing API
+        Name: ApiCachePolicy
+        DefaultTTL: 0
+        MaxTTL: 0
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: whitelist
+            Headers:
+              - X-Forwarded-For
+              - X-Forwarded-Proto
+              - X-Forwarded-Host
+              - Host
+          QueryStringsConfig:
+            QueryStringBehavior: none
+          EnableAcceptEncodingGzip: false
 
   #############################################################
   # Tables
