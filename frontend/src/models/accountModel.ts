@@ -1,6 +1,6 @@
 import { Writable, writable, get } from 'svelte/store';
 import { Account, RequestError } from '../models'
-import 'jwt-decode'
+import { RequestOptions } from './requestOptions';
 import jwtDecode from 'jwt-decode';
 
 export class AccountModel {
@@ -32,26 +32,6 @@ export class AccountModel {
 
     private static static_delay_ms = 200;
 
-    #get_request_options: RequestInit = {
-        method: 'GET',
-        mode: 'same-origin',
-        credentials: 'include',
-        headers: {
-            'Authorization': "",
-        }
-    };
-
-    #post_request_options: RequestInit = {
-        method: 'POST',
-        mode: 'same-origin',
-        credentials: 'include',
-        headers: {
-            'Authorization': "",
-            'Content-Type': 'application/json'
-        },
-        body: ""
-    };
-
     account: Writable<Account> = writable();
     
     async createAccount(): Promise<void> {
@@ -66,7 +46,7 @@ export class AccountModel {
         const access_decoded: any = jwtDecode(accesstoken);
         const account = new Account(idtoken, accesstoken, access_decoded.username, id_decoded.email, null);
         
-        const response = await fetch('api/preferences/', this.getRequestOptions(account));
+        const response = await fetch('api/preferences', RequestOptions.getRequestOptions(account));
         
         const res = await response.json();
         if(!response.ok) return;
@@ -77,7 +57,7 @@ export class AccountModel {
     async cambiaPreferenza(newPref: boolean) : Promise<void> {
         await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
         
-        const options = this.postRequestOptions();
+        const options = RequestOptions.postRequestOptions();
         options.method = 'PUT';
         options.body = JSON.stringify({default_guide_view: newPref == true ? 'list' : 'map'});
         const response = await fetch('api/preferences/', options);
@@ -99,19 +79,5 @@ export class AccountModel {
     private getSearchParams() : URLSearchParams {
         const url = new URL(window.location.href.replace('#', '?'));
         return url.searchParams;
-    }
-
-    postRequestOptions(account: Account = null) : RequestInit {
-        if(!account) account = this.getAccount();
-        const options = this.#post_request_options;
-        options.headers['Authorization'] = 'Bearer ' + account.idtoken;
-        return options;
-    }
-
-    getRequestOptions(account: Account = null) : RequestInit {
-        if(!account) account = this.getAccount();
-        const options = this.#get_request_options;
-        options.headers['Authorization'] = 'Bearer ' + account.idtoken;
-        return options;
     }
 }
