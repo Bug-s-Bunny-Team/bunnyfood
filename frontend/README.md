@@ -20,6 +20,5 @@
 
 - Deploy:
   ```sh
-  aws s3 rm s3://bunnyfood-frontend --recursive    # rimuove versione precedente
-  aws s3 cp dist/ s3://bunnyfood-frontend --recursive
+  npm run deploy
   ```
