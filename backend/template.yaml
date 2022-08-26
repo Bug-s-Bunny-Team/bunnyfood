@@ -9,9 +9,12 @@ Parameters:
   RegionName:
     Type: String
     Default: 'eu-central-1'
-  ApiStageName:
+#  ApiStageName:
+#    Type: String
+#    Default: 'dev'
+  ApiId:
     Type: String
-    Default: 'dev'
+    Default: '43uvev6qfk'
 
 Globals:
   Function:
@@ -56,12 +59,12 @@ Resources:
             DomainName: !GetAtt FrontendBucket.RegionalDomainName
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-          #          - Id: ApiOrigin
-          #            DomainName: !Sub '${Api}.execute-api.${RegionName}.amazonaws.com'
-          #            CustomOriginConfig:
-          #              OriginProtocolPolicy: https-only
-          #              OriginSSLProtocols:
-          #                - TLSv1.2
+          - Id: ApiOrigin
+            DomainName: !Sub '${ApiId}.execute-api.${RegionName}.amazonaws.com'
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols:
+                - TLSv1.2
           - Id: S3BackendOrigin
             DomainName: !GetAtt BackendBucket.RegionalDomainName
             S3OriginConfig:
