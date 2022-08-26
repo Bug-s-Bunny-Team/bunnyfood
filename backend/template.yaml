@@ -47,96 +47,96 @@ Resources:
   #      EndpointConfiguration:
   #        Type: REGIONAL
 
-  CloudFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        DefaultRootObject: index.html
-        Enabled: true
-        HttpVersion: http2
-        Origins:
-          - Id: S3Origin
-            DomainName: !GetAtt FrontendBucket.RegionalDomainName
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-          - Id: ApiOrigin
-            DomainName: !Sub '${ApiId}.execute-api.${RegionName}.amazonaws.com'
-            CustomOriginConfig:
-              OriginProtocolPolicy: https-only
-              OriginSSLProtocols:
-                - TLSv1.2
-          - Id: S3BackendOrigin
-            DomainName: !GetAtt BackendBucket.RegionalDomainName
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
-        CacheBehaviors:
-          - PathPattern: 'media/*'
-            TargetOriginId: S3BackendOrigin
-            CachePolicyId: !Ref S3CachePolicy
-            ViewerProtocolPolicy: redirect-to-https
-            Compress: true
-          - PathPattern: 'api/*'
-            TargetOriginId: ApiOrigin
-            CachePolicyId: !Ref ApiCachePolicy
-            ViewerProtocolPolicy: redirect-to-https
-            Compress: true
-            AllowedMethods:
-              - GET
-              - HEAD
-              - OPTIONS
-              - PUT
-              - PATCH
-              - POST
-              - DELETE
-        DefaultCacheBehavior:
-          TargetOriginId: ApiOrigin
-          CachePolicyId: !Ref ApiCachePolicy
-          ViewerProtocolPolicy: redirect-to-https
-          Compress: true
-
-  CloudFrontOriginAccessIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: Client Origin Access Identity
-
-  S3CachePolicy:
-    Type: AWS::CloudFront::CachePolicy
-    Properties:
-      CachePolicyConfig:
-        Comment: Cache policy used when accessing static data from S3 Bucket
-        Name: S3CachePolicy
-        DefaultTTL: 600
-        MaxTTL: 1200
-        MinTTL: 0
-        ParametersInCacheKeyAndForwardedToOrigin:
-          CookiesConfig:
-            CookieBehavior: none
-          HeadersConfig:
-            HeaderBehavior: none
-          QueryStringsConfig:
-            QueryStringBehavior: none
-          EnableAcceptEncodingGzip: true
-
-  ApiCachePolicy:
-    Type: AWS::CloudFront::CachePolicy
-    Properties:
-      CachePolicyConfig:
-        Comment: Cache policy used when accessing API
-        Name: ApiCachePolicy
-        DefaultTTL: 0
-        MaxTTL: 0
-        MinTTL: 0
-        ParametersInCacheKeyAndForwardedToOrigin:
-          CookiesConfig:
-            CookieBehavior: none
-          HeadersConfig:
-            HeaderBehavior: whitelist
-            Headers:
-              - Host
-          QueryStringsConfig:
-            QueryStringBehavior: none
-          EnableAcceptEncodingGzip: false
+#  CloudFrontDistribution:
+#    Type: AWS::CloudFront::Distribution
+#    Properties:
+#      DistributionConfig:
+#        DefaultRootObject: index.html
+#        Enabled: true
+#        HttpVersion: http2
+#        Origins:
+#          - Id: S3Origin
+#            DomainName: !GetAtt FrontendBucket.RegionalDomainName
+#            S3OriginConfig:
+#              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+#          - Id: ApiOrigin
+#            DomainName: !Sub '${ApiId}.execute-api.${RegionName}.amazonaws.com'
+#            CustomOriginConfig:
+#              OriginProtocolPolicy: https-only
+#              OriginSSLProtocols:
+#                - TLSv1.2
+#          - Id: S3BackendOrigin
+#            DomainName: !GetAtt BackendBucket.RegionalDomainName
+#            S3OriginConfig:
+#              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
+#        CacheBehaviors:
+#          - PathPattern: 'media/*'
+#            TargetOriginId: S3BackendOrigin
+#            CachePolicyId: !Ref S3CachePolicy
+#            ViewerProtocolPolicy: redirect-to-https
+#            Compress: true
+#          - PathPattern: 'api/*'
+#            TargetOriginId: ApiOrigin
+#            CachePolicyId: !Ref ApiCachePolicy
+#            ViewerProtocolPolicy: redirect-to-https
+#            Compress: true
+#            AllowedMethods:
+#              - GET
+#              - HEAD
+#              - OPTIONS
+#              - PUT
+#              - PATCH
+#              - POST
+#              - DELETE
+#        DefaultCacheBehavior:
+#          TargetOriginId: ApiOrigin
+#          CachePolicyId: !Ref ApiCachePolicy
+#          ViewerProtocolPolicy: redirect-to-https
+#          Compress: true
+#
+#  CloudFrontOriginAccessIdentity:
+#    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+#    Properties:
+#      CloudFrontOriginAccessIdentityConfig:
+#        Comment: Client Origin Access Identity
+#
+#  S3CachePolicy:
+#    Type: AWS::CloudFront::CachePolicy
+#    Properties:
+#      CachePolicyConfig:
+#        Comment: Cache policy used when accessing static data from S3 Bucket
+#        Name: S3CachePolicy
+#        DefaultTTL: 600
+#        MaxTTL: 1200
+#        MinTTL: 0
+#        ParametersInCacheKeyAndForwardedToOrigin:
+#          CookiesConfig:
+#            CookieBehavior: none
+#          HeadersConfig:
+#            HeaderBehavior: none
+#          QueryStringsConfig:
+#            QueryStringBehavior: none
+#          EnableAcceptEncodingGzip: true
+#
+#  ApiCachePolicy:
+#    Type: AWS::CloudFront::CachePolicy
+#    Properties:
+#      CachePolicyConfig:
+#        Comment: Cache policy used when accessing API
+#        Name: ApiCachePolicy
+#        DefaultTTL: 0
+#        MaxTTL: 0
+#        MinTTL: 0
+#        ParametersInCacheKeyAndForwardedToOrigin:
+#          CookiesConfig:
+#            CookieBehavior: none
+#          HeadersConfig:
+#            HeaderBehavior: whitelist
+#            Headers:
+#              - Host
+#          QueryStringsConfig:
+#            QueryStringBehavior: none
+#          EnableAcceptEncodingGzip: false
 
   #############################################################
   # Tables
@@ -248,10 +248,10 @@ Resources:
             BucketName: !Ref BackendBucket
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 
-Outputs:
-  CloudFrontDomain:
-    Description: CloudFront domain name accessible from public
-    Value: !GetAtt CloudFrontDistribution.DomainName
+#Outputs:
+#  CloudFrontDomain:
+#    Description: CloudFront domain name accessible from public
+#    Value: !GetAtt CloudFrontDistribution.DomainName
 #  ApiPath:
 #    Description: Api path accessible through CloudFront
 #    Value: !Sub '${CloudFrontDistribution.DomainName}/${ApiStageName}'
