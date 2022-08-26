@@ -94,12 +94,12 @@ Resources:
 #          ViewerProtocolPolicy: redirect-to-https
 #          Compress: true
 #
-#  CloudFrontOriginAccessIdentity:
-#    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-#    Properties:
-#      CloudFrontOriginAccessIdentityConfig:
-#        Comment: Client Origin Access Identity
-#
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Client Origin Access Identity
+
 #  S3CachePolicy:
 #    Type: AWS::CloudFront::CachePolicy
 #    Properties:
