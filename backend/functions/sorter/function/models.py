@@ -11,62 +11,6 @@ class SortEvent(LambdaEvent):
     posts: list
 
 
-class Sentiment(Enum):
-    POSITIVE = 1
-    NEGATIVE = 0
-    NEUTRAL = 0.3
-    MIXED = 0.1
-
-
-class SentimentComprehend:
-    def __init__(self, negative: float, positive: float, neutral: float, mixed: float):
-        self.__positive = positive
-        self.__neutral = neutral
-        self.__negative = negative
-        self.__mixed = mixed
-        self.__principal_sentiment = None
-
-    # set principal sentiment
-
-    def set_sentiment(self, sentiment: str):
-        sentiment = sentiment.lower()
-        if sentiment == "positive":
-            self.__principal_sentiment = Sentiment.POSITIVE
-        elif sentiment == "negative":
-            self.__principal_sentiment = Sentiment.NEGATIVE
-        elif sentiment == "mixed":
-            self.__principal_sentiment = Sentiment.MIXED
-        else:
-            self.__principal_sentiment = Sentiment.NEUTRAL
-
-    def calculate_score(self) -> float:
-        return (
-            Sentiment.POSITIVE.value * self.__positive
-            + Sentiment.NEUTRAL.value * self.__neutral
-            + Sentiment.NEGATIVE.value * self.__negative
-            + Sentiment.MIXED.value * self.__mixed
-        )
-
-    def __str__(self) -> str:
-        return (
-            "Principal Sentiment: "
-            + str(self.__principal_sentiment)
-            + "\n"
-            + "Positive: "
-            + str(self.__positive)
-            + "\n"
-            + "Neutral: "
-            + str(self.__neutral)
-            + "\n"
-            + "Negative: "
-            + str(self.__negative)
-            + "\n"
-            + "Mixed: "
-            + str(self.__mixed)
-            + "\n"
-        )
-
-
 class Emotions(float, Enum):
     HAPPY = 1
     SURPRISED = 0.6
@@ -112,9 +56,6 @@ class Image:
     def __str__(self) -> str:
         return "image name: " + str(self.name)
 
-    # def toString(self):
-    #  return json.dumps(self.__dict__)
-
 
 class SortingPost:
     id: int
@@ -122,7 +63,6 @@ class SortingPost:
     list_images: List[Image]
     texts: Dict[int, str]
     hashtags: Dict[int, str]
-    # captionScore: SentimentComprehend
     imageScore: float
     textsScore: Dict[int, float]
     finalScore: float
@@ -133,25 +73,17 @@ class SortingPost:
         self.list_images = list_images
         self.texts = dict()
         self.hashtags = dict()
-        # self.captionScore = None
         self.imageScore = 0.0
         self.textsScore = dict()
         self.finalScore = 0.0
 
     def __validate_input_json(self, in_json):
         return (
-            key_present_in_dict(in_json, "id")
-            & key_present_in_dict(in_json, "caption")
-            & key_present_in_dict(in_json, "image")
-            & key_present_in_dict(in_json, "hashtags")
+                key_present_in_dict(in_json, "id")
+                & key_present_in_dict(in_json, "caption")
+                & key_present_in_dict(in_json, "image")
+                & key_present_in_dict(in_json, "hashtags")
         )
-
-    def calculate_final_score(self):
-        if self.captionScore:
-            self.finalScore = self.captionScore.calculate_score()
-
-    def set_caption_score(self, score: SentimentComprehend):
-        self.captionScore = score
 
     def calculate_and_set_image_score(self):
         if self.list_images:

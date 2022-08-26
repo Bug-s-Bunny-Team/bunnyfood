@@ -1,4 +1,3 @@
-import os
 from typing import Optional
 
 import boto3
@@ -7,7 +6,7 @@ from sqlalchemy.orm import Session
 from common.service import BaseService
 from common.utils import s3_delete_file
 from db import models
-from .models import SortingPost, SentimentComprehend, SortEvent
+from .models import SortingPost, SortEvent
 
 
 class SorterService(BaseService):
@@ -130,7 +129,7 @@ class SorterService(BaseService):
         self._session.commit()
 
     def sort(self, post: SortingPost) -> Optional[SortingPost]:
-        # Analyze a post with Rekognition and Comprehend for save or delete it
+        # Analyze a post with Rekognition for save or delete it
         # post: Post to analyze
         print("\n-------------------")
         print('sorting')

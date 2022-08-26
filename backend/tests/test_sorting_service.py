@@ -12,29 +12,6 @@ class TestSorterService(TestCase):
     def setUp(self):
         self.sorting_service = SorterService()
         self.reko = self.sorting_service._rekognition
-        self.comp = self.sorting_service._comprehend
-
-    def test_detect_language_text(self):
-        print('start test_detect_language_text')
-        # per provare inglese(i am a man and i have 52 years)
-        text = 'vediamo se capisci di cosa parlo'
-        language = self.sorting_service.detect_language_text(text)
-        print(language)
-        self.assertEqual('it', language, 'test_detect_language_text failed')
-        print('finish test_detect_language_text')
-
-    def test_detect_sentiment_text(self):
-        print('start test_detect_sentiment_text')
-        language = 'it'
-        post = SortingPost(id=5, caption="bel posto e buon cibo ma sono rimasto deluso dal servizio. Primi fantastici, "
-                                  "secondi un po meno. Prezzo nella mdedia", list_images=[img])
-
-        score = self.sorting_service.detect_sentiment_text(post, language)
-        post.set_caption_score(score)
-        post.calculate_final_score()
-        print(post.finalScore)
-        self.assertEqual(9.9, post.finalScore, 'test_detect_sentiment_text')
-        print('finish test_detect_sentiment_text')
 
     def test_detect_person(self):
         print('start test_detect_person')
@@ -190,27 +167,6 @@ class TestSorterService(TestCase):
             self.assertEqual(0, contain_person)
             print('finish test_analyze_image')
 
-    def test_calculate_text_score(self):
-        print('start test_calculate_text_score')
-        post = SortingPost(id=5, caption="bel posto e buon cibo", list_images=[img])
-
-        if post.caption:
-            score = self.sorting_service.detect_sentiment_text(post,
-                                                               self.sorting_service.detect_language_text(post.caption))
-            post.set_caption_score(score)
-            post.calculate_final_score()
-
-            print("\n")
-            print('Print Final Score')
-            print(post.finalScore)
-            self.assertEqual(99, post.finalScore, 'test_calculate_text_score failed')
-            print('finish test_calculate_text_score')
-            return post.finalScore
-        else:
-            print('test_calculate_text_score failed')
-            self.fail() # sostituire con self.assertEqual
-            print('finish test_calculate_text_score')
-
     def test_calculate_image_score(self):
         print('start test_calculate_image_score')
         post = SortingPost(id=5, caption="bel posto e buon cibo", list_images=[img])
@@ -235,11 +191,8 @@ class TestSorterService(TestCase):
 
     def test_sort(self):
         print('start test_sort')
-        text_score = self.test_calculate_text_score()
-        if not text_score:
-            print('no text found')
         image_score = self.test_calculate_image_score()
-        if image_score is not None or text_score is not None:
+        if image_score is not None:
             print('save post')
             self.assertEqual(100, image_score)
             print('finish test_sort')
@@ -247,4 +200,3 @@ class TestSorterService(TestCase):
             print('delete post')
             self.assertEqual(0, image_score)
             print('finish test_sort')
-
