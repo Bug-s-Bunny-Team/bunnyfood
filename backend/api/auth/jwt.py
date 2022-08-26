@@ -34,7 +34,7 @@ class JWKS(BaseModel):
                 f"{os.environ.get('COGNITO_POOL_ID')}/.well-known/jwks.json"
             )
         data = requests.get(keys_url)
-        cls.parse_obj(data)
+        cls.parse_obj(data.json())
 
 
 class JWTBearer(HTTPBearer):
