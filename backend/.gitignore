@@ -1,3 +1,6 @@
 data/pgdata/
 data/pgadmin/*
 !data/pgadmin/.gitkeep
+
+.aws-sam
+alembic_prod.ini

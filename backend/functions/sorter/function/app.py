@@ -1,16 +1,14 @@
-import json
+import os
 
-from db.utils import init_db
-from entity.post import Post
-from functions.sorter.function.sorting_service import SorterService
+from db import get_session
+from .models import SortEvent
+from .sorting_service import SorterService
 
 
 def lambda_handler(event, context):
-    try:
-        init_db()
-        sorterEvent = SorterService
-        sorterEvent.sort(event)
-        return 'Success'
-    except Exception as e:
-        print('Error processing Event {}'.format(json.dumps(event, indent=2)))
-        raise e
+    event = SortEvent(**event)
+
+    session = get_session()
+    service = SorterService(session, os.environ['BUCKET_NAME'])
+
+    return service.process_event(event)

@@ -1,8 +1,8 @@
 import json
 from abc import ABC, abstractmethod
-from db.utils import *
-from db.models import *
 from .models import ScoringPost
+
+from db import SessionLocal, models
 
 class EventAdapter(ABC):
     @abstractmethod
@@ -20,7 +20,8 @@ class SNSEventAdapter(EventAdapter):
     def processEvent(self, event) -> ScoringPost:
         print("Processing SNS Event")
         post_id = json.loads(event['Records'][0]['Sns']['Message'])['post_id']
-        post = Post.get_or_none(id=post_id)
+        with SessionLocal() as db:
+            post = db.query(models.Post).filter_by(id=post_id).first()
         if not post:
             raise Exception(f'Post with id: {post_id}, not found in Database') 
         sPost = ScoringPost.fromPost(post)

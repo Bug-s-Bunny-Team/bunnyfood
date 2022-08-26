@@ -32,6 +32,11 @@ def s3_upload_file(bucket_name: str, key: str, src: Path):
     bucket.upload_file(str(src), key)
 
 
+def s3_delete_file(bucket_name: str, key: str):
+    s3 = boto3.client('s3')
+    s3.delete_object(Bucket=bucket_name, Key=key)
+
+
 def key_present_in_dict(dict, key):
     if key in dict.keys():
         return True
@@ -46,3 +51,7 @@ def extract_insta_shortcode(url: str) -> Optional[str]:
         if shortcode:
             return shortcode
     return None
+
+
+def sns_extract_message(event):
+    return json.loads(event['Records'][0]['Sns']['Message'])

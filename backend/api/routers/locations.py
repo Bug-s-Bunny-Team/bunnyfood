@@ -1,32 +1,55 @@
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import HTTPException, Depends
+from starlette.status import HTTP_404_NOT_FOUND
 
 from api import schemas
-from api.db import get_db
+from api.crud.locations import LocationsCRUD
+from api.dependencies import get_user, get_locations_crud
+from api.routers import APIRouter
 from db import models
 
 router = APIRouter()
 
 
 @router.get(
-    '/locations',
+    '/locations/',
     response_model=List[schemas.Location],
     response_model_exclude_unset=True,
-    dependencies=[Depends(get_db)],
 )
-def get_locations():
-    return list(models.Location.select())
+def get_locations(
+    only_from_followed: bool = True,
+    lat: Optional[float] = None,
+    long: Optional[float] = None,
+    current_lat: Optional[float] = None,
+    current_long: Optional[float] = None,
+    radius: Optional[int] = None,
+    min_rating: Optional[float] = None,
+    user: models.User = Depends(get_user),
+    locations: LocationsCRUD = Depends(get_locations_crud),
+):
+    return locations.get_from_filters(
+        user,
+        only_from_followed,
+        lat,
+        long,
+        current_lat,
+        current_long,
+        radius,
+        min_rating,
+    )
 
 
 @router.get(
     '/locations/{location_id}',
     response_model=schemas.Location,
     response_model_exclude_unset=True,
-    dependencies=[Depends(get_db)],
 )
-def get_location(location_id: int):
-    location = models.Location.get_or_none(models.Location.id == location_id)
+def get_location(
+    location_id: int,
+    locations: LocationsCRUD = Depends(get_locations_crud),
+):
+    location = locations.get_by_id(location_id)
     if not location:
-        raise HTTPException(status_code=404, detail='Location not found')
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail='Location not found')
     return location

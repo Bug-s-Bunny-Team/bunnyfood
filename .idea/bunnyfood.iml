@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/backend/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/frontend" />
       <excludeFolder url="file://$MODULE_DIR$/backend/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/.aws-sam" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.10 (bunnyfood)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

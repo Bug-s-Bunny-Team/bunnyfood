@@ -1,18 +1,13 @@
-import datetime
-from enum import Enum, unique
+from enum import unique, Enum
 from functools import cached_property
-from typing import Set, Tuple, Optional
+from typing import Tuple, Optional, Set
 
-from peewee import (
-    Model,
-    CharField,
-    TextField,
-    ForeignKeyField,
-    FloatField,
-    DateTimeField,
-)
+from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func
+from sqlalchemy.ext.hybrid import hybrid_method
+from sqlalchemy.orm import relationship, Session
 
-from . import db
+from db import Base
+from db.utils import gc_distance, get_or_create
 
 
 @unique
@@ -21,38 +16,106 @@ class MediaType(str, Enum):
     VIDEO = 'video'
 
 
-class BaseModel(Model):
-    class Meta:
-        database = db
+@unique
+class GuideType(str, Enum):
+    MAP = 'map'
+    LIST = 'list'
 
 
-class SocialProfile(BaseModel):
-    username = CharField(unique=True, null=False)
+profiles_users_association = Table(
+    'profiles_users',
+    Base.metadata,
+    Column('left_id', ForeignKey('socialprofiles.id'), primary_key=True),
+    Column('right_id', ForeignKey('users.id'), primary_key=True),
+)
 
 
-class Location(BaseModel):
-    name = CharField(unique=True)
-    description = TextField()
-    lat = FloatField(default=0)
-    long = FloatField(default=0)
-    score = FloatField(null=True)
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(length=50), unique=True)
+
+    preferences = relationship('UserPreferences', back_populates='user', uselist=False)
+    followed_profiles = relationship(
+        'SocialProfile',
+        secondary=profiles_users_association,
+        back_populates='followers',
+    )
+
+
+class UserPreferences(Base):
+    __tablename__ = 'userpreferences'
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    default_guide_view = Column(String(10), default='map')
+
+    user = relationship('User', back_populates='preferences', uselist=False)
+
+
+class SocialProfile(Base):
+    __tablename__ = 'socialprofiles'
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(length=50), unique=True)
+
+    posts = relationship('Post', back_populates='profile')
+    followers = relationship(
+        'User', secondary=profiles_users_association, back_populates='followed_profiles'
+    )
+
+
+class Location(Base):
+    __tablename__ = 'locations'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(length=50), unique=True)
+    description = Column(Text)
+    lat = Column(Float, default=0)
+    long = Column(Float, default=0)
+    score = Column(Float, nullable=True, default=None)
+
+    posts = relationship('Post', back_populates='location')
+
+    @hybrid_method
+    def distance(self, lat, lng):
+        return gc_distance(lat, lng, self.lat, self.long)
+
+    @distance.expression
+    def distance(cls, lat, lng):
+        return gc_distance(lat, lng, cls.lat, cls.long, math_lib=func)
 
     @classmethod
-    def from_instaloader_location(cls, location) -> Tuple['Location', bool]:
-        return Location.get_or_create(
-            name=location.name, lat=location.lat, long=location.lng, description=''
+    def from_instaloader_location(
+        cls, session: Session, location
+    ) -> 'Location':
+        location = get_or_create(
+            session,
+            cls,
+            name=location.name,
+            lat=location.lat,
+            long=location.lng,
+            description='',
         )
+        return location
 
 
-class Post(BaseModel):
-    shortcode = CharField(unique=True)
-    caption = TextField()
-    social_profile = ForeignKeyField(SocialProfile, backref='posts', lazy_load=False)
-    media_type = CharField(choices=[MediaType.IMAGE, MediaType.VIDEO])
-    media_url = CharField(max_length=512)
-    media_s3_key = CharField(null=True, unique=True)
-    location = ForeignKeyField(Location, backref='posts', lazy_load=False, null=True)
-    added = DateTimeField(default=datetime.datetime.now())
+class Post(Base):
+    __tablename__ = 'posts'
+
+    id = Column(Integer, primary_key=True, index=True)
+    profile_id = Column(Integer, ForeignKey('socialprofiles.id'))
+    location_id = Column(Integer, ForeignKey('locations.id'))
+    shortcode = Column(String, unique=True)
+    caption = Column(Text)
+    media_type = Column(String)
+    media_url = Column(String(length=512))
+    media_s3_key = Column(String, nullable=True, unique=True)
+    score = Column(Float, nullable=True, default=None)
+
+    profile = relationship('SocialProfile', back_populates='posts')
+    location = relationship('Location', back_populates='posts')
 
     @cached_property
     def media_filename(self) -> str:
@@ -66,23 +129,20 @@ class Post(BaseModel):
 
     @classmethod
     def from_instaloader_post(
-        cls, insta_post, profile: SocialProfile, location: Optional[Location] = None
+        cls, session: Session, insta_post, profile: SocialProfile, location: Location
     ) -> Tuple['Post', bool]:
-        if post := Post.get_or_none(shortcode=insta_post.shortcode):
+        post = session.query(Post).filter_by(shortcode=insta_post.shortcode).first()
+        if post:
             return post, False
-        post = Post.create(
+        post = Post(
             shortcode=insta_post.shortcode,
             caption=insta_post.caption,
             media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
             media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
-            social_profile=profile,
+            profile=profile,
             location=location,
         )
+        session.add(post)
+        session.commit()
+        session.refresh(post)
         return post, True
-
-
-class PostScore(BaseModel):
-    media_score = FloatField(default=0)
-    caption_score = FloatField(default=0)
-    post = ForeignKeyField(Post, backref='score', lazy_load=False, unique=True)
-    created = DateTimeField(default=datetime.datetime.now())

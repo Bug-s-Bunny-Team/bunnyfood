@@ -2,6 +2,7 @@
 
     import { NavPresenter } from "../presenters/NavPresenter";
     import ThemeSwitch from "./ThemeSwitch.svelte";
+
     const presenter = new NavPresenter();
     let routes;
     presenter.routes.subscribe(new_routes => {

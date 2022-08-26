@@ -1,32 +1,34 @@
-from . import db
-from .secret import get_db_secret
-from .models import SocialProfile, PostScore, Post, Location
+import math
+
+from sqlalchemy.orm import Session
 
 
-def init_db(
-    user: str,
-    password: str,
-    host: str,
-    database: str,
-):
-    db.init(
-        user=user,
-        password=password,
-        host=host,
-        database=database,
+def get_or_create(db: Session, model, **kwargs):
+    instance = db.query(model).filter_by(**kwargs).first()
+    if instance:
+        return instance
+    else:
+        instance = model(**kwargs)
+        db.add(instance)
+        db.commit()
+        db.refresh(instance)
+        return instance
+
+
+def gc_distance(lat1, lng1, lat2, lng2, math_lib=None):
+    """
+    Calculate distance between two coordinates.
+    https://en.wikipedia.org/wiki/Great-circle_distance
+    """
+    if not math_lib:
+        math_lib = math
+
+    ang = math_lib.acos(
+        math_lib.cos(math_lib.radians(lat1))
+        * math_lib.cos(math_lib.radians(lat2))
+        * math_lib.cos(math_lib.radians(lng2) - math_lib.radians(lng1))
+        + math_lib.sin(math_lib.radians(lat1)) * math_lib.sin(math_lib.radians(lat2))
     )
-    db.connect()
-    create_all_tables()
 
-
-def init_db_from_secrets():
-    init_db(
-        user=get_db_secret()['username'],
-        password=get_db_secret()['password'],
-        host=get_db_secret()['host'],
-        database=get_db_secret()['database'],
-    )
-
-
-def create_all_tables():
-    db.create_tables(models=[SocialProfile, Location, Post, PostScore])
+    # return 6371 * ang   # distance in kilometers
+    return 6371000 * ang    # distance in meters

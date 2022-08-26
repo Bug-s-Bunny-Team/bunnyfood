@@ -1,7 +1,16 @@
 import json
 from enum import Enum, unique
 from typing import Dict
+
+from common.models import LambdaEvent
 from common.utils import key_present_in_dict
+
+
+# TODO: define the event
+class ScoringEvent(LambdaEvent):
+    posts_count: int
+    posts: list
+
 
 @unique
 class Score(str, Enum):
@@ -19,6 +28,7 @@ class ScoringPost:
     hashtags: Dict[int, str]
     captionScore: float
     textsScore: Dict[int, float]
+    faceScore: float
     finalScore: float
 
     def __init__(self, id: str, caption: str, image: str, hashtags: Dict[int, str]):
@@ -29,6 +39,7 @@ class ScoringPost:
         self.hashtags = hashtags
         self.captionScore = 0.0
         self.textsScore = dict()
+        self.faceScore = 0.0
         self.finalScore = 0.0
 
     def __validate_input_json(self, in_json):

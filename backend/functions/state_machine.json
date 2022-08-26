@@ -1,0 +1,97 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Scraping",
+  "States": {
+    "Scraping": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:eu-central-1:104582034671:function:bunnyfood-ScrapingFunction-l6s9bJQOGCzW:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Sorter"
+    },
+    "Sorter": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:eu-central-1:104582034671:function:bunnyfood-SortingFunction-bSAtiI3WiQMZ:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Choice"
+    },
+    "Choice": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.stateInput.posts_count",
+            "NumericGreaterThan": 0
+          },
+          "Next": "Fail",
+          "Comment": "posts_count is 0"
+        }
+      ],
+      "Default": "Scoring",
+      "Comment": "posts_count is > 0"
+    },
+    "Fail": {
+      "Type": "Fail",
+      "Error": "NoPosts",
+      "Comment": "there are 0 posts to score",
+      "Cause": "sorter didn't keep any post"
+    },
+    "Scoring": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:eu-central-1:104582034671:function:bunnyfood-SortingFunction-bSAtiI3WiQMZ:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Success"
+    },
+    "Success": {
+      "Type": "Succeed",
+      "Comment": "all posts have been scored"
+    }
+  }
+}
