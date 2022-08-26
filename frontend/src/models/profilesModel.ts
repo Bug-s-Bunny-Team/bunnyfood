@@ -16,61 +16,50 @@ export class ProfilesModel {
     private constructor() { 
     }
 
-    private static static_delay_ms = 200;
-
-    async getFollowees() {
-        await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        
+    async getFollowees() {        
         const response = await fetch('api/followed/', RequestOptions.getRequestOptions());
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(res.code, res.msg);
+        if(!response.ok) throw new RequestError(response.status, res.msg);
         return res;
     }
 
-    async removeFollowee(profile: SocialProfile) : Promise<void> {
-        await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        
+    async removeFollowee(profile: SocialProfile) : Promise<void> {        
         const options = RequestOptions.postRequestOptions();
         options.body = JSON.stringify({username: profile.username});
         const response = await fetch('api/followed/unfollow/', options);
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(res.code, res.msg);
+        if(!response.ok) throw new RequestError(response.status, res.msg);
         return res;
     }
 
-    async getMostPopularProfiles(quantity: number = 20) : Promise<SocialProfile[]> {
-        await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        
+    async getMostPopularProfiles(quantity: number = 20) : Promise<SocialProfile[]> {        
         const response = await fetch(`api/profiles/popular/${quantity}`, RequestOptions.getRequestOptions());
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(res.code, res.msg);
+        if(!response.ok) throw new RequestError(response.status, res.msg);
         return res;
     }
 
-    async getProfiles(ricerca: string) : Promise<SocialProfile[]> {
-        await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        
-        const url = new URL('api/profiles/', `${window.location.protocol}//${window.location.host}`);
-        url.searchParams.append('username', encodeURIComponent(ricerca));
-        const response = await fetch(url, RequestOptions.getRequestOptions());
+    async getProfiles(ricerca: string) : Promise<SocialProfile[]> {        
+        const response = await fetch(`api/profiles/search/${encodeURIComponent(ricerca)}`, RequestOptions.getRequestOptions());
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(res.code, res.msg);
+        if(!response.ok) {
+            if(response.status == 404) return [];
+            throw new RequestError(response.status, res.msg);
+        }
         return res;
     }
 
-    async followProfile(profile: SocialProfile) : Promise<void> {
-        await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
-        
+    async followProfile(profile: SocialProfile) : Promise<void> {        
         const options = RequestOptions.postRequestOptions();
         options.body = JSON.stringify({username: profile.username});
         const response = await fetch('api/followed/', options);
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(res.code, res.msg);
+        if(!response.ok) throw new RequestError(response.status, res.msg);
         return res;
     }
 }  

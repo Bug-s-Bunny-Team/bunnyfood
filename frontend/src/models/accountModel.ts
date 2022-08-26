@@ -30,13 +30,9 @@ export class AccountModel {
         });
     }
 
-    private static static_delay_ms = 200;
-
     account: Writable<Account> = writable();
     
     async createAccount(): Promise<void> {
-        await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
-
         const params = this.getSearchParams();
         const idtoken = params.get('id_token');
         const accesstoken = params.get('access_token');
@@ -54,16 +50,14 @@ export class AccountModel {
         this.account.set(account);
     }
 
-    async cambiaPreferenza(newPref: boolean) : Promise<void> {
-        await new Promise(r => setTimeout(r, AccountModel.static_delay_ms))
-        
+    async cambiaPreferenza(newPref: boolean) : Promise<void> {        
         const options = RequestOptions.postRequestOptions();
         options.method = 'PUT';
         options.body = JSON.stringify({default_guide_view: newPref == true ? 'list' : 'map'});
         const response = await fetch('api/preferences/', options);
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(res.code, res.msg);
+        if(!response.ok) throw new RequestError(response.status, res.msg);
 
         this.account.update(account => { account.preference = newPref; return account; });
     }
