@@ -1,3 +1,3 @@
-from api.auth.jwt import JWTBearer
+from api.auth.utils import get_auth
 
-auth = JWTBearer()
+auth = get_auth()
