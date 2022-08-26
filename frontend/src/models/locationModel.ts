@@ -15,11 +15,8 @@ export class LocationModel {
 
     private constructor() { 
     }
-
-    private static static_delay_ms = 200;
-    
+        
     async getInfo(id: number, parentNode: HTMLElement) : Promise<Info> {
-        await new Promise(r => setTimeout(r, LocationModel.static_delay_ms));
         const location: Location = ResultsModel.getInstance().getById(id);
         const attribution_div = document.createElement('div');
         parentNode.append(attribution_div);

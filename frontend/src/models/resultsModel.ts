@@ -30,12 +30,8 @@ export class ResultsModel {
     }
 
     rankedList: Writable<Location[]> = writable();
-
-    private static static_delay_ms = 200;
     
-    async getRankedList(filter: Filter) : Promise<Location[]> {
-        await new Promise(r => setTimeout(r, ResultsModel.static_delay_ms))
-        
+    async getRankedList(filter: Filter) : Promise<Location[]> {        
         const url = new URL('api/locations/', `${window.location.protocol}//${window.location.host}`);
         for (const field in filter) {
             url.searchParams.append(field, filter[field]);
@@ -43,7 +39,7 @@ export class ResultsModel {
         const response = await fetch(url, RequestOptions.getRequestOptions());
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(res.code, res.msg);
+        if(!response.ok) throw new RequestError(response.status, res.msg);
         this.rankedList.set(this.fixLocations(res));
         return get(this.rankedList);
     }
