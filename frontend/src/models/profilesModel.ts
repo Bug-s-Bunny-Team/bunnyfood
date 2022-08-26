@@ -21,7 +21,7 @@ export class ProfilesModel {
     async getFollowees() {
         await new Promise(r => setTimeout(r, ProfilesModel.static_delay_ms))
         
-        const response = await fetch('api/followed', RequestOptions.getRequestOptions());
+        const response = await fetch('api/followed/', RequestOptions.getRequestOptions());
         
         const res = await response.json();
         if(!response.ok) throw new RequestError(res.code, res.msg);
@@ -33,7 +33,7 @@ export class ProfilesModel {
         
         const options = RequestOptions.postRequestOptions();
         options.body = JSON.stringify({username: profile.username});
-        const response = await fetch('api/followed/unfollow', options);
+        const response = await fetch('api/followed/unfollow/', options);
         
         const res = await response.json();
         if(!response.ok) throw new RequestError(res.code, res.msg);
