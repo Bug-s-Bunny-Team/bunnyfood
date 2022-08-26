@@ -9,35 +9,35 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '/api/profiles/popular': {
+            '/api/profiles/popular/': {
                 target: 'http://127.0.0.1:5000/mock/popular_profiles.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api\/profiles\/popular/, '')
+                rewrite: (path) => path.replace(/^\/api\/profiles\/popular\//, '')
             },
-            '/api/profiles': {
+            '/api/profiles/': {
                 target: 'http://127.0.0.1:5000/mock/social_profiles.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api\/profiles/, '')
+                rewrite: (path) => path.replace(/^\/api\/profiles\//, '')
             },
-            '/api/locations': {
+            '/api/locations/': {
                 target: 'http://127.0.0.1:5000/mock/locations.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api\/locations/, '')
+                rewrite: (path) => path.replace(/^\/api\/locations\//, '')
             },
             /*'/api/followed/unfollow': {
                 target: 'http://127.0.0.1:5000/mock/followed.json',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/dev-api\/followed\/unfollow/, '')
             },*/
-            '/api/followed': {
+            '/api/followed/': {
                 target: 'http://127.0.0.1:5000/mock/followed.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api\/followed/, '')
+                rewrite: (path) => path.replace(/^\/api\/followed\//, '')
             },
-            '/api/preferences': {
+            '/api/preferences/': {
                 target: 'http://127.0.0.1:5000/mock/preferences.json',
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api\/preferences/, '')
+                rewrite: (path) => path.replace(/^\/api\/preferences\//, '')
             },
         }
     }
