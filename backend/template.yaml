@@ -133,9 +133,6 @@ Resources:
           HeadersConfig:
             HeaderBehavior: whitelist
             Headers:
-              - X-Forwarded-For
-              - X-Forwarded-Proto
-              - X-Forwarded-Host
               - Host
           QueryStringsConfig:
             QueryStringBehavior: none
