@@ -7,7 +7,7 @@
     <option name="environmentVariables">
       <map>
         <entry key="ENV" value="dev" />
-        <entry key="INSTA_SESSIONS_TABLE" value="poc-instagram-sessions" />
+        <entry key="INSTA_SESSIONS_TABLE" value="bunnyfood-instagram-sessions" />
         <entry key="INSTA_USERNAME" value="notabbotswe" />
       </map>
     </option>

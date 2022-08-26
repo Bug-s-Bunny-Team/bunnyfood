@@ -3,6 +3,7 @@ import os
 from db import get_session
 from .custom import CustomInstaloader
 from .download import Downloader
+from .proxy import set_random_proxy
 from .scrapers import InstagramScraper
 from .service import ScrapingService
 from .sessions import InstagramSessionProvider
@@ -31,8 +32,8 @@ def create_scraper() -> InstagramScraper:
 def create_service() -> ScrapingService:
     scraper = create_scraper()
     downloader = Downloader(bucket_name=os.environ['BUCKET_NAME'])
-
     session = get_session()
+    set_random_proxy()
 
     service = ScrapingService(scraper=scraper, downloader=downloader, session=session)
 
