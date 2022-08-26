@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "deploy": "vite build && aws s3 sync dist/ s3://bunnyfood-frontend --delete"
+    "deploy": "aws s3 sync dist/ s3://bunnyfood-frontend --delete"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
