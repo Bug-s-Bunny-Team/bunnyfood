@@ -1,11 +1,12 @@
 from typing import List
 
-from fastapi import APIRouter, status, Depends, HTTPException, Response
+from fastapi import status, Depends, HTTPException, Response
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
 from api import schemas
 from api.crud.profiles import ProfilesCRUD
 from api.dependencies import get_user, get_profiles_crud
+from api.routers import APIRouter
 from api.utils import search_social_profile
 from db import models
 

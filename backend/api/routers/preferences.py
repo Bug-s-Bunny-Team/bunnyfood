@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import Depends
 
 from api import schemas
 from api.crud.preferences import PreferencesCRUD
 from api.dependencies import get_user, get_prefs_crud
+from api.routers import APIRouter
 from db import models
 
 router = APIRouter()

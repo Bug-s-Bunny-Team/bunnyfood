@@ -6,6 +6,9 @@
     <module name="bunnyfood" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
+    <envs>
+      <env name="ENV" value="dev" />
+    </envs>
     <option name="SDK_HOME" value="$PROJECT_DIR$/backend/venv/bin/python" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
     <option name="IS_MODULE_SDK" value="false" />

@@ -1,11 +1,12 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import HTTPException, Depends
 from starlette.status import HTTP_404_NOT_FOUND
 
 from api import schemas
 from api.crud.locations import LocationsCRUD
 from api.dependencies import get_user, get_locations_crud
+from api.routers import APIRouter
 from db import models
 
 router = APIRouter()
