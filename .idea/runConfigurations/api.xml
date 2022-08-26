@@ -7,9 +7,7 @@
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
-      <env name="ENV" value="prod" />
-      <env name="REGION_NAME" value="eu-central-1" />
-      <env name="COGNITO_POOL_ID" value="eu-central-1_vzltHv2mZ" />
+      <env name="ENV" value="dev" />
     </envs>
     <option name="SDK_HOME" value="$PROJECT_DIR$/backend/venv/bin/python" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
