@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
