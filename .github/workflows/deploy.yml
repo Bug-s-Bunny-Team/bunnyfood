@@ -19,12 +19,12 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Restore SAM cache
-        id: cache-sam
-        uses: actions/cache@v3
-        with:
-          path: '**/.aws-sam'
-          key: ${{ runner.os }}-sam-${{ hashFiles('template.yml') }}
+#      - name: Restore SAM cache
+#        id: cache-sam
+#        uses: actions/cache@v3
+#        with:
+#          path: '**/.aws-sam'
+#          key: ${{ runner.os }}-sam-${{ hashFiles('template.yml') }}
 
       - uses: aws-actions/setup-sam@v2
 
