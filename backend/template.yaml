@@ -233,7 +233,7 @@ Resources:
         - S3CrudPolicy:
             BucketName: !Ref BackendBucket
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
-        - ComprehendBasicAccessPolicy: { }
+        - RekognitionDetectOnlyPolicy: { }
 
   ScrapingFunction:
     Type: AWS::Serverless::Function
