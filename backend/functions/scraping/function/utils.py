@@ -5,7 +5,7 @@ from instagram_private_api import Client as PrivateApi
 from db import get_session
 from .custom import CustomInstaloader
 from .download import Downloader
-from .providers import LocationProvider
+from .providers import PrivateApiLocationProvider, AWSLocationProvider
 from .proxy import set_random_proxy
 from .scrapers import InstagramScraper, GramhirScraper
 from .service import ScrapingService
@@ -52,8 +52,7 @@ def create_instagram_scraper() -> InstagramScraper:
 
 
 def create_gramhir_scraper() -> GramhirScraper:
-    private_api = create_private_api()
-    location_provider = LocationProvider(private_api)
+    location_provider = AWSLocationProvider()
 
     scraper = GramhirScraper(location_provider)
 

@@ -102,7 +102,7 @@ class ScrapingService(BaseService):
                         name=insta_post.location_name,
                         description='',
                         lat=insta_post.location_data['lat'],
-                        long=insta_post.location_data['lng'],
+                        long=insta_post.location_data['long'],
                     )
                     post, created = models.Post.from_gramhir_post(
                         self._session, insta_post, profile, location

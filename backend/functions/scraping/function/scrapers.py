@@ -15,7 +15,7 @@ from common.utils import extract_insta_shortcode
 
 from .constants import USER_AGENT_LIST
 from .models import GramhirPost
-from .providers import LocationProvider
+from .providers import PrivateApiLocationProvider, AWSLocationProvider
 
 
 class BaseScraper(ABC):
@@ -68,7 +68,7 @@ class GramhirScraper(BaseScraper):
     _SEARCH_URL = 'https://gramhir.com/app/controllers/ajax.php'
     _PROFILE_URL = 'https://gramhir.com/profile/{username}/{gramhir_id}'
 
-    def __init__(self, location_provider: Optional[LocationProvider] = None):
+    def __init__(self, location_provider: Optional[AWSLocationProvider] = None):
         self._session = requests.Session()
         self._session.headers.update(self._get_random_agent())
         self._location_provider = location_provider
@@ -118,12 +118,7 @@ class GramhirScraper(BaseScraper):
     def get_location(self, location_name: str) -> Optional[dict]:
         if not self._location_provider:
             return None
-        location = self._location_provider.search_location(location_name)
-        if location:
-            location = location['location']
-            if location.get('lat') and location.get('lng'):
-                return location
-        return None
+        return self._location_provider.search_location(location_name)
 
     def get_last_post(self, username: str):
         return self._get_posts(username, 1)[0]
