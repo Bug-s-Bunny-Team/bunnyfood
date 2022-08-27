@@ -30,8 +30,5 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Delete old build from S3 bucket
-        run: aws s3 rm s3://bunnyfood-frontend --recursive
-
-      - name: Push build to S3 bucket
-        run: aws s3 cp dist/ s3://bunnyfood-frontend --recursive
+      - name: Deploy built files to S3
+        run: npm run deploy
