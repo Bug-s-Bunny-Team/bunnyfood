@@ -23,7 +23,7 @@ jobs:
         id: cache-sam
         uses: actions/cache@v3
         with:
-          path: .aws-sam
+          path: '**/.aws-sam'
           key: ${{ runner.os }}-sam-${{ hashFiles('template.yml') }}
 
       - uses: aws-actions/setup-sam@v2
