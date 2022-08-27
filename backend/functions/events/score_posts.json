@@ -1,14 +1,8 @@
 {
-  "posts_count": 3,
+  "posts_count": 1,
   "posts": [
     {
       "id": 1
-    },
-    {
-      "id": 2
-    },
-    {
-      "id": 3
     }
   ]
 }

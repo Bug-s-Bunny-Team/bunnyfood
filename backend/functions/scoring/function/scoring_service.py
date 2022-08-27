@@ -119,7 +119,7 @@ class BasicScoringService(ScoringService):
             }
         }
         textResponse = self._rekognition.detect_text(Image=Image)
-        faceResponse = self._rekognition.detect_faces(Image=Image)
+        faceResponse = self._rekognition.detect_faces(Image=Image, Attributes=['ALL'])
         self.__parse_rekognition_response(
             sPost, textResponse, faceResponse
         )

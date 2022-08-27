@@ -6,7 +6,7 @@
     <option name="architecture" />
     <option name="environmentVariables">
       <map>
-        <entry key="BUCKET_NAME" value="BackendBucket" />
+        <entry key="BUCKET_NAME" value="bunnyfood-backend" />
         <entry key="DB_HOST" value="db" />
         <entry key="DB_NAME" value="bunnyfood_dev" />
         <entry key="DB_PASSWORD" value="password" />
