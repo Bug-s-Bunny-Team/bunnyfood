@@ -81,7 +81,7 @@ class BasicScoringService(ScoringService):
     # SCORING
     # qui vengono fatti gli scoring per caption(diretto) e text on image(preso da reko)
     def __parse_comprehend_response(self, sPost: ScoringPost, compResult):
-        n_texts = len(sPost.texts)
+        # n_texts = len(sPost.texts)
         if len(compResult['ErrorList']) > 0:
             raise Exception(compResult['ErrorList'])
         # se ErrorList vuota allora per ogni risultato nella lista dei risultati:
@@ -120,7 +120,7 @@ class BasicScoringService(ScoringService):
         }
         textResponse = self._rekognition.detect_text(Image=Image)
         faceResponse = self._rekognition.detect_faces(Image=Image)
-        BasicScoringService.__parse_rekognition_response(
+        self.__parse_rekognition_response(
             sPost, textResponse, faceResponse
         )
         print('Successfully analized image')
@@ -131,12 +131,12 @@ class BasicScoringService(ScoringService):
             Text=sPost.caption
         )
         response = self._comprehend.batch_detect_sentiment(
-            TextList=BasicScoringService.__unpack_post_for_comprehend(sPost),
-            LanguageCode=BasicScoringService.__parse_dominant_language_response(
+            TextList=self.__unpack_post_for_comprehend(sPost),
+            LanguageCode=self.__parse_dominant_language_response(
                 dominantLanguageResponse
             ),
         )
-        BasicScoringService.__parse_comprehend_response(sPost, response)
+        self.__parse_comprehend_response(sPost, response)
         print('Successfully analized textual information')
 
     def _calcFinalScore(self, sPost: ScoringPost):
