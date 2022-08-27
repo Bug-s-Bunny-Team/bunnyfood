@@ -222,6 +222,8 @@ Resources:
         - S3CrudPolicy:
             BucketName: !Ref BackendBucket
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+        - ComprehendBasicAccessPolicy: { }
+        - RekognitionDetectOnlyPolicy: { }
 
   SortingFunction:
     Type: AWS::Serverless::Function
@@ -231,6 +233,7 @@ Resources:
         - S3CrudPolicy:
             BucketName: !Ref BackendBucket
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+        - RekognitionDetectOnlyPolicy: { }
 
   ScrapingFunction:
     Type: AWS::Serverless::Function
@@ -247,6 +250,12 @@ Resources:
         - S3CrudPolicy:
             BucketName: !Ref BackendBucket
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - geo:*
+              Resource: 'arn:aws:geo:*:*:place-index/*'
 
 #Outputs:
 #  CloudFrontDomain:

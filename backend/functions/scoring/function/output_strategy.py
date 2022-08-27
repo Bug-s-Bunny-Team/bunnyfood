@@ -14,7 +14,7 @@ class OutputStrategy(ABC):
 
 
 class S3OutputStrategy(OutputStrategy):
-    outputBucket = os.environ['ENV_BUCKET_NAME']
+    outputBucket = os.environ['BUCKET_NAME']
     s3 = boto3.resource('s3')
 
     def output(self, sPost: ScoringPost):

@@ -87,9 +87,7 @@ class Location(Base):
         return gc_distance(lat, lng, cls.lat, cls.long, math_lib=func)
 
     @classmethod
-    def from_instaloader_location(
-        cls, session: Session, location
-    ) -> 'Location':
+    def from_instaloader_location(cls, session: Session, location) -> 'Location':
         location = get_or_create(
             session,
             cls,
@@ -139,6 +137,26 @@ class Post(Base):
             caption=insta_post.caption,
             media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
             media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
+            profile=profile,
+            location=location,
+        )
+        session.add(post)
+        session.commit()
+        session.refresh(post)
+        return post, True
+
+    @classmethod
+    def from_gramhir_post(
+        cls, session: Session, gramhir_post, profile: SocialProfile, location: Location
+    ) -> Tuple['Post', bool]:
+        post = session.query(Post).filter_by(shortcode=gramhir_post.shortcode).first()
+        if post:
+            return post, False
+        post = Post(
+            shortcode=gramhir_post.shortcode,
+            caption=gramhir_post.caption,
+            media_url=gramhir_post.image_url,
+            media_type=MediaType.IMAGE,
             profile=profile,
             location=location,
         )

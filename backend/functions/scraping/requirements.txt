@@ -1,2 +1,4 @@
 requests==2.28.1
 instaloader==4.9.3
+beautifulsoup4==4.11.1
+git+https://git@github.com/ping/instagram_private_api.git@1.6.0
