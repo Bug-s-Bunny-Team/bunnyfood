@@ -15,22 +15,17 @@ export class LocationPresenter {
     }
 
     getInfo() : void {
-        if(get(google_ready)) {
-            this.info.set(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
-        }
-        else {
-            this.info.set(new Promise(async resolve => {
-                let resolved = false;
-                google_ready.subscribe(_ready => {
-                    if(_ready) {
-                        resolved = true;
-                        resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
-                    }
-                });
-                await new Promise(r => setTimeout(r, 10000));
-                if(!resolved) throw new RequestError(404, "Timeout on loading google api");
-            }));
-        }
+        this.info.set(new Promise(resolve => {
+            let timeout = setTimeout(() => {
+                throw new RequestError(404, "Timeout on loading google api");
+            }, 10000);
+            google_ready.subscribe(_ready => {
+                if(_ready) {
+                    resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
+                    if(timeout) clearTimeout(timeout);
+                }
+            });
+        }));
     }
 
     async adjustInfo(info: Promise<Info>) : Promise<Info> {

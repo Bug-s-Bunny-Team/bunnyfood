@@ -55,7 +55,6 @@
         position: sticky;
         background-color: #11191f;
         top:0;
-        width: 100%;
         border: 2px solid rgb(1, 96, 17);
         border-left: none;
         border-right: none;
