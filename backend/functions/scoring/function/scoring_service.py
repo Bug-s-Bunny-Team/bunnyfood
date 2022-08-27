@@ -114,7 +114,7 @@ class BasicScoringService(ScoringService):
         print('Analyzing image')
         Image = {
             'S3Object': {
-                'Bucket': os.environ['ENV_BUCKET_NAME'],
+                'Bucket': os.environ['BUCKET_NAME'],
                 'Name': sPost.image,
             }
         }
