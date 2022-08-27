@@ -1,8 +1,8 @@
 import type { Account, RequestError } from "../models";
 import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
-import ErrorSvelte from "../components/Error.svelte";
 import { error_duration, removeChildren } from "../utils";
+import ErrorSvelte from "../components/Error.svelte";
 
 export class AccountPresenter {
     name: string;

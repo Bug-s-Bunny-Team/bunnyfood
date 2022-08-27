@@ -1,9 +1,8 @@
+import type { RequestError, SocialProfile } from "../models";
 import { ProfilesModel } from "../models/profilesModel";
 import { Writable, writable } from "svelte/store";
-import type { RequestError, SocialProfile } from "../models";
-import ErrorSvelte from "../components/Error.svelte";
 import { error_duration, removeChildren } from "../utils";
-
+import ErrorSvelte from "../components/Error.svelte";
 
 export class AddProfilesPresenter {
 
