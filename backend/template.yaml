@@ -223,6 +223,12 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/scoring/
+    Policies:
+      - S3CrudPolicy:
+          BucketName: !Ref BackendBucket
+      - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+      - ComprehendBasicAccessPolicy: { }
+      - RekognitionDetectOnlyPolicy: { }
 
   SortingFunction:
     Type: AWS::Serverless::Function
