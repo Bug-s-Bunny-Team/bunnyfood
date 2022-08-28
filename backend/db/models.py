@@ -120,7 +120,7 @@ class Post(Base):
     shortcode = Column(String, unique=True)
     caption = Column(Text)
     media_type = Column(String)
-    media_url = Column(String(length=512))
+    media_url = Column(String)
     media_s3_key = Column(String, nullable=True, unique=True)
     score = Column(Float, nullable=True, default=None)
 
