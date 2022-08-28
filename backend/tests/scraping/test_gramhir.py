@@ -10,7 +10,7 @@ def scraper(session):
 
 
 def test_search_user(scraper):
-    gramhir_id = scraper._search_profile('antoniorazzi')
+    gramhir_id = scraper._get_profile_internal_id('antoniorazzi')
 
     assert gramhir_id == '1571244992'
 

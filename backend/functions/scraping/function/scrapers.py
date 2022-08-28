@@ -58,11 +58,12 @@ class GramhirScraper(SoupScraper):
         super().__init__(*args, **kwargs)
         self._session = session
 
-    def _search_profile(self, username: str) -> str:
-        """
-        Get Gramhir internal user id
-        """
-        cache = self._session.query(models.GramhirProfiles).filter_by(username=username).first()
+    def _get_profile_internal_id(self, username: str) -> str:
+        cache = (
+            self._session.query(models.GramhirProfiles)
+            .filter_by(username=username)
+            .first()
+        )
         if not cache:
             r = self._rsession.post(
                 self._SEARCH_URL,
@@ -77,7 +78,7 @@ class GramhirScraper(SoupScraper):
         return gramhir_id
 
     def _get_profile_url(self, username: str) -> str:
-        gramhir_id = self._search_profile(username)
+        gramhir_id = self._get_profile_internal_id(username)
         profile_url = self._PROFILE_URL.format(username=username, gramhir_id=gramhir_id)
         return profile_url
 
@@ -132,3 +133,20 @@ class GramhirScraper(SoupScraper):
 
     def get_last_posts(self, username: str, limit: int) -> List[ScrapedPost]:
         return self._get_posts(username, limit)
+
+
+class PicukiScraper(GramhirScraper):
+    """
+    Seems to be te same as Gramhir, except for the profile url not requiring an internal id
+    """
+
+    _PROFILE_URL = 'https://picuki.com/profile/{username}'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(session=None, *args, **kwargs)
+
+    def _get_profile_internal_id(self, username: str) -> str:
+        raise NotImplementedError()
+
+    def _get_profile_url(self, username: str) -> str:
+        return self._PROFILE_URL.format(username=username)
