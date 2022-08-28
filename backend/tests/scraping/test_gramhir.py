@@ -21,7 +21,7 @@ def test_get_profile_url(scraper):
 
 
 def test_get_shortcode(scraper):
-    shortcode = scraper.get_shortcode('https://gramhir.com/media/2913462245164671985')
+    shortcode = scraper._get_shortcode('https://gramhir.com/media/2913462245164671985')
 
     assert shortcode == 'ChusnnNjWPx'
 

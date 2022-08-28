@@ -71,7 +71,7 @@
       "OutputPath": "$.Payload",
       "Parameters": {
         "Payload.$": "$",
-        "FunctionName": "arn:aws:lambda:eu-central-1:104582034671:function:bunnyfood-ScoringFunction-WJzPDhitCKrG:$LATEST"
+        "FunctionName": "arn:aws:lambda:eu-central-1:104582034671:function:bunnyfood-ScoringFunction-3vNrmX5V7O4B:$LATEST"
       },
       "Retry": [
         {

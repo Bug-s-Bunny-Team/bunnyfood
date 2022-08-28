@@ -1,77 +1,39 @@
-import itertools
 import random
 import re
 from abc import ABC, abstractmethod
 from typing import Optional, List
 
 import requests
-from instaloader import Instaloader, Profile
-from instaloader import Post as InstaPost
-from bs4 import BeautifulSoup
-
-from common.exceptions import InvalidUrlException
-from common.constants import INSTA_SHORTCODE_REGEX
-from common.utils import extract_insta_shortcode
+from bs4 import BeautifulSoup, Tag
 
 from .constants import USER_AGENT_LIST
-from .models import GramhirPost
-from .providers import PrivateApiLocationProvider, AWSLocationProvider
+from .models import ScrapedPost, LocationData
+from .providers import BaseLocationProvider
 
 
 class BaseScraper(ABC):
-    @abstractmethod
-    def get_last_post(self, username: str):
-        pass
-
-    @abstractmethod
-    def get_post_from_url(self, url: str):
-        pass
-
-    @abstractmethod
-    def get_last_posts(self, username: str, limit: int):
-        pass
-
-
-class InstagramScraper(BaseScraper):
-    def __init__(self, client: Instaloader):
-        self._client = client
-        self._shortcode_regex = re.compile(INSTA_SHORTCODE_REGEX)
-
-    @staticmethod
-    def extract_shortcode(url: str) -> Optional[str]:
-        return extract_insta_shortcode(url)
-
-    def get_profile(self, username: str) -> Profile:
-        return Profile.from_username(self._client.context, username)
-
-    def get_last_post(self, username: str) -> InstaPost:
-        profile = self.get_profile(username)
-        post = next(profile.get_posts())
-        return post
-
-    def get_last_posts(self, username: str, limit: int) -> List[InstaPost]:
-        profile = self.get_profile(username)
-        post_iterator = profile.get_posts()
-        if post_iterator.count <= limit:
-            return list(post_iterator)
-        return [post for post in itertools.islice(post_iterator, limit)]
-
-    def get_post_from_url(self, url: str) -> InstaPost:
-        shortcode = self.extract_shortcode(url)
-        if not shortcode:
-            raise InvalidUrlException('Cannot extract shortcode from provided URL')
-        p = InstaPost.from_shortcode(self._client.context, shortcode)
-        return p
-
-
-class GramhirScraper(BaseScraper):
-    _SEARCH_URL = 'https://gramhir.com/app/controllers/ajax.php'
-    _PROFILE_URL = 'https://gramhir.com/profile/{username}/{gramhir_id}'
-
-    def __init__(self, location_provider: Optional[AWSLocationProvider] = None):
-        self._session = requests.Session()
-        self._session.headers.update(self._get_random_agent())
+    def __init__(self, location_provider: Optional[BaseLocationProvider] = None):
         self._location_provider = location_provider
+
+    def _get_location_data(self, query: str) -> Optional[LocationData]:
+        if not self._location_provider:
+            return None
+        return self._location_provider.search_location(query)
+
+    @abstractmethod
+    def get_last_post(self, username: str) -> Optional[ScrapedPost]:
+        pass
+
+    @abstractmethod
+    def get_last_posts(self, username: str, limit: int) -> List[ScrapedPost]:
+        pass
+
+
+class SoupScraper(BaseScraper, ABC):
+    def __init__(self, location_provider: Optional[BaseLocationProvider] = None):
+        super().__init__(location_provider)
+        self._session = requests.Session()
+        self._set_random_agent()
 
     @staticmethod
     def _get_random_agent() -> dict:
@@ -81,6 +43,14 @@ class GramhirScraper(BaseScraper):
     @staticmethod
     def _get_soup(data) -> BeautifulSoup:
         return BeautifulSoup(data, 'html.parser')
+
+    def _set_random_agent(self):
+        self._session.headers.update(self._get_random_agent())
+
+
+class GramhirScraper(SoupScraper):
+    _SEARCH_URL = 'https://gramhir.com/app/controllers/ajax.php'
+    _PROFILE_URL = 'https://gramhir.com/profile/{username}/{gramhir_id}'
 
     def _search_user(self, username: str) -> str:
         """
@@ -97,9 +67,39 @@ class GramhirScraper(BaseScraper):
         profile_url = self._PROFILE_URL.format(username=username, gramhir_id=gramhir_id)
         return profile_url
 
+    def _get_shortcode(self, details_url: str) -> str:
+        r = self._session.get(details_url)
+        details_page = r.text
+        match = re.search(r'short_code\s=\s\"(.*)\"', details_page)
+        return match.group(1)
+
+    def _extract_post_data(self, post_result: Tag) -> ScrapedPost:
+        location_name = post_result.find(attrs={'class': 'photo-location'}).get_text(
+            strip=True
+        )
+        location_name = location_name if location_name else None
+
+        location_data = None
+        if location_name:
+            location_data = self._get_location_data(location_name)
+
+        details_url = post_result.find('a').get('href')
+        shortcode = self._get_shortcode(details_url)
+
+        return ScrapedPost(
+            image_url=post_result.find('img').get('src'),
+            caption=post_result.find(attrs={'class': 'photo-description'}).get_text(
+                strip=True
+            ),
+            description='',
+            location_name=location_name,
+            location_data=location_data,
+            shortcode=shortcode,
+        )
+
     def _get_posts(
         self, username: str, limit: Optional[int] = None
-    ) -> List[GramhirPost]:
+    ) -> List[ScrapedPost]:
         r = self._session.get(self._get_profile_url(username))
         soup = self._get_soup(r.text)
         posts = soup.find_all(attrs={'class': 'box-photo'})
@@ -107,24 +107,14 @@ class GramhirScraper(BaseScraper):
         if limit:
             posts = posts[:limit]
 
-        return [GramhirPost.from_soup_result(p, self) for p in posts]
+        scraped_posts = []
+        for p in posts:
+            scraped_posts.append(self._extract_post_data(p))
 
-    def get_shortcode(self, details_url: str) -> str:
-        r = self._session.get(details_url)
-        details_page = r.text
-        match = re.search(r'short_code\s=\s\"(.*)\"', details_page)
-        return match.group(1)
+        return scraped_posts
 
-    def get_location(self, location_name: str) -> Optional[dict]:
-        if not self._location_provider:
-            return None
-        return self._location_provider.search_location(location_name)
-
-    def get_last_post(self, username: str):
+    def get_last_post(self, username: str) -> Optional[ScrapedPost]:
         return self._get_posts(username, 1)[0]
 
-    def get_last_posts(self, username: str, limit: int):
+    def get_last_posts(self, username: str, limit: int) -> List[ScrapedPost]:
         return self._get_posts(username, limit)
-
-    def get_post_from_url(self, url: str):
-        raise NotImplementedError()
