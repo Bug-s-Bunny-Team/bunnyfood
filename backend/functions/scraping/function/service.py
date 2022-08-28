@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Optional
 
 from sqlalchemy.orm import Session
@@ -37,6 +38,9 @@ class ScrapingService(BaseService):
         profile = get_or_create(
             self._session, models.SocialProfile, username=event.username
         )
+        profile.last_scraped = datetime.datetime.now()
+        self._session.add(profile)
+        self._session.commit()
 
         downloaded_posts = []
 
