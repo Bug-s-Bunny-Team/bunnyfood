@@ -2,7 +2,17 @@ from enum import unique, Enum
 from functools import cached_property
 from typing import Tuple, Set
 
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func, DateTime
+from sqlalchemy import (
+    Table,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    Float,
+    func,
+    DateTime,
+)
 from sqlalchemy.ext.hybrid import hybrid_method
 from sqlalchemy.orm import relationship, Session
 
@@ -146,3 +156,10 @@ class Post(Base):
         session.commit()
         session.refresh(post)
         return post, True
+
+
+class GramhirProfiles(Base):
+    __tablename__ = 'gramhirprofiles'
+
+    gramhir_id = Column(String(length=10), primary_key=True)
+    username = Column(String(length=50), primary_key=True)

@@ -5,7 +5,9 @@ from typing import Optional, List
 
 import requests
 from bs4 import BeautifulSoup, Tag
+from sqlalchemy.orm import Session
 
+from db import models
 from .constants import USER_AGENT_LIST
 from .models import ScrapedPost, LocationData
 from .providers import BaseLocationProvider
@@ -30,9 +32,9 @@ class BaseScraper(ABC):
 
 
 class SoupScraper(BaseScraper, ABC):
-    def __init__(self, location_provider: Optional[BaseLocationProvider] = None):
-        super().__init__(location_provider)
-        self._session = requests.Session()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._rsession = requests.Session()
         self._set_random_agent()
 
     @staticmethod
@@ -45,30 +47,42 @@ class SoupScraper(BaseScraper, ABC):
         return BeautifulSoup(data, 'html.parser')
 
     def _set_random_agent(self):
-        self._session.headers.update(self._get_random_agent())
+        self._rsession.headers.update(self._get_random_agent())
 
 
 class GramhirScraper(SoupScraper):
     _SEARCH_URL = 'https://gramhir.com/app/controllers/ajax.php'
     _PROFILE_URL = 'https://gramhir.com/profile/{username}/{gramhir_id}'
 
-    def _search_user(self, username: str) -> str:
+    def __init__(self, session: Session, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._session = session
+
+    def _search_profile(self, username: str) -> str:
         """
         Get Gramhir internal user id
         """
-        r = self._session.post(
-            self._SEARCH_URL,
-            data={'query': username, 'type': 'search_api'},
-        )
-        return r.text.split('/')[1]
+        cache = self._session.query(models.GramhirProfiles).filter_by(username=username).first()
+        if not cache:
+            r = self._rsession.post(
+                self._SEARCH_URL,
+                data={'query': username, 'type': 'search_api'},
+            )
+            gramhir_id = r.text.split('/')[1]
+            cache = models.GramhirProfiles(gramhir_id=gramhir_id, username=username)
+            self._session.add(cache)
+            self._session.commit()
+        else:
+            gramhir_id = cache.gramhir_id
+        return gramhir_id
 
     def _get_profile_url(self, username: str) -> str:
-        gramhir_id = self._search_user(username)
+        gramhir_id = self._search_profile(username)
         profile_url = self._PROFILE_URL.format(username=username, gramhir_id=gramhir_id)
         return profile_url
 
     def _get_shortcode(self, details_url: str) -> str:
-        r = self._session.get(details_url)
+        r = self._rsession.get(details_url)
         details_page = r.text
         match = re.search(r'short_code\s=\s\"(.*)\"', details_page)
         return match.group(1)
@@ -100,7 +114,7 @@ class GramhirScraper(SoupScraper):
     def _get_posts(
         self, username: str, limit: Optional[int] = None
     ) -> List[ScrapedPost]:
-        r = self._session.get(self._get_profile_url(username))
+        r = self._rsession.get(self._get_profile_url(username))
         soup = self._get_soup(r.text)
         posts = soup.find_all(attrs={'class': 'box-photo'})
 
