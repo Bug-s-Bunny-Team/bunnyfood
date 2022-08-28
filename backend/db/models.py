@@ -1,8 +1,8 @@
 from enum import unique, Enum
 from functools import cached_property
-from typing import Tuple, Optional, Set
+from typing import Tuple, Set
 
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func
+from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func, DateTime
 from sqlalchemy.ext.hybrid import hybrid_method
 from sqlalchemy.orm import relationship, Session
 
@@ -59,6 +59,7 @@ class SocialProfile(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(length=50), unique=True)
+    last_scraped = Column(DateTime, nullable=True, default=None)
 
     posts = relationship('Post', back_populates='profile')
     followers = relationship(
@@ -75,6 +76,7 @@ class Location(Base):
     lat = Column(Float, default=0)
     long = Column(Float, default=0)
     score = Column(Float, nullable=True, default=None)
+    last_scored = Column(DateTime, nullable=True, default=None)
 
     posts = relationship('Post', back_populates='location')
 
