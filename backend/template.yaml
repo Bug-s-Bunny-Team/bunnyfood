@@ -219,7 +219,7 @@ Resources:
     Properties:
       CodeUri: functions/signup/
 
-  ScoringFunction:
+  ScoringFunction1:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/scoring/
