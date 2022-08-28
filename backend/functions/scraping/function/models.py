@@ -1,12 +1,20 @@
+from enum import Enum
 from dataclasses import dataclass
 from typing import Optional
 
 from common.models import LambdaEvent
 
 
+class ScraperType(str, Enum):
+    RANDOM = 'RANDOM'
+    GRAMHIR = 'GRAMHIR'
+    PICUKI = 'PICUKI'
+
+
 class ScrapingEvent(LambdaEvent):
     username: str
     posts_limit: int = 6
+    scraper: ScraperType = ScraperType.RANDOM
 
 
 @dataclass
