@@ -7,6 +7,7 @@ from api import schemas
 from api.crud.profiles import ProfilesCRUD
 from api.dependencies import get_user, get_profiles_crud
 from api.routers import APIRouter
+from api.s4 import s4
 from api.utils import search_social_profile
 from db import models
 
@@ -56,6 +57,7 @@ def get_profile_by_username(
         if search_social_profile(profile_username):
             profile = profiles.create_profile(profile_username)
             response.status_code = HTTP_201_CREATED
+            s4.start(profile_username)
         else:
             raise HTTPException(
                 status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'
