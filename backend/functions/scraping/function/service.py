@@ -84,4 +84,4 @@ class ScrapingService(BaseService):
             downloaded_posts = [{'id': p.id} for p in downloaded_posts]
             return {'posts_count': len(downloaded_posts), 'posts': downloaded_posts}
         else:
-            return {'posts_count': 0}
+            return {'posts_count': 0, 'posts': []}
