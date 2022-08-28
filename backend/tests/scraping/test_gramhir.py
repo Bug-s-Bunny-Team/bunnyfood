@@ -1,17 +1,22 @@
 import pytest
 
+from db import models
 from functions.scraping.function.scrapers import GramhirScraper
 
 
 @pytest.fixture
-def scraper():
-    return GramhirScraper()
+def scraper(session):
+    return GramhirScraper(session)
 
 
 def test_search_user(scraper):
     gramhir_id = scraper._search_profile('antoniorazzi')
 
     assert gramhir_id == '1571244992'
+
+    session = scraper._session
+    cache = session.query(models.GramhirProfiles).filter_by(username='antoniorazzi').first()
+    assert cache.gramhir_id == '1571244992'
 
 
 def test_get_profile_url(scraper):
