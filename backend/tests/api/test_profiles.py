@@ -1,3 +1,4 @@
+from api.s4 import s4
 from db import models
 
 
@@ -44,12 +45,14 @@ def test_profiles_search_existing(api_client):
 
     assert results.status_code == 200
     assert results.json()['username'] == 'testprofile1'
+    assert len(s4.runs) == 0
 
 
 def test_profiles_search_not_existing(api_client):
     results = api_client.get('/profiles/search/thissurelydoesnotexist43058')
 
     assert results.status_code == 404
+    assert len(s4.runs) == 0
 
 
 def test_profiles_search_existing_and_create(api_client):
@@ -57,3 +60,4 @@ def test_profiles_search_existing_and_create(api_client):
 
     assert results.status_code == 201
     assert results.json()['username'] == 'antoniorazzi'
+    assert len(s4.runs) == 1
