@@ -32,14 +32,11 @@ class SchedulerService(BaseService):
     def _get_profiles(
         self, last_scrape_gte: int, limit: Optional[int] = None
     ) -> List[models.SocialProfile]:
-        now = datetime.datetime.now()
+        since = datetime.datetime.now() - datetime.timedelta(hours=last_scrape_gte)
         profiles = (
             self._session.query(models.SocialProfile)
-            .filter(
-                models.SocialProfile.last_scraped
-                >= now + datetime.timedelta(hours=last_scrape_gte)
-            )
-            .order_by(models.SocialProfile.last_scraped.desc())
+            .filter(models.SocialProfile.last_scraped <= since)
+            .order_by(models.SocialProfile.last_scraped)
         )
         if limit:
             profiles = profiles.limit(limit)
