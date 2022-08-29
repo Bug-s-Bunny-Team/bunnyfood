@@ -235,6 +235,7 @@ Resources:
     Policies:
       - StepFunctionsExecutionPolicy:
           StateMachineName: !Ref S4Name
+      - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 
   ScoringFunction:
     Type: AWS::Serverless::Function
