@@ -80,8 +80,6 @@ class BasicScoringService(ScoringService):
             sPost.faceScore = None
 
     def __unpack_post_for_comprehend(self, sPost: ScoringPost):
-        if not sPost.caption:
-            sPost.caption = ' '  # empty caption diventa maneggiabile da comprehend
         return list([sPost.caption, *sPost.texts.values()])
 
     # SCORING
@@ -131,6 +129,9 @@ class BasicScoringService(ScoringService):
 
     def _runComprehend(self, sPost: ScoringPost):
         print('Analizying textual information')
+        if not sPost.caption:
+            sPost.caption = ' '  # empty caption diventa maneggiabile da comprehend
+
         dominantLanguageResponse = self._comprehend.detect_dominant_language(
             Text=sPost.caption
         )
