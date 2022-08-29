@@ -1,7 +1,10 @@
+import datetime
+
 import boto3
 import os
 from abc import abstractmethod
 
+from sqlalchemy import column, func
 from sqlalchemy.orm import Session
 
 from common.service import BaseService
@@ -67,11 +70,14 @@ class BasicScoringService(ScoringService):
                             scoreSum + faceSum
                         )  # se volto disgusted value >= allora face value = 0
                 # UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
-            faceScore = scoreSum / faceCount  # =[0,100]
-            sPost.faceScore = faceScore / 100  # normalizzato a [0,1]
+            if faceCount == 0:
+                sPost.faceScore = None
+            else:
+                faceScore = scoreSum / faceCount  # =[0,100]
+                sPost.faceScore = faceScore / 100  # normalizzato a [0,1]
         else:
-            sPost.faceScore = None  # se num facce =0 si ignora nel calcolo di final Score
-            
+            # se num facce =0 si ignora nel calcolo di final Score
+            sPost.faceScore = None
 
     def __unpack_post_for_comprehend(self, sPost: ScoringPost):
         if not sPost.caption:
@@ -119,10 +125,8 @@ class BasicScoringService(ScoringService):
             }
         }
         textResponse = self._rekognition.detect_text(Image=Image)
-        faceResponse = self._rekognition.detect_faces(Image=Image)
-        self.__parse_rekognition_response(
-            sPost, textResponse, faceResponse
-        )
+        faceResponse = self._rekognition.detect_faces(Image=Image, Attributes=['ALL'])
+        self.__parse_rekognition_response(sPost, textResponse, faceResponse)
         print('Successfully analized image')
 
     def _runComprehend(self, sPost: ScoringPost):
@@ -200,6 +204,17 @@ class BasicScoringService(ScoringService):
     def _save_to_db(self, db_post: models.Post, scoring_post: ScoringPost):
         db_post.score = scoring_post.finalScore
         self._session.add(db_post)
+        self._session.commit()
+
+        location = db_post.location
+        location_score = (
+            self._session.query(func.avg(models.Post.score).label('location_score'))
+            .join(models.Location)
+            .filter(models.Post.location == location)
+        )
+        location.score = location_score
+        location.last_scored = datetime.datetime.now()
+        self._session.add(location)
         self._session.commit()
 
     def process_event(self, event: ScoringEvent) -> dict:

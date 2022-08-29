@@ -15,6 +15,12 @@ Parameters:
   ApiId:
     Type: String
     Default: '43uvev6qfk'
+  S4Arn:
+    Type: String
+    Default: 'arn:aws:states:eu-central-1:104582034671:stateMachine:bunnyfood-sfn'
+  S4Name:
+    Type: String
+    Default: 'bunnyfood-sfn'
 
 Globals:
   Function:
@@ -213,6 +219,23 @@ Resources:
 
   #############################################################
   # Functions
+
+  SignupFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/signup/
+
+  SchedulerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: functions/scheduler/
+      Environment:
+        Variables:
+          S4_ARN: !Ref S4Arn
+      Policies:
+        - StepFunctionsExecutionPolicy:
+            StateMachineName: !Ref S4Name
+        - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 
   ScoringFunction:
     Type: AWS::Serverless::Function

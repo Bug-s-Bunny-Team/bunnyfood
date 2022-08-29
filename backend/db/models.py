@@ -1,8 +1,18 @@
 from enum import unique, Enum
 from functools import cached_property
-from typing import Tuple, Optional, Set
+from typing import Tuple, Set
 
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Text, Float, func
+from sqlalchemy import (
+    Table,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    Float,
+    func,
+    DateTime,
+)
 from sqlalchemy.ext.hybrid import hybrid_method
 from sqlalchemy.orm import relationship, Session
 
@@ -59,6 +69,7 @@ class SocialProfile(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(length=50), unique=True)
+    last_scraped = Column(DateTime, nullable=True, default=None)
 
     posts = relationship('Post', back_populates='profile')
     followers = relationship(
@@ -75,6 +86,7 @@ class Location(Base):
     lat = Column(Float, default=0)
     long = Column(Float, default=0)
     score = Column(Float, nullable=True, default=None)
+    last_scored = Column(DateTime, nullable=True, default=None)
 
     posts = relationship('Post', back_populates='location')
 
@@ -108,7 +120,7 @@ class Post(Base):
     shortcode = Column(String, unique=True)
     caption = Column(Text)
     media_type = Column(String)
-    media_url = Column(String(length=512))
+    media_url = Column(String)
     media_s3_key = Column(String, nullable=True, unique=True)
     score = Column(Float, nullable=True, default=None)
 
@@ -126,36 +138,16 @@ class Post(Base):
         return set(tags)
 
     @classmethod
-    def from_instaloader_post(
-        cls, session: Session, insta_post, profile: SocialProfile, location: Location
+    def from_scraped_post(
+        cls, session: Session, scraped_post, profile: SocialProfile, location: Location
     ) -> Tuple['Post', bool]:
-        post = session.query(Post).filter_by(shortcode=insta_post.shortcode).first()
+        post = session.query(Post).filter_by(shortcode=scraped_post.shortcode).first()
         if post:
             return post, False
         post = Post(
-            shortcode=insta_post.shortcode,
-            caption=insta_post.caption,
-            media_url=insta_post.video_url if insta_post.is_video else insta_post.url,
-            media_type=MediaType.VIDEO if insta_post.is_video else MediaType.IMAGE,
-            profile=profile,
-            location=location,
-        )
-        session.add(post)
-        session.commit()
-        session.refresh(post)
-        return post, True
-
-    @classmethod
-    def from_gramhir_post(
-        cls, session: Session, gramhir_post, profile: SocialProfile, location: Location
-    ) -> Tuple['Post', bool]:
-        post = session.query(Post).filter_by(shortcode=gramhir_post.shortcode).first()
-        if post:
-            return post, False
-        post = Post(
-            shortcode=gramhir_post.shortcode,
-            caption=gramhir_post.caption,
-            media_url=gramhir_post.image_url,
+            shortcode=scraped_post.shortcode,
+            caption=scraped_post.caption,
+            media_url=scraped_post.image_url,
             media_type=MediaType.IMAGE,
             profile=profile,
             location=location,
@@ -164,3 +156,10 @@ class Post(Base):
         session.commit()
         session.refresh(post)
         return post, True
+
+
+class GramhirProfiles(Base):
+    __tablename__ = 'gramhirprofiles'
+
+    gramhir_id = Column(String(length=10), primary_key=True)
+    username = Column(String(length=50), primary_key=True)

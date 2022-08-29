@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 from pydantic import BaseModel
 
@@ -18,7 +18,7 @@ class Location(BaseModel):
     description: str
     lat: float = 0
     long: float = 0
-    score: float = 0
+    score: Optional[float] = None
 
     class Config:
         orm_mode = True

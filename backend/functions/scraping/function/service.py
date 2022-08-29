@@ -1,13 +1,13 @@
+import datetime
 from typing import List, Optional
 
-from instaloader import Post as InstaPost
 from sqlalchemy.orm import Session
 
 from common.service import BaseService
 from db import models
 from db.utils import get_or_create
 from .download import Downloader
-from .models import ScrapingEvent, GramhirPost
+from .models import ScrapingEvent, ScrapedPost
 from .scrapers import BaseScraper
 
 
@@ -22,107 +22,66 @@ class ScrapingService(BaseService):
         key = self._downloader.download_and_save_post(post)
         return key
 
-    # def _scrape_last_post(self, username: str) -> InstaPost:
-    def _scrape_last_post(self, username: str) -> GramhirPost:
+    def _scrape_last_post(self, username: str) -> Optional[ScrapedPost]:
         print(f'getting last post for "{username}"')
-        insta_post = self._scraper.get_last_post(username)
-        return insta_post
+        scraped_post = self._scraper.get_last_post(username)
+        return scraped_post
 
-    # def _scrape_last_posts(self, username: str, limit: int) -> List[InstaPost]:
-    def _scrape_last_posts(self, username: str, limit: int) -> List[GramhirPost]:
+    def _scrape_last_posts(self, username: str, limit: int) -> List[ScrapedPost]:
         print(f'getting last {limit} posts for "{username}"')
-        insta_posts = self._scraper.get_last_posts(username, limit)
-        return insta_posts
+        scraped_posts = self._scraper.get_last_posts(username, limit)
+        return scraped_posts
 
-    def _scrape_url(self, url: str) -> InstaPost:
-        print(f'getting post from url')
-        insta_post = self._scraper.get_post_from_url(url)
-        return insta_post
+    def _process_posts(
+        self, scraped_posts: List[ScrapedPost], event: ScrapingEvent
+    ) -> List[models.Post]:
+        profile = get_or_create(
+            self._session, models.SocialProfile, username=event.username
+        )
+        profile.last_scraped = datetime.datetime.now()
+        self._session.add(profile)
+        self._session.commit()
 
-    # def _extract_location(self, post: InstaPost) -> Optional[models.Location]:
-    #     insta_location = post.location
-    #     if not insta_location:
-    #         print('post has no location data, skipping')
-    #         return None
-    #     location = models.Location.from_instaloader_location(
-    #         self._session, insta_location
-    #     )
-    #     return location
+        downloaded_posts = []
 
-    # def process_event(self, event: ScrapingEvent) -> dict:
-    #     posts = self._scrape_last_posts(event.username, event.posts_limit)
-    #
-    #     if len(posts) > 0:
-    #         profile = get_or_create(
-    #             self._session, models.SocialProfile, username=event.username
-    #         )
-    #         downloaded_posts = []
-    #
-    #         for insta_post in posts:
-    #             location = self._extract_location(insta_post)
-    #             if not location:
-    #                 print('post has no location data, skipping')
-    #             else:
-    #                 post, created = models.Post.from_instaloader_post(
-    #                     self._session, insta_post, profile, location
-    #                 )
-    #
-    #                 if created:
-    #                     key = self._download_post(post)
-    #                     post.media_s3_key = key
-    #                     self._session.add(post)
-    #                     self._session.commit()
-    #                     downloaded_posts.append(post)
-    #                 else:
-    #                     print('post already in db, skipping download')
-    #         downloaded_posts = [
-    #             {'id': post.id, 'media_s3_key': post.media_s3_key}
-    #             for post in downloaded_posts
-    #         ]
-    #         return {'posts_count': len(downloaded_posts), 'posts': downloaded_posts}
-    #     else:
-    #         return {'posts_count': 0}
+        for scraped in scraped_posts:
+            if not scraped.has_location:
+                print('post has no location data, skipping')
+            else:
+                location = get_or_create(
+                    self._session,
+                    models.Location,
+                    name=scraped.location_name,
+                    description=scraped.description,
+                    lat=scraped.location_data.lat,
+                    long=scraped.location_data.long,
+                )
+
+                post, created = models.Post.from_scraped_post(
+                    self._session, scraped, profile, location
+                )
+
+                if created:
+                    key = self._download_post(post)
+                    post.media_s3_key = key
+                    self._session.add(post)
+                    self._session.commit()
+                    downloaded_posts.append(post)
+                else:
+                    print('post already in db, skipping download')
+
+        return downloaded_posts
 
     def process_event(self, event: ScrapingEvent) -> dict:
-        posts = self._scrape_last_posts(event.username, event.posts_limit)
+        if event.posts_limit == 1:
+            post = self._scrape_last_post(event.username)
+            posts = [post] if post else []
+        else:
+            posts = self._scrape_last_posts(event.username, event.posts_limit)
 
         if len(posts) > 0:
-            profile = get_or_create(
-                self._session, models.SocialProfile, username=event.username
-            )
-            downloaded_posts = []
-
-            for insta_post in posts:
-                if not insta_post.location_data:
-                    print('post has no location data, skipping')
-                else:
-                    location = get_or_create(
-                        self._session,
-                        models.Location,
-                        name=insta_post.location_name,
-                        description='',
-                        lat=insta_post.location_data['lat'],
-                        long=insta_post.location_data['long'],
-                    )
-                    post, created = models.Post.from_gramhir_post(
-                        self._session, insta_post, profile, location
-                    )
-
-                    if created:
-                        key = self._download_post(post)
-                        post.media_s3_key = key
-                        self._session.add(post)
-                        self._session.commit()
-                        downloaded_posts.append(post)
-                    else:
-                        print('post already in db, skipping download')
-
-            downloaded_posts = [
-                {'id': post.id, 'media_s3_key': post.media_s3_key}
-                for post in downloaded_posts
-            ]
-
+            downloaded_posts = self._process_posts(posts, event)
+            downloaded_posts = [{'id': p.id} for p in downloaded_posts]
             return {'posts_count': len(downloaded_posts), 'posts': downloaded_posts}
-
         else:
-            return {'posts_count': 0}
+            return {'posts_count': 0, 'posts': []}

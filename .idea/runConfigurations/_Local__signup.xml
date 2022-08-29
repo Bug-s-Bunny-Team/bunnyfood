@@ -1,22 +1,17 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[Local] scoring" type="aws.lambda" factoryName="Local">
+  <configuration default="false" name="[Local] signup" type="aws.lambda" factoryName="Local">
     <option name="credentialProviderId" value="profile:default" />
     <option name="regionId" value="eu-central-1" />
     <option name="debugHost" value="localhost" />
     <option name="architecture" />
     <option name="environmentVariables">
       <map>
-        <entry key="BUCKET_NAME" value="bunnyfood-backend" />
-        <entry key="DB_HOST" value="db" />
-        <entry key="DB_NAME" value="bunnyfood_dev" />
-        <entry key="DB_PASSWORD" value="password" />
-        <entry key="DB_USER" value="user" />
         <entry key="ENV" value="dev" />
       </map>
     </option>
     <option name="handler" />
     <option name="image" value="false" />
-    <option name="logicalFunctionName" value="ScoringFunction" />
+    <option name="logicalFunctionName" value="SignupFunction" />
     <option name="memorySize" value="128" />
     <option name="pathMappings">
       <list />
@@ -26,7 +21,7 @@
     <option name="templateFile" value="$PROJECT_DIR$/backend/template.yaml" />
     <option name="timeout" value="300" />
     <option name="useTemplate" value="true" />
-    <option name="input" value="$PROJECT_DIR$/backend/functions/events/score_posts.json" />
+    <option name="input" value="$PROJECT_DIR$/backend/functions/events/signup.json" />
     <option name="inputIsFile" value="true" />
     <sam>
       <option name="additionalBuildArgs" value="--cached --parallel" />
