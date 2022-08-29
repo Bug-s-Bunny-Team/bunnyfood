@@ -12,22 +12,19 @@ beforeEach(() => {
 })
 
 describe('LocationPresenter', () => {
-    describe('google api ready', () => {
-        beforeAll(() => {
+    test('constructor', () => {
+        const tmp = LocationPresenter.prototype.getInfo;
+        LocationPresenter.prototype.getInfo = jest.fn();
+        
+        new LocationPresenter(0);
+        expect(LocationPresenter.prototype.getInfo).toHaveBeenCalledTimes(1);
+
+        LocationPresenter.prototype.getInfo = tmp;
+    })
+
+    describe('get info', () => {
+        test('google api ready', async () => {
             google_ready.set(true);
-        })
-
-        test('constructor', () => {
-            const tmp = LocationPresenter.prototype.getInfo;
-            LocationPresenter.prototype.getInfo = jest.fn();
-            
-            new LocationPresenter(0);
-            expect(LocationPresenter.prototype.getInfo).toHaveBeenCalledTimes(1);
-
-            LocationPresenter.prototype.getInfo = tmp;
-        })
-
-        test('get info & adjust info', async () => {
             const presenter = new LocationPresenter(0);
 
             const info = await get(presenter.info);
@@ -43,31 +40,13 @@ describe('LocationPresenter', () => {
             expect(info.name.charAt(0) == info.name.charAt(0).toUpperCase()).toBeTruthy();
             expect(info.address.charAt(0) == info.address.charAt(0).toUpperCase()).toBeTruthy();
         })
-    });
 
-    describe('google api not ready', () => {
-        beforeAll(() => {
+        test('google api not ready', () => {
             google_ready.set(false);
-        })
-
-        test('constructor', () => {
-            const tmp = LocationPresenter.prototype.getInfo;
-            LocationPresenter.prototype.getInfo = jest.fn();
-
-            new LocationPresenter(0);
-            expect(LocationPresenter.prototype.getInfo).toHaveBeenCalledTimes(1);
-            
-            LocationPresenter.prototype.getInfo = tmp;
-        })
-
-        test('get info', () => {
             const presenter = new LocationPresenter(0);
             expect(presenter.info).toBeTruthy();
             expect(jest.runAllTimers).toThrow(new RequestError(404, "Timeout on loading google api"));
         })
-
     });
-
-
 });
 
