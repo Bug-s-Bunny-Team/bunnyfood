@@ -18,9 +18,13 @@ describe('LocationPresenter', () => {
         })
 
         test('constructor', () => {
-            const getInfo_spy = jest.spyOn(LocationPresenter.prototype, 'getInfo');
+            const tmp = LocationPresenter.prototype.getInfo;
+            LocationPresenter.prototype.getInfo = jest.fn();
+            
             new LocationPresenter(0);
-            expect(getInfo_spy).toHaveBeenCalledTimes(1);
+            expect(LocationPresenter.prototype.getInfo).toHaveBeenCalledTimes(1);
+
+            LocationPresenter.prototype.getInfo = tmp;
         })
 
         test('get info & adjust info', async () => {
@@ -47,10 +51,13 @@ describe('LocationPresenter', () => {
         })
 
         test('constructor', () => {
-            const getInfo_spy = jest.spyOn(LocationPresenter.prototype, 'getInfo');
+            const tmp = LocationPresenter.prototype.getInfo;
+            LocationPresenter.prototype.getInfo = jest.fn();
+
             new LocationPresenter(0);
-            jest.clearAllTimers();
-            expect(getInfo_spy).toHaveBeenCalledTimes(1);
+            expect(LocationPresenter.prototype.getInfo).toHaveBeenCalledTimes(1);
+            
+            LocationPresenter.prototype.getInfo = tmp;
         })
 
         test('get info', () => {

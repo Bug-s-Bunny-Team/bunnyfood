@@ -10,9 +10,13 @@ describe('ListPresenter', () => {
     })
 
     test('constructor', () => {
-        const refresh_spy = jest.spyOn(ListPresenter.prototype, 'refresh');
+        const tmp = ListPresenter.prototype.refresh;
+        ListPresenter.prototype.refresh = jest.fn();
+        
         new ListPresenter();
-        expect(refresh_spy).toHaveBeenCalledTimes(1);
+        expect(ListPresenter.prototype.refresh).toHaveBeenCalledTimes(1);
+
+        ListPresenter.prototype.refresh = tmp;
     })
 
     test('refresh', async () => {
