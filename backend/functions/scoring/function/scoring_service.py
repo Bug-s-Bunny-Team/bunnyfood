@@ -230,4 +230,4 @@ class BasicScoringService(ScoringService):
 
             scored_posts.append({'id': sPost.id, 'score': sPost.finalScore})
 
-        return {'scored_posts_count': len(scored_posts), 'score_posts': scored_posts}
+        return {'scored_posts_count': len(scored_posts), 'scored_posts': scored_posts}
