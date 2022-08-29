@@ -1,5 +1,6 @@
 import datetime
 import json
+import uuid
 from typing import List, Optional
 
 import boto3
@@ -25,8 +26,9 @@ class SchedulerService(BaseService):
         if not self._client:
             self._client = boto3.client('stepfunctions')
         payload = {'username': username, 'posts_limit': 10}
+        name = f'scheduler-{username}-{uuid.uuid4()}'
         self._client.start_execution(
-            stateMachineArn=self._s4_arn, input=json.dumps(payload)
+            stateMachineArn=self._s4_arn, input=json.dumps(payload), name=name
         )
 
     def _get_profiles(
