@@ -224,17 +224,17 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/signup/
-      Environment:
-        Variables:
-          S4_ARN: !Ref S4Arn
-      Policies:
-        - StepFunctionsExecutionPolicy:
-            StateMachineName: !Ref S4Name
 
   SchedulerFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: functions/scheduler/
+      Environment:
+        Variables:
+          S4_ARN: !Ref S4Arn
+    Policies:
+      - StepFunctionsExecutionPolicy:
+          StateMachineName: !Ref S4Name
 
   ScoringFunction:
     Type: AWS::Serverless::Function

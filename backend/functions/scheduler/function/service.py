@@ -50,8 +50,11 @@ class SchedulerService(BaseService):
         profiles = self._get_profiles(event.last_scrape_gte, event.limit)
         profiles_count = len(profiles)
 
-        print(f'scheduling {profiles_count} to execution in s4')
+        print(f'scheduling {profiles_count} profiles to execution in s4')
         for p in profiles:
             self._start_s4(p.username)
 
-        return {'profiles_count': profiles_count, 'profiles': [p.username for p in profiles]}
+        return {
+            'profiles_count': profiles_count,
+            'profiles': [{'id': p.id, 'username': p.username} for p in profiles],
+        }
