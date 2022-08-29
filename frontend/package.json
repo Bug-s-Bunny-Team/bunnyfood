@@ -9,8 +9,7 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "deploy": "aws s3 sync dist/ s3://bunnyfood-frontend --delete",
-    "test": "jest test",
-    "devtest": "jest test --detectOpenHandles"
+    "test": "jest test --detectOpenHandles"
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",
