@@ -18,6 +18,9 @@ Parameters:
   S4Arn:
     Type: String
     Default: 'arn:aws:states:eu-central-1:104582034671:stateMachine:bunnyfood-sfn'
+  S4Name:
+    Type: String
+    Default: 'bunnyfood-sfn'
 
 Globals:
   Function:
@@ -225,7 +228,8 @@ Resources:
         Variables:
           S4_ARN: !Ref S4Arn
       Policies:
-        - StepFunctionsExecutionPolicy: { }
+        - StepFunctionsExecutionPolicy:
+            StateMachineName: !Ref S4Name
 
   SchedulerFunction:
     Type: AWS::Serverless::Function
