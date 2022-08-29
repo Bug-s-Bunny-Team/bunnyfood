@@ -232,10 +232,10 @@ Resources:
       Environment:
         Variables:
           S4_ARN: !Ref S4Arn
-    Policies:
-      - StepFunctionsExecutionPolicy:
-          StateMachineName: !Ref S4Name
-      - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+      Policies:
+        - StepFunctionsExecutionPolicy:
+            StateMachineName: !Ref S4Name
+        - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
 
   ScoringFunction:
     Type: AWS::Serverless::Function
