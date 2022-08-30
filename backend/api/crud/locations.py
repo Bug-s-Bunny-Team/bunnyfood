@@ -32,6 +32,7 @@ class LocationsCRUD(BaseCRUD):
 
         location_alias = aliased(models.Location, stmt)
         locations = self._db.query(location_alias)
+        filter_radius = all([current_lat, current_long, radius])
 
         if min_rating:
             locations = locations.filter(stmt.c.score >= min_rating)
@@ -49,13 +50,15 @@ class LocationsCRUD(BaseCRUD):
                 .subquery()
             )
             locations = locations.join(models.Post).filter(models.Post.id.in_(posts))
-        if all([current_lat, current_long, radius]):
+        if filter_radius:
             # filter by radius from current location
             # https://stackoverflow.com/questions/51014687/convert-a-complex-sql-query-to-sqlalchemy
             locations = locations.filter(stmt.c.distance <= radius).order_by(
                 stmt.c.distance
             )
 
+        if not filter_radius:
+            locations = locations.order_by(stmt.c.score.desc())
         locations = locations.all()
         # locations = flatten_results(locations, 'distance')
 
