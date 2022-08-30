@@ -104,16 +104,28 @@ export class MapPresenter {
     const bounds = this.map.getBounds();
     const zoom = this.map.getZoom();
     const center = bounds.getCenter();
-    const width = bounds.getEast()-bounds.getWest();
     const height = bounds.getNorth()-bounds.getSouth();
 
     const currentPosition = new Position(center.lat, center.lng);
 
-    if(!this.lastRefreshPosition || currentPosition.distance(this.lastRefreshPosition)>Math.min(width, height)/2.0 || Math.abs(zoom-this.lastRefreshZoom)>1) {
-      const filter = new Filter(false, currentPosition.lat, currentPosition.long, currentPosition.lat, currentPosition.long, Math.max(width, height), 0.0);
+    if(!this.lastRefreshPosition || currentPosition.distance(this.lastRefreshPosition)>height/2.0 || Math.abs(zoom-this.lastRefreshZoom)>1) {
+      const radius_meters = this.measure_meters(center.lat, bounds.getWest(), center.lat, bounds.getEast());
+      const filter = new Filter(false, currentPosition.lat, currentPosition.long, currentPosition.lat, currentPosition.long, Math.round(radius_meters), 0.0);
       this.rankedList.set(ResultsModel.getInstance().getRankedList(filter));
       this.lastRefreshPosition = currentPosition;
       this.lastRefreshZoom = zoom;
     }
   }
+
+  measure_meters(lat1: number, lon1: number, lat2: number, lon2: number) : number {  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d * 1000; // meters
+}
 }
