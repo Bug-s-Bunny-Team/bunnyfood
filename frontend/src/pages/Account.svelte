@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy } from 'svelte/internal';
-    import Followees from '../components/Followees.svelte';
+    import Followed from '../components/Followed.svelte';
     import { AccountPresenter } from '../presenters/AccountPresenter';
     let presenter = new AccountPresenter();
     let disableButtons: boolean;
@@ -31,8 +31,8 @@
         </p>
         <p>
             <details>
-                <summary>Show Followees</summary>
-                <span><Followees/></span>
+                <summary>Show Followed</summary>
+                <span><Followed/></span>
             </details>
         </p>
         <button on:click|preventDefault={presenter.logout} disabled={disableButtons} id="logout">Logout</button>

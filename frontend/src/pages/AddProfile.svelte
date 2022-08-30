@@ -4,10 +4,10 @@
     import { AddProfilesPresenter } from "../presenters/AddProfilesPresenter";
 
     let presenter = new AddProfilesPresenter();
-    let profiles: Promise<SocialProfile[]>;
+    let profile: Promise<SocialProfile>;
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
-    presenter.profiles.subscribe(_profiles => { profiles = _profiles; });
+    presenter.profile.subscribe(_profile => { profile = _profile; });
 
     onDestroy(presenter.destroy);
 </script>
@@ -34,24 +34,22 @@
     </form>
 </article>
 
-{#if profiles} 
-    {#await profiles}
+{#if profile} 
+    {#await profile}
         Searching profile...
         <progress />
-    {:then profiles} 
-        {#if profiles.length > 0}
+    {:then _profile} 
+        {#if _profile}
             <div class="grid">
-                {#each profiles as profile}
-                    <article>
-                        <header>
-                            <strong>Username</strong>: {profile.username}
-                        </header>
-                        <strong>Followers</strong>: {profile.followers}
-                        <footer>
-                            <button disabled={disableButtons} on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
-                        </footer>            
-                    </article>
-                {/each}
+                <article>
+                    <header>
+                        <strong>Username</strong>: {_profile.username}
+                    </header>
+                    <strong>Followers</strong>: {_profile.followers}
+                    <footer>
+                        <button disabled={disableButtons} on:click={() => {presenter.addProfile(_profile)}}><strong>Segui</strong></button>
+                    </footer>            
+                </article>
             </div>
         {:else}
             <p>Couldn't find profile. <strong>You must enter the correct and full username of the profile</strong></p>

@@ -1,33 +1,33 @@
 <script lang="ts">
     import { onDestroy } from 'svelte/internal';
-    import { FolloweesPresenter } from '../presenters/FolloweesPresenter';
+    import { FollowedPresenter } from '../presenters/FollowedPresenter';
     import { Navigate } from 'svelte-router-spa'
     import type { SocialProfile } from '../models';
 
-    let presenter = new FolloweesPresenter();
-    let followees: Promise<SocialProfile[]>;
+    let presenter = new FollowedPresenter();
+    let followed: Promise<SocialProfile[]>;
     let disableButtons: boolean;
     presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
-    presenter.profiles.subscribe(_profiles => {followees = _profiles});
+    presenter.profiles.subscribe(_profiles => {followed = _profiles});
 
     onDestroy(presenter.destroy);
 </script>
 
 <div>    
-    {#await followees}
+    {#await followed}
         <p>Loading followed profiles...</p>
         <progress />
-    {:then followees} 
-        {#if followees.length > 0}
+    {:then followed} 
+        {#if followed.length > 0}
             <div class="grid">
-                {#each followees as followee}
+                {#each followed as _followed}
                     <article>
                         <header>
-                            <strong>Username</strong>: {followee.username}
+                            <strong>Username</strong>: {_followed.username}
                         </header>
-                        <strong>Followers</strong>: {followee.followers}
+                        <strong>Followers</strong>: {_followed.followers}
                         <footer>
-                            <button disabled={disableButtons} on:click|preventDefault={() => {presenter.removeFollowee(followee)}}><strong>Rimuovi</strong></button>
+                            <button disabled={disableButtons} on:click|preventDefault={() => {presenter.removeFollowed(_followed)}}><strong>Rimuovi</strong></button>
                         </footer>  
                     </article>
                 {/each}

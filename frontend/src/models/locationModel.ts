@@ -36,7 +36,7 @@ export class LocationModel {
                                             results[0].formatted_address,
                                             location.score));
                         } else {
-                            throw new RequestError(400, "Error with request to G_API");
+                            throw new RequestError(status, "Error with request to G_API");
                         }
                 });
         });

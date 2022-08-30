@@ -7,7 +7,7 @@ import ErrorSvelte from "../components/Error.svelte";
 export class AddProfilesPresenter {
 
     searchText: string;
-    profiles: Writable<Promise<SocialProfile[]>> = writable(null);
+    profile: Writable<Promise<SocialProfile>> = writable(null);
     disableButtons: Writable<boolean> = writable(false);
     errorTimeout: NodeJS.Timeout = null;
 
@@ -19,9 +19,9 @@ export class AddProfilesPresenter {
 
     search() : void {
         this.disableButtons.set(true);
-        let promise = ProfilesModel.getInstance().getProfiles(this.searchText);
+        let promise = ProfilesModel.getInstance().getProfile(this.searchText);
         promise.finally(() => {this.disableButtons.set(false)});
-        this.profiles.set(promise);
+        this.profile.set(promise);
     }
 
     addProfile(profile: SocialProfile) : void {

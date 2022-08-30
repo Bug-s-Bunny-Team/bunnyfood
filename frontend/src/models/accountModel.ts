@@ -43,9 +43,9 @@ export class AccountModel {
         const account = new Account(idtoken, accesstoken, access_decoded.username, id_decoded.email, null);
         
         const response = await fetch('api/preferences/', RequestOptions.getRequestOptions(account));
-        
+        if(!response.ok) throw new RequestError(response.status, response.statusText);
+
         const res = await response.json();
-        if(!response.ok) return;
         account.preference = res.default_guide_view == "list" ? true : false;
         this.account.set(account);
     }
@@ -55,10 +55,7 @@ export class AccountModel {
         options.method = 'PUT';
         options.body = JSON.stringify({default_guide_view: newPref == true ? 'list' : 'map'});
         const response = await fetch('api/preferences/', options);
-        
-        const res = await response.json();
-        if(!response.ok) throw new RequestError(response.status, res.msg);
-
+        if(!response.ok) throw new RequestError(response.status, response.statusText);
         this.account.update(account => { account.preference = newPref; return account; });
     }
 

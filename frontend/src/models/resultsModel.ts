@@ -37,9 +37,9 @@ export class ResultsModel {
             url.searchParams.append(field, filter[field]);
         }
         const response = await fetch(url, RequestOptions.getRequestOptions());
+        if(!response.ok) throw new RequestError(response.status, response.statusText);
         
         const res = await response.json();
-        if(!response.ok) throw new RequestError(response.status, res.msg);
         this.rankedList.set(this.fixLocations(res));
         return get(this.rankedList);
     }
