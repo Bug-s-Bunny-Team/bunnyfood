@@ -79,7 +79,11 @@ def get_most_popular_profiles(
             detail='Can provide at most 20 popular profiles',
         )
 
-    return profiles.get_most_popular(limit)
+    results = profiles.get_most_popular(limit)
+    if not results:
+        # fallback to all profiles with limit if most popular is empty
+        results = profiles.get_all(limit)
+    return results
 
 
 @router.get(

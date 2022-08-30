@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import uuid
 from abc import ABC, abstractmethod
 
 import boto3
@@ -36,8 +37,9 @@ class S4(BaseS4):
 
     def start(self, username: str):
         payload = {'username': username, 'posts_limit': 10}
+        name = f'api-{username}-{uuid.uuid4()}'
         self._client.start_execution(
-            stateMachineArn=self._s4_arn, input=json.dumps(payload)
+            stateMachineArn=self._s4_arn, input=json.dumps(payload), name=name
         )
 
 

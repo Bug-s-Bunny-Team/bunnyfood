@@ -1,5 +1,6 @@
 import datetime
 import json
+import uuid
 from typing import List, Optional
 
 import boto3
@@ -25,21 +26,19 @@ class SchedulerService(BaseService):
         if not self._client:
             self._client = boto3.client('stepfunctions')
         payload = {'username': username, 'posts_limit': 10}
+        name = f'scheduler-{username}-{uuid.uuid4()}'
         self._client.start_execution(
-            stateMachineArn=self._s4_arn, input=json.dumps(payload)
+            stateMachineArn=self._s4_arn, input=json.dumps(payload), name=name
         )
 
     def _get_profiles(
         self, last_scrape_gte: int, limit: Optional[int] = None
     ) -> List[models.SocialProfile]:
-        now = datetime.datetime.now()
+        since = datetime.datetime.now() - datetime.timedelta(hours=last_scrape_gte)
         profiles = (
             self._session.query(models.SocialProfile)
-            .filter(
-                models.SocialProfile.last_scraped
-                >= now + datetime.timedelta(hours=last_scrape_gte)
-            )
-            .order_by(models.SocialProfile.last_scraped.desc())
+            .filter(models.SocialProfile.last_scraped <= since)
+            .order_by(models.SocialProfile.last_scraped)
         )
         if limit:
             profiles = profiles.limit(limit)

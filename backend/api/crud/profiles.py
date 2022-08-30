@@ -11,8 +11,11 @@ from db.utils import get_or_create
 
 
 class ProfilesCRUD(BaseCRUD):
-    def get_all(self) -> List[models.SocialProfile]:
-        return self._db.query(models.SocialProfile).all()
+    def get_all(self, limit: Optional[int] = None) -> List[models.SocialProfile]:
+        profiles = self._db.query(models.SocialProfile)
+        if limit:
+            profiles = profiles.limit(limit)
+        return profiles.all()
 
     def get_by_id(self, profile_id: int):
         profile = self._db.query(models.SocialProfile).filter_by(id=profile_id).first()

@@ -17,12 +17,12 @@ def test_get_profiles(service):
     profiles = [
         models.SocialProfile(
             username='should_be_scraped_now_1',
-            last_scraped=now + timedelta(hours=1, minutes=30),
+            last_scraped=now - timedelta(hours=1, minutes=30),
         ),
         models.SocialProfile(
-            username='should_be_scraped_now_2', last_scraped=now + timedelta(hours=2)
+            username='should_be_scraped_now_2', last_scraped=now - timedelta(hours=2)
         ),
-        models.SocialProfile(username='should_not_be_scraped_now', last_scraped=now),
+        models.SocialProfile(username='should_not_be_scraped_now', last_scraped=now - timedelta(minutes=30)),
     ]
     session.add_all(profiles)
     session.commit()
