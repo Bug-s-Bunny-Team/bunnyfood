@@ -8,6 +8,8 @@ def populate_db(session: Session):
         models.SocialProfile(username='testprofile1'),
         models.SocialProfile(username='testprofile2'),
         models.SocialProfile(username='testprofile3'),
+        models.SocialProfile(username='testprofile4'),
+        models.SocialProfile(username='testprofile5'),
     ]
     session.add_all(profiles)
 
@@ -16,8 +18,12 @@ def populate_db(session: Session):
     user.followed_profiles.append(profiles[2])
     session.add(user)
 
+    user = models.User(username='testuser1')
+    user.followed_profiles.append(profiles[3])
+    user.followed_profiles.append(profiles[4])
+    session.add(user)
+
     users = [
-        models.User(username='testuser1'),
         models.User(username='testuser2'),
         models.User(username='testuser3'),
     ]

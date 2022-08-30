@@ -20,8 +20,12 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_profiles(
+    unfollowed_only: bool = True,
     profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
 ):
+    if unfollowed_only:
+        return profiles.get_all(user)
     return profiles.get_all()
 
 
@@ -71,7 +75,9 @@ def get_profile_by_username(
     response_model_exclude_unset=True,
 )
 def get_most_popular_profiles(
-    limit: int, profiles: ProfilesCRUD = Depends(get_profiles_crud)
+    limit: int,
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
 ):
     if limit > 20:
         raise HTTPException(
@@ -79,10 +85,10 @@ def get_most_popular_profiles(
             detail='Can provide at most 20 popular profiles',
         )
 
-    results = profiles.get_most_popular(limit)
+    results = profiles.get_most_popular(user, limit)
     if not results:
         # fallback to all profiles with limit if most popular is empty
-        results = profiles.get_all(limit)
+        results = profiles.get_all(user, limit)
     return results
 
 

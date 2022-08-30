@@ -2,11 +2,25 @@ from api.s4 import s4
 from db import models
 
 
-def test_get_all_profiles(api_client):
+def test_get_all_unfollowed_profiles(api_client):
     results = api_client.get('/profiles/')
 
     assert results.status_code == 200
-    assert len(results.json()) == 3
+
+    results = results.json()
+    assert len(results) == 3
+    assert results[0]['username'] == 'testprofile2'
+    assert results[1]['username'] == 'testprofile4'
+    assert results[2]['username'] == 'testprofile5'
+
+
+def test_get_all_profiles(api_client):
+    results = api_client.get('/profiles/?unfollowed_only=false')
+
+    assert results.status_code == 200
+
+    results = results.json()
+    assert len(results) == 5
 
 
 def test_get_followed_profiles(api_client):
@@ -38,6 +52,11 @@ def test_get_popular_profiles(api_client):
     results = api_client.get('/profiles/popular/10')
 
     assert results.status_code == 200
+
+    results = results.json()
+    assert len(results) == 2
+    assert results[0]['username'] == 'testprofile4'
+    assert results[1]['username'] == 'testprofile5'
 
 
 def test_profiles_search_existing(api_client):

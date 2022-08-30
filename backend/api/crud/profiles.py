@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from sqlalchemy import column, func
+from sqlalchemy import column, func, any_, not_
 
 from api import schemas
 from api.crud import BaseCRUD
@@ -11,8 +11,14 @@ from db.utils import get_or_create
 
 
 class ProfilesCRUD(BaseCRUD):
-    def get_all(self, limit: Optional[int] = None) -> List[models.SocialProfile]:
+    def get_all(
+        self, user: Optional[models.User] = None, limit: Optional[int] = None
+    ) -> List[models.SocialProfile]:
         profiles = self._db.query(models.SocialProfile)
+        if user:
+            profiles = profiles.filter(
+                ~models.SocialProfile.followers.any(models.User.id == user.id)
+            )
         if limit:
             profiles = profiles.limit(limit)
         return profiles.all()
@@ -29,7 +35,9 @@ class ProfilesCRUD(BaseCRUD):
         )
         return profile
 
-    def get_most_popular(self, limit: int) -> List[models.SocialProfile]:
+    def get_most_popular(
+        self, user: models.User, limit: int
+    ) -> List[models.SocialProfile]:
         profiles = (
             self._db.query(
                 models.SocialProfile,
@@ -37,13 +45,16 @@ class ProfilesCRUD(BaseCRUD):
                     'followers_count'
                 ),
             )
+            .filter(
+                ~models.SocialProfile.followers.any(models.User.id == user.id)
+            )
             .join(profiles_users_association)
             .group_by(models.SocialProfile)
             .order_by(column('followers_count').desc())
             .limit(limit)
-            .all()
         )
 
+        profiles = profiles.all()
         profiles = flatten_results(profiles, 'followers_count')
 
         return profiles
