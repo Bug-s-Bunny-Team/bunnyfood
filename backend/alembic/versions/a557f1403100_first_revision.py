@@ -25,7 +25,7 @@ def upgrade() -> None:
     )
     op.create_table('locations',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=50), nullable=True),
+    sa.Column('name', sa.String(), nullable=True),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('lat', sa.Float(), nullable=True),
     sa.Column('long', sa.Float(), nullable=True),
