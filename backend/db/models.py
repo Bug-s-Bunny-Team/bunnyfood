@@ -161,5 +161,5 @@ class Post(Base):
 class GramhirProfiles(Base):
     __tablename__ = 'gramhirprofiles'
 
-    gramhir_id = Column(String(length=10), primary_key=True)
+    gramhir_id = Column(String(length=20), primary_key=True)
     username = Column(String(length=50), primary_key=True)
