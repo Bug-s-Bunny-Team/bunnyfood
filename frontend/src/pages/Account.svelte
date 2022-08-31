@@ -31,7 +31,7 @@
         <p>
             <details>
                 <summary>Show Followed</summary>
-                <span><Followed/></span>
+                <div><Followed/></div>
             </details>
         </p>
         <button on:click|preventDefault={presenter.logout} disabled={disableButtons} id="logout">Logout</button>
@@ -45,8 +45,7 @@
     h1 {
         --font-size: 1.5rem;
     }
-    details > span {
-        display: block;
+    details > div {
         padding: 1em 2em;
     }
 </style>
