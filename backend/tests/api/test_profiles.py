@@ -60,9 +60,10 @@ def test_get_popular_profiles(api_client):
     assert results.status_code == 200
 
     results = results.json()
-    assert len(results) == 5
+    assert len(results) == 3
     assert results[0]['username'] == 'testprofile4'
     assert results[1]['username'] == 'testprofile5'
+    assert results[2]['username'] == 'testprofile2'
 
 
 def test_profiles_search_existing(api_client):

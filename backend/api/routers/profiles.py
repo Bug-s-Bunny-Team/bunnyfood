@@ -88,7 +88,7 @@ def get_most_popular_profiles(
         # fallback to all profiles with limit if most popular is empty
         results = profiles.get_all(user, limit)
     if results_count := len(results) < limit:
-        results = results + profiles.get_all(user, limit - results_count)
+        results = results + profiles.get_all(user, limit - results_count, results)
     return results
 
 

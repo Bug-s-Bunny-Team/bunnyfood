@@ -12,9 +12,14 @@ from db.utils import get_or_create
 
 class ProfilesCRUD(BaseCRUD):
     def get_all(
-        self, user: Optional[models.User] = None, limit: Optional[int] = None
+        self,
+        user: Optional[models.User] = None,
+        limit: Optional[int] = None,
+        exclude: Optional[List[models.SocialProfile]] = None,
     ) -> List[models.SocialProfile]:
         profiles = self._db.query(models.SocialProfile)
+        if exclude:
+            profiles = profiles.filter(~models.SocialProfile.id.in_([p.id for p in exclude]))
         if user:
             profiles = profiles.filter(
                 ~models.SocialProfile.followers.any(models.User.id == user.id)
