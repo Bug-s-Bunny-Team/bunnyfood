@@ -39,6 +39,12 @@ def test_follow_profile(api_client, session):
     assert followed.followers[0].username == 'testuser'
 
 
+def test_follow_unexisting_user(api_client, session):
+    results = api_client.post('/followed/', json={'username': 'thissurelydoesnotexist43058'})
+
+    assert results.status_code == 404
+
+
 def test_unfollow_profile(api_client, session):
     results = api_client.post('/followed/unfollow/', json={'username': 'testprofile3'})
 

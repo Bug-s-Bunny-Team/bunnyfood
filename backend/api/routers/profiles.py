@@ -51,7 +51,7 @@ def get_profile_by_id(
     response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
 )
-def get_profile_by_username(
+def search_profile(
     profile_username: str,
     response: Response,
     profiles: ProfilesCRUD = Depends(get_profiles_crud),
@@ -106,16 +106,29 @@ def get_followed_profiles(user: models.User = Depends(get_user)):
 
 @router.post(
     '/followed/',
-    status_code=status.HTTP_201_CREATED,
-    response_model=List[schemas.SocialProfile],
+    response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
+    status_code=status.HTTP_201_CREATED
 )
 def follow_profile(
     profile: schemas.FollowedSocialProfile,
     profiles: ProfilesCRUD = Depends(get_profiles_crud),
     user: models.User = Depends(get_user),
 ):
+    profile_username = profile.username
+    profile = profiles.get_by_username(profile_username)
+
+    if not profile:
+        if search_social_profile(profile_username):
+            profile = profiles.create_profile(profile_username)
+        else:
+            raise HTTPException(
+                status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'
+            )
+
     profiles.follow_profile(profile, user)
+    return profile
+
 
 
 @router.post(
