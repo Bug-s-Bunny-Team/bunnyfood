@@ -97,8 +97,11 @@ def get_most_popular_profiles(
     response_model=List[schemas.SocialProfile],
     response_model_exclude_unset=True,
 )
-def get_followed_profiles(user: models.User = Depends(get_user)):
-    followed = user.followed_profiles
+def get_followed_profiles(
+    user: models.User = Depends(get_user),
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+):
+    followed = profiles.get_user_followed(user)
     return followed
 
 
@@ -106,7 +109,7 @@ def get_followed_profiles(user: models.User = Depends(get_user)):
     '/followed/',
     response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
 )
 def follow_profile(
     profile: schemas.FollowedSocialProfile,
@@ -126,7 +129,6 @@ def follow_profile(
 
     profiles.follow_profile(profile, user)
     return profile
-
 
 
 @router.post(

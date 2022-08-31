@@ -19,7 +19,9 @@ class ProfilesCRUD(BaseCRUD):
     ) -> List[models.SocialProfile]:
         profiles = self._db.query(models.SocialProfile)
         if exclude:
-            profiles = profiles.filter(~models.SocialProfile.id.in_([p.id for p in exclude]))
+            profiles = profiles.filter(
+                ~models.SocialProfile.id.in_([p.id for p in exclude])
+            )
         if user:
             profiles = profiles.filter(
                 ~models.SocialProfile.followers.any(models.User.id == user.id)
@@ -64,6 +66,25 @@ class ProfilesCRUD(BaseCRUD):
             .group_by(models.SocialProfile)
             .order_by(column('followers_count').desc())
             .limit(limit)
+        )
+
+        profiles = profiles.all()
+        profiles = flatten_results(profiles, 'followers_count')
+
+        return profiles
+
+    def get_user_followed(self, user: models.User) -> List[models.SocialProfile]:
+        profiles = (
+            self._db.query(
+                models.SocialProfile,
+                func.count(profiles_users_association.c.right_id).label(
+                    'followers_count'
+                ),
+            )
+            .filter(models.SocialProfile.id.in_([p.id for p in user.followed_profiles]))
+            .join(profiles_users_association)
+            .group_by(models.SocialProfile)
+            .order_by(column('followers_count').desc())
         )
 
         profiles = profiles.all()
