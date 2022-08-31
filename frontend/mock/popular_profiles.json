@@ -2,16 +2,16 @@
     {
         "id": 3,
         "username": "sergiomattarella",
-        "followers": 100000
+        "followers_count": 100000
     },
     {
         "id": 4,
         "username": "giuseppeconte",
-        "followers": 200000
+        "followers_count": 200000
     },
     {
         "id": 5,
         "username": "mariodraghi",
-        "followers": 500000
+        "followers_count": 500000
     }
 ]

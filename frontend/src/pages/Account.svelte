@@ -11,8 +11,7 @@
 
 <div id="error"></div>
 
-<h2>My Account</h2>
-<h3> Your personal information </h3>
+<h1> Your personal information </h1>
 <article>
     <form>
         <p> Name: { presenter.name }</p>
@@ -43,6 +42,9 @@
 </footer>
 
 <style>
+    h1 {
+        --font-size: 1.5rem;
+    }
     details > span {
         display: block;
         padding: 1em 2em;
