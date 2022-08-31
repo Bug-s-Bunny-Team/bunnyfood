@@ -81,7 +81,7 @@ class Location(Base):
     __tablename__ = 'locations'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(length=50), unique=True)
+    name = Column(String, unique=True)
     description = Column(Text)
     lat = Column(Float, default=0)
     long = Column(Float, default=0)

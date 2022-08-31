@@ -39,6 +39,12 @@ def test_follow_profile(api_client, session):
     assert followed.followers[0].username == 'testuser'
 
 
+def test_follow_unexisting_user(api_client, session):
+    results = api_client.post('/followed/', json={'username': 'thissurelydoesnotexist43058'})
+
+    assert results.status_code == 404
+
+
 def test_unfollow_profile(api_client, session):
     results = api_client.post('/followed/unfollow/', json={'username': 'testprofile3'})
 
@@ -49,14 +55,15 @@ def test_unfollow_profile(api_client, session):
 
 
 def test_get_popular_profiles(api_client):
-    results = api_client.get('/profiles/popular/10')
+    results = api_client.get('/profiles/popular/5')
 
     assert results.status_code == 200
 
     results = results.json()
-    assert len(results) == 2
+    assert len(results) == 3
     assert results[0]['username'] == 'testprofile4'
     assert results[1]['username'] == 'testprofile5'
+    assert results[2]['username'] == 'testprofile2'
 
 
 def test_profiles_search_existing(api_client):

@@ -1,7 +1,6 @@
 from typing import List
 
 from fastapi import status, Depends, HTTPException, Response
-from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
 from api import schemas
 from api.crud.profiles import ProfilesCRUD
@@ -41,7 +40,7 @@ def get_profile_by_id(
     profile = profiles.get_by_id(profile_id)
     if not profile:
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'
+            status_code=status.HTTP_404_NOT_FOUND, detail='SocialProfile not found'
         )
     return profile
 
@@ -51,7 +50,7 @@ def get_profile_by_id(
     response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
 )
-def get_profile_by_username(
+def search_profile(
     profile_username: str,
     response: Response,
     profiles: ProfilesCRUD = Depends(get_profiles_crud),
@@ -60,11 +59,11 @@ def get_profile_by_username(
     if not profile:
         if search_social_profile(profile_username):
             profile = profiles.create_profile(profile_username)
-            response.status_code = HTTP_201_CREATED
             s4.start(profile_username)
+            response.status_code = status.HTTP_201_CREATED
         else:
             raise HTTPException(
-                status_code=HTTP_404_NOT_FOUND, detail='SocialProfile not found'
+                status_code=status.HTTP_404_NOT_FOUND, detail='SocialProfile not found'
             )
     return profile
 
@@ -72,7 +71,6 @@ def get_profile_by_username(
 @router.get(
     '/profiles/popular/{limit}',
     response_model=List[schemas.SocialProfile],
-    response_model_exclude_unset=True,
 )
 def get_most_popular_profiles(
     limit: int,
@@ -81,7 +79,7 @@ def get_most_popular_profiles(
 ):
     if limit > 20:
         raise HTTPException(
-            status_code=HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail='Can provide at most 20 popular profiles',
         )
 
@@ -89,6 +87,8 @@ def get_most_popular_profiles(
     if not results:
         # fallback to all profiles with limit if most popular is empty
         results = profiles.get_all(user, limit)
+    if results_count := len(results) < limit:
+        results = results + profiles.get_all(user, limit - results_count, results)
     return results
 
 
@@ -104,16 +104,29 @@ def get_followed_profiles(user: models.User = Depends(get_user)):
 
 @router.post(
     '/followed/',
-    status_code=status.HTTP_201_CREATED,
-    response_model=List[schemas.SocialProfile],
+    response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
+    status_code=status.HTTP_201_CREATED
 )
 def follow_profile(
     profile: schemas.FollowedSocialProfile,
     profiles: ProfilesCRUD = Depends(get_profiles_crud),
     user: models.User = Depends(get_user),
 ):
+    profile_username = profile.username
+    profile = profiles.get_by_username(profile_username)
+
+    if not profile:
+        if search_social_profile(profile_username):
+            profile = profiles.create_profile(profile_username)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail='SocialProfile not found'
+            )
+
     profiles.follow_profile(profile, user)
+    return profile
+
 
 
 @router.post(
@@ -127,6 +140,6 @@ def unfollow_profile(
     db_profile = profiles.get_by_username(profile.username)
     if not db_profile:
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail='SocialProfile does not exist'
+            status_code=status.HTTP_404_NOT_FOUND, detail='SocialProfile does not exist'
         )
     profiles.unfollow_profile(db_profile, user)

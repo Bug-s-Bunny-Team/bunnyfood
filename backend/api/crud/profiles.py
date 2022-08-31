@@ -12,9 +12,14 @@ from db.utils import get_or_create
 
 class ProfilesCRUD(BaseCRUD):
     def get_all(
-        self, user: Optional[models.User] = None, limit: Optional[int] = None
+        self,
+        user: Optional[models.User] = None,
+        limit: Optional[int] = None,
+        exclude: Optional[List[models.SocialProfile]] = None,
     ) -> List[models.SocialProfile]:
         profiles = self._db.query(models.SocialProfile)
+        if exclude:
+            profiles = profiles.filter(~models.SocialProfile.id.in_([p.id for p in exclude]))
         if user:
             profiles = profiles.filter(
                 ~models.SocialProfile.followers.any(models.User.id == user.id)
@@ -29,10 +34,19 @@ class ProfilesCRUD(BaseCRUD):
 
     def get_by_username(self, profile_username: str) -> Optional[models.SocialProfile]:
         profile = (
-            self._db.query(models.SocialProfile)
-            .filter_by(username=profile_username)
+            self._db.query(
+                models.SocialProfile,
+                func.count(profiles_users_association.c.right_id).label(
+                    'followers_count'
+                ),
+            )
+            .filter(models.SocialProfile.username == profile_username)
+            .join(profiles_users_association, isouter=True)
+            .group_by(models.SocialProfile)
             .first()
         )
+        if profile:
+            profile = flatten_results([profile], 'followers_count')[0]
         return profile
 
     def get_most_popular(
@@ -45,9 +59,7 @@ class ProfilesCRUD(BaseCRUD):
                     'followers_count'
                 ),
             )
-            .filter(
-                ~models.SocialProfile.followers.any(models.User.id == user.id)
-            )
+            .filter(~models.SocialProfile.followers.any(models.User.id == user.id))
             .join(profiles_users_association)
             .group_by(models.SocialProfile)
             .order_by(column('followers_count').desc())
@@ -59,11 +71,8 @@ class ProfilesCRUD(BaseCRUD):
 
         return profiles
 
-    def follow_profile(self, profile: schemas.FollowedSocialProfile, user: models.User):
-        db_profile = get_or_create(
-            self._db, models.SocialProfile, username=profile.username
-        )
-        user.followed_profiles.append(db_profile)
+    def follow_profile(self, profile: models.SocialProfile, user: models.User):
+        user.followed_profiles.append(profile)
         self._db.add(user)
         self._db.commit()
 

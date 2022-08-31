@@ -32,16 +32,18 @@ class ScrapingService(BaseService):
         scraped_posts = self._scraper.get_last_posts(username, limit)
         return scraped_posts
 
-    def _process_posts(
-        self, scraped_posts: List[ScrapedPost], event: ScrapingEvent
-    ) -> List[models.Post]:
-        profile = get_or_create(
-            self._session, models.SocialProfile, username=event.username
-        )
+    def _get_profile(self, username: str) -> models.SocialProfile:
+        profile = get_or_create(self._session, models.SocialProfile, username=username)
+        return profile
+
+    def _set_last_scraped(self, profile: models.SocialProfile):
         profile.last_scraped = datetime.datetime.now()
         self._session.add(profile)
         self._session.commit()
 
+    def _process_posts(
+        self, scraped_posts: List[ScrapedPost], profile: models.SocialProfile
+    ) -> List[models.Post]:
         downloaded_posts = []
 
         for scraped in scraped_posts:
@@ -79,8 +81,11 @@ class ScrapingService(BaseService):
         else:
             posts = self._scrape_last_posts(event.username, event.posts_limit)
 
+        profile = self._get_profile(event.username)
+        self._set_last_scraped(profile)
+
         if len(posts) > 0:
-            downloaded_posts = self._process_posts(posts, event)
+            downloaded_posts = self._process_posts(posts, profile)
             downloaded_posts = [{'id': p.id} for p in downloaded_posts]
             return {'posts_count': len(downloaded_posts), 'posts': downloaded_posts}
         else:

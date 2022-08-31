@@ -30,7 +30,7 @@ class FollowedSocialProfile(BaseModel):
 
 class SocialProfile(FollowedSocialProfile):
     id: int
-    followers_count: Union[int, None] = None
+    followers_count: Union[int, None] = 0
 
     class Config:
         orm_mode = True

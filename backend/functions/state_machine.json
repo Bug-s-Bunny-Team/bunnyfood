@@ -22,7 +22,21 @@
           "BackoffRate": 2
         }
       ],
-      "Next": "Sorter"
+      "Next": "Check posts"
+    },
+    "Check posts": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.posts_count",
+            "NumericGreaterThan": 0
+          },
+          "Next": "No posts",
+          "Comment": "posts_count is 0"
+        }
+      ],
+      "Default": "Sorter"
     },
     "Sorter": {
       "Type": "Task",
@@ -44,9 +58,9 @@
           "BackoffRate": 2
         }
       ],
-      "Next": "Choice"
+      "Next": "Check remaining posts"
     },
-    "Choice": {
+    "Check remaining posts": {
       "Type": "Choice",
       "Choices": [
         {
@@ -55,13 +69,13 @@
             "NumericGreaterThan": 0
           },
           "Comment": "posts_count is 0",
-          "Next": "No post"
+          "Next": "No posts"
         }
       ],
       "Default": "Scoring",
       "Comment": "posts_count is > 0"
     },
-    "No post": {
+    "No posts": {
       "Type": "Succeed",
       "Comment": "success but no posts scored"
     },
