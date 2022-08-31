@@ -63,6 +63,7 @@
     .refresh {
         display: inline;
         width: fit-content;
+        margin-top: 0.5em;
         margin-left: 0.5em;
         padding: 0.5em;
     }

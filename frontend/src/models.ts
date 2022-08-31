@@ -5,10 +5,10 @@ interface Model {
 export class SocialProfile implements Model {
     id: number;
     username: string;
-    followers: number;
+    followers_count: number;
 
-    constructor(id: number = 0, username: string = 'default username', followers: number = 0) {
-        this.id = id; this.username = username; this.followers = followers;
+    constructor(id: number = 0, username: string = 'default username', followers_count: number = 0) {
+        this.id = id; this.username = username; this.followers_count = followers_count;
     }
 }
 
@@ -59,15 +59,13 @@ export class Info {
 
 export class Filter {
     only_from_followed: boolean;
-    lat: number;
-    long: number;
     current_lat: number;
     current_long: number;
     radius: number;
     min_rating: number;
 
-    constructor(only_from_followed: boolean=false, lat: number=null, long: number=null, current_lat: number=null, current_long: number=null, radius: number=null, min_rating: number=0.0) {
-        this.only_from_followed=only_from_followed; this.lat=lat; this.long=long; this.current_lat=current_lat; this.current_long=current_long; this.radius=radius; this.min_rating=min_rating;
+    constructor(only_from_followed: boolean=false, current_lat: number=null, current_long: number=null, radius: number=null, min_rating: number=0.0) {
+        this.only_from_followed=only_from_followed; this.current_lat=current_lat; this.current_long=current_long; this.radius=radius; this.min_rating=min_rating;
     }
 }
 
