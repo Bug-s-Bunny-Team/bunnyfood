@@ -32,9 +32,17 @@ export class LocationModel {
                 function(results, status) {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
                             resolve(new Info(results[0].name, 
-                                            {height: results[0].photos[0].height, width:results[0].photos[0].width, url: results[0].photos[0].getUrl()}, 
-                                            results[0].formatted_address,
-                                            location.score));
+                                             results[0].photos && results[0].photos[0] ? 
+                                                    {height: results[0].photos[0].height, 
+                                                     width: results[0].photos[0].width, 
+                                                     url: results[0].photos[0].getUrl(), 
+                                                     alt: ""}
+                                                :   {height: 20, 
+                                                     width: 400,
+                                                     url: "",
+                                                     alt: "image unavailable"}, 
+                                             results[0].formatted_address,
+                                             location.score));
                         } else {
                             throw new RequestError(status, "Error with request to G_API");
                         }

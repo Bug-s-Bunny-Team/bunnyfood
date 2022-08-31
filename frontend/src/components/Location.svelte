@@ -28,10 +28,14 @@
         {:then info} 
             <div class="content">
                 <h1>{info.name}</h1>
-                <img src={info.img.url} width={info.img.width} height={info.img.height} alt=""/>
+                <img src={info.img.url} width={info.img.width} height={info.img.height} alt={info.img.alt}/>
                 <article>
                     <p>Address: {info.address}</p>
-                    <p>Score: <StarRating rating={Math.round(info.score*10.0)/10.0} {config} {style}/></p>
+                    {#if info.score !== null}
+                        <p>Score: <StarRating rating={Math.round(info.score*10.0)/10.0} {config} {style}/></p>
+                    {:else}
+                        <p>The Score is unavailable</p>
+                    {/if}
                 </article>
             </div>
         {:catch}

@@ -29,7 +29,7 @@ export class Location implements Model {
     id: number;
     name: string;
     position: Position;
-    score: number;
+    score: number | null;
 
     constructor(id: number = 0, name: string = 'default name', position: Position = new Position(0.0, 0.0), score: number = 0.0) {
         this.id = id; this.name = name; this.position = position; this.score = score;

@@ -35,8 +35,12 @@
                         <header>
                             <strong>Location</strong>: <a href="./home?details_placeid={location.id}">{capitalizeFirstLetter(location.name)}</a>
                         </header>
-                        <strong>Score</strong>: <StarRating rating={Math.round(location.score*10.0)/10.0} {config} {style} />
-                    </article>
+                        {#if location.score !== null}
+                            <p><strong>Score</strong>: <StarRating rating={Math.round(location.score*10.0)/10.0} {config} {style}/></p>
+                        {:else}
+                            <p>The Score is unavailable</p>
+                        {/if}
+                </article>
                 {/each}
             </div>
         {:else}

@@ -61,7 +61,7 @@ export class MapPresenter {
 
   createPopup(location: Location) {
     return `<p><a href="./home?details_placeid=${location.id}">${capitalizeFirstLetter(location.name)}</a></p>
-            <p>${Math.round(location.score*10.0)/10.0}/5</p>`;
+            ${location.score !== null ? '<p>'+Math.round(location.score*10.0)/10.0+'/5</p>' : '<p>Score unavailable</p>'}`;
   }
 
   initMap(container: any) {

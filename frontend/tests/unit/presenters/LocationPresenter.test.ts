@@ -34,6 +34,7 @@ describe('LocationPresenter', () => {
             expect(info.img.height).toBeTruthy();
             expect(info.img.width).toBeTruthy();
             expect(info.img.url).toBeTruthy();
+            expect(info.img.alt).toEqual("");
             expect(info.name).toBeTruthy();
             expect(info.score).toBeTruthy();
 

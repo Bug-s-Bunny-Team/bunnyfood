@@ -49,7 +49,6 @@
     top: 2em;
     left: 10%;
     width: 80%;
-    max-height: 80%;
     overflow-y: auto;
     overflow-x: hidden;
     z-index: 50;
