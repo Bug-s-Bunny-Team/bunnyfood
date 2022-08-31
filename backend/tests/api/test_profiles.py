@@ -49,12 +49,12 @@ def test_unfollow_profile(api_client, session):
 
 
 def test_get_popular_profiles(api_client):
-    results = api_client.get('/profiles/popular/10')
+    results = api_client.get('/profiles/popular/5')
 
     assert results.status_code == 200
 
     results = results.json()
-    assert len(results) == 2
+    assert len(results) == 5
     assert results[0]['username'] == 'testprofile4'
     assert results[1]['username'] == 'testprofile5'
 
