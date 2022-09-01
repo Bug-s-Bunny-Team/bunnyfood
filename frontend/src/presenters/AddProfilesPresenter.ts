@@ -20,8 +20,14 @@ export class AddProfilesPresenter {
     search() : void {
         this.disableButtons.set(true);
         let promise = ProfilesModel.getInstance().getProfile(get(this.searchText));
-        promise.finally(() => {this.disableButtons.set(false)});
-        this.profile.set(promise);
+        let already_followed: boolean = false;
+        promise
+            .catch((e: RequestError) => { 
+                if(e.code==1) already_followed=true;
+                else throw e;
+            })
+            .finally(() => {this.disableButtons.set(false)});
+        if(!already_followed) this.profile.set(promise);
     }
 
     addProfile(profile: SocialProfile) : void {

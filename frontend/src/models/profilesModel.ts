@@ -49,6 +49,7 @@ export class ProfilesModel {
             throw new RequestError(response.status, response.statusText);
         }
         const res = await response.json();
+        if(res==JSON.parse('{}')) throw new Error(1, "already followed");
         return res;
     }
 
