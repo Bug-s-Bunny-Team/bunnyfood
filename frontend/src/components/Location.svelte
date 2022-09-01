@@ -30,12 +30,14 @@
                 <h1>{info.name}</h1>
                 <img src={info.img.url} width={info.img.width} height={info.img.height} alt={info.img.alt}/>
                 <article>
-                    <p>Address: {info.address}</p>
+                    <p><strong>Adress</strong>: {info.address}</p>
+                    <p><strong>Phone</strong>: <a href={'tel:'+info.phone_number}>{info.phone_number}</a></p>
                     {#if info.score !== null}
-                        <p>Score: <StarRating rating={Math.round(info.score*10.0)/10.0} {config} {style}/></p>
+                        <p><strong>Score</strong>: <StarRating rating={Math.round(info.score*10.0)/10.0} {config} {style}/></p>
                     {:else}
                         <p>The Score is unavailable</p>
                     {/if}
+                    
                 </article>
             </div>
         {:catch}

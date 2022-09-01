@@ -13,7 +13,7 @@ export class ListPresenter {
 
     refresh() : void {
         this.disableButtons.set(true);
-        let promise = ResultsModel.getInstance().getRankedList(new Filter());
+        let promise = ResultsModel.getInstance().getRankedList(new Filter(false, null, null, null, 0.0));
         promise.finally(() => {this.disableButtons.set(false)});
         this.rankedList.set(promise);
     }

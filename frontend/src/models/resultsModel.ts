@@ -34,7 +34,7 @@ export class ResultsModel {
     async getRankedList(filter: Filter) : Promise<Location[]> {        
         const url = new URL('api/locations/', `${window.location.protocol}//${window.location.host}`);
         for (const field in filter) {
-            url.searchParams.append(field, filter[field]);
+            if(filter[field] !== null) url.searchParams.append(field, filter[field]);
         }
         const response = await fetch(url, RequestOptions.getRequestOptions());
         if(!response.ok) throw new RequestError(response.status, response.statusText);
@@ -45,7 +45,8 @@ export class ResultsModel {
     }
 
     fixLocations(list: any[]) : Location[] {
-        return list.map(location => {return new Location(location.id, location.name, new Position(location.lat, location.long), location.score)})
+        return list.map(location => {return new Location(location.id, location.name, new Position(location.lat, location.long), 
+                                                         location.address, location.maps_place_id, location.score)})
     }
 
     getById(id: number) : Location {

@@ -22,7 +22,7 @@
 
 {#if currentRoute.queryParams.details_placeid } 
     <div id="overlay"></div>
-    <article class="popup">
+    <article style={'top: '+(document.documentElement.scrollTop || document.body.scrollTop)+'px;'} class="popup">
         <header><a href="/home"> Close </a></header>
         <Location placeid={parseInt(currentRoute.queryParams.details_placeid)}/>
     </article>
@@ -46,7 +46,7 @@
 
 .popup {
     position: absolute;
-    top: 2em;
+    margin-top: 2em;
     left: 10%;
     width: 80%;
     max-height: 100%;
