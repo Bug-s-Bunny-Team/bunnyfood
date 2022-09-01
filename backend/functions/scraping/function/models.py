@@ -21,6 +21,9 @@ class ScrapingEvent(LambdaEvent):
 class LocationData:
     lat: float
     long: float
+    address: Optional[str] = None
+    maps_name: Optional[str] = None
+    maps_place_id: Optional[str] = None
 
 
 @dataclass

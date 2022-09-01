@@ -145,17 +145,6 @@ Resources:
 #          EnableAcceptEncodingGzip: false
 
   #############################################################
-  # Tables
-
-  InstaSessionsTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: 'username'
-        Type: 'String'
-      TableName: 'bunnyfood-instagram-sessions'
-
-  #############################################################
   # Buckets
 
   BackendBucket:
@@ -263,13 +252,7 @@ Resources:
     Properties:
       Timeout: 300  # 5 minutes
       CodeUri: functions/scraping/
-      Environment:
-        Variables:
-          INSTA_USERNAME: 'notabbotswe'
-          INSTA_SESSIONS_TABLE: !Ref InstaSessionsTable
       Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref InstaSessionsTable
         - S3CrudPolicy:
             BucketName: !Ref BackendBucket
         - "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
