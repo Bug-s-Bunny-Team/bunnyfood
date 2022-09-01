@@ -32,6 +32,11 @@ export class LocationPresenter {
         let _info: Info = await info;
         _info.name = capitalizeFirstLetter(_info.name);
         _info.address = capitalizeFirstLetter(_info.address);
+        if(_info.types.length) {
+            _info.types.forEach((value, index, array) => {array[index] = value.replaceAll('_', ' ')});
+            _info.types.splice(_info.types.findIndex(value => value==='point of interest'), 1);
+            _info.types.splice(_info.types.findIndex(value => value==='establishment'), 1);
+        }
         return _info;
     }
 }

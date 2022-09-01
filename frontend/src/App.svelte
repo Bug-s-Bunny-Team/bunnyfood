@@ -9,13 +9,12 @@
     import { google_ready } from './store';
 
     let presenter = new AppPresenter();
-    let routes : any[];
-    presenter.routes.subscribe(_routes => {routes=_routes});
+    let {routes} = presenter;
 
     (window as any).google_initialize = function() {
         google_ready.set(true);
     }
 </script>
 
-<Router {routes}/>
+<Router routes={$routes}/>
 

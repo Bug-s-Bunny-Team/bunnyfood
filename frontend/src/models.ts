@@ -7,7 +7,7 @@ export class SocialProfile implements Model {
     username: string;
     followers_count: number;
 
-    constructor(id: number = 0, username: string = 'default username', followers_count: number = 0) {
+    constructor(id: number = 0, username: string = '', followers_count: number = 0) {
         this.id = id; this.username = username; this.followers_count = followers_count;
     }
 }
@@ -33,7 +33,7 @@ export class Location implements Model {
     maps_place_id: string;
     score: number | null;
 
-    constructor(id: number = 0, name: string = 'default name', position: Position = new Position(0.0, 0.0), 
+    constructor(id: number = 0, name: string = '', position: Position = new Position(0.0, 0.0), 
                 address: string = "", maps_place_id: string = '', score: number = null) {
         this.id = id; this.name = name; this.position = position; this.address = address; this.maps_place_id = maps_place_id; this.score = score;
     }
@@ -46,7 +46,7 @@ export class Account {
     email: string;
     preference: boolean;
 
-    constructor(idtoken: string, accesstoken: string, accountname: string = 'default name', email: string = 'default email', preference: boolean = true) {
+    constructor(idtoken: string, accesstoken: string, accountname: string = '', email: string = '', preference: boolean = true) {
         this.idtoken=idtoken; this.accesstoken=accesstoken; this.accountname = accountname; this.email=email; this.preference = preference;
     }
 }
@@ -57,9 +57,11 @@ export class Info {
     address: string;
     score: number;
     phone_number: string;
+    types: string[];
+    website: string;
 
-    constructor(name: string, img: any, address:string, score:number, phone_number = '') {
-        this.name=name; this.img=img; this.address=address; this.score=score; this.phone_number=phone_number;
+    constructor(name: string, img: any, address:string, score:number, phone_number = '', types: string[] = [], website: string = '') {
+        this.name=name; this.img=img; this.address=address; this.score=score; this.phone_number=phone_number; this.types=types; this.website=website;
     }
 }
 

@@ -23,7 +23,7 @@ export class LocationModel {
 
         // google will be defined once the application runs
         let service = new google.maps.places.PlacesService(attribution_div);
-        let fields = ['photos', 'international_phone_number'];
+        let fields = ['photos', 'international_phone_number', 'website', 'types'];
 
         
         return new Promise((resolve) => {
@@ -42,7 +42,9 @@ export class LocationModel {
                                                      alt: "image unavailable"}, 
                                              location.address,
                                              location.score,
-                                             result.international_phone_number));
+                                             result.international_phone_number,
+                                             result.types,
+                                             result.website));
                         } else {
                             throw new RequestError(status, "Error with request to G_API");
                         }

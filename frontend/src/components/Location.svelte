@@ -1,13 +1,14 @@
 <script lang="ts">
     import type { Info } from "../models";
+    import type { Writable } from "svelte/store";
     import { LocationPresenter } from "../presenters/LocationPresenter";
     export let placeid: number;
     let presenter: LocationPresenter;
-    let info: Promise<Info> = null;
+    let info: Writable<Promise<Info>> = null;
 
     onMount(() => {
         presenter = new LocationPresenter(placeid);
-        presenter.info.subscribe(_info => {info = _info});
+        info = presenter.info;
     })
 
     import StarRating from 'svelte-star-rating';
@@ -22,14 +23,19 @@
 </script>
 
 <div id="location">
-    {#if info}
-        {#await info}
+    {#if $info}
+        {#await $info}
             <progress/>
         {:then info} 
             <div class="content">
                 <h1>{info.name}</h1>
                 <img src={info.img.url} width={info.img.width} height={info.img.height} alt={info.img.alt}/>
                 <article>
+                    <p><em id="types">
+                        {#each info.types as type}
+                            <span>{type}</span>
+                        {/each}
+                    </em></p>
                     <p><strong>Adress</strong>: {info.address}</p>
                     <p><strong>Phone</strong>: <a href={'tel:'+info.phone_number}>{info.phone_number}</a></p>
                     {#if info.score !== null}
@@ -37,7 +43,9 @@
                     {:else}
                         <p>The Score is unavailable</p>
                     {/if}
-                    
+                    {#if info.website}
+                        <p><a href={info.website}>Website</a></p>
+                    {/if}
                 </article>
             </div>
         {:catch}
@@ -75,5 +83,13 @@
         grid-row: 2 / span 2;
         grid-column: 2;
         z-index: 0;
+    }
+
+    #types > span::after {
+        content: ", ";
+    }
+
+    #types > span:last-child::after {
+        content: "";
     }
 </style>

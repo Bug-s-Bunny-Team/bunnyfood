@@ -1,13 +1,9 @@
 <script lang="ts">
     import { onDestroy } from 'svelte/internal';
-    import type { SocialProfile } from "../models";
     import { ExplorePresenter } from "../presenters/ExplorePresenter";
 
     let presenter = new ExplorePresenter();
-    let profiles: Promise<SocialProfile[]>;
-    let disableButtons: boolean;
-    presenter.disableButtons.subscribe(_disableButtons => {disableButtons = _disableButtons});
-    presenter.profiles.subscribe(_profiles => {profiles = _profiles});
+    let {profiles, disableButtons} = presenter;
 
     onDestroy(presenter.destroy);
 </script>
@@ -15,9 +11,9 @@
 <div id="error"></div>
 
 <div>
-    <button class="refresh outline" disabled={disableButtons} on:click={presenter.refresh}>Refresh</button>
+    <button class="refresh outline" disabled={$disableButtons} on:click={presenter.refresh}>Refresh</button>
     
-    {#await profiles}
+    {#await $profiles}
         <p>Loading most popular profiles...</p>
         <progress />
     {:then _profiles} 
@@ -30,7 +26,7 @@
                         </header>
                         <strong>Followers</strong>: {profile.followers_count}
                         <footer>
-                            <button disabled={disableButtons} on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
+                            <button disabled={$disableButtons} on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
                         </footer>  
                     </article>
                 {/each}

@@ -1,12 +1,12 @@
 import type { RequestError, SocialProfile } from "../models";
 import { ProfilesModel } from "../models/profilesModel";
-import { Writable, writable } from "svelte/store";
+import { get, Writable, writable } from "svelte/store";
 import { error_duration, removeChildren } from "../utils";
 import ErrorSvelte from "../components/Error.svelte";
 
 export class AddProfilesPresenter {
 
-    searchText: string;
+    searchText: Writable<string> = writable('');
     profile: Writable<Promise<SocialProfile>> = writable(null);
     disableButtons: Writable<boolean> = writable(false);
     errorTimeout: NodeJS.Timeout = null;
@@ -19,7 +19,7 @@ export class AddProfilesPresenter {
 
     search() : void {
         this.disableButtons.set(true);
-        let promise = ProfilesModel.getInstance().getProfile(this.searchText);
+        let promise = ProfilesModel.getInstance().getProfile(get(this.searchText));
         promise.finally(() => {this.disableButtons.set(false)});
         this.profile.set(promise);
     }
@@ -33,7 +33,11 @@ export class AddProfilesPresenter {
                 new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
                 this.errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
             })
-            .finally(this.search);
+            .finally(() => {
+                this.searchText.set('');
+                this.profile.set(null);
+                this.disableButtons.set(false);
+            });
     }
 
     destroy() {

@@ -2,19 +2,15 @@
     import { onDestroy } from 'svelte/internal';
     import { FollowedPresenter } from '../presenters/FollowedPresenter';
     import { Navigate } from 'svelte-router-spa'
-    import type { SocialProfile } from '../models';
 
     let presenter = new FollowedPresenter();
-    let followed: Promise<SocialProfile[]>;
-    let disableButtons: boolean;
-    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
-    presenter.profiles.subscribe(_profiles => {followed = _profiles});
+    let {profiles, disableButtons} = presenter;
 
     onDestroy(presenter.destroy);
 </script>
 
 <div>    
-    {#await followed}
+    {#await $profiles}
         <p>Loading followed profiles...</p>
         <progress />
     {:then followed} 
@@ -27,7 +23,7 @@
                         </header>
                         <strong>Followers</strong>: {_followed.followers_count}
                         <footer>
-                            <button disabled={disableButtons} on:click|preventDefault={() => {presenter.removeFollowed(_followed)}}><strong>Rimuovi</strong></button>
+                            <button disabled={$disableButtons} on:click|preventDefault={() => {presenter.removeFollowed(_followed)}}><strong>Rimuovi</strong></button>
                         </footer>  
                     </article>
                 {/each}

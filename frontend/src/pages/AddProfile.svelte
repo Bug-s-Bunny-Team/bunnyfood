@@ -1,14 +1,8 @@
 <script lang="ts">
     import { onDestroy } from 'svelte/internal';
-    import type { SocialProfile } from "../models";
     import { AddProfilesPresenter } from "../presenters/AddProfilesPresenter";
-
     let presenter = new AddProfilesPresenter();
-    let profile: Promise<SocialProfile>;
-    let disableButtons: boolean;
-    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons });
-    presenter.profile.subscribe(_profile => { profile = _profile; });
-
+    let {searchText, disableButtons, profile} = presenter;
     onDestroy(presenter.destroy);
 </script>
 
@@ -22,20 +16,20 @@
                 <input
                     type="search"
                     id="scrape-input"
-                    bind:value={presenter.searchText}
+                    bind:value={$searchText}
                     placeholder="testuser123"
                     required
-                    disabled={disableButtons}
+                    disabled={$disableButtons}
                     pattern="^[^\s]+$"
                 />
     </label>
-    <button id="submit" type="submit" disabled={disableButtons}> Search </button>
+    <button id="submit" type="submit" disabled={$disableButtons}> Search </button>
     </div>
     </form>
 </article>
 
-{#if profile} 
-    {#await profile}
+{#if $profile} 
+    {#await $profile}
         Searching profile...
         <progress />
     {:then _profile} 
@@ -47,7 +41,7 @@
                     </header>
                     <strong>Followers</strong>: {_profile.followers_count}
                     <footer>
-                        <button disabled={disableButtons} on:click={() => {presenter.addProfile(_profile)}}><strong>Segui</strong></button>
+                        <button disabled={$disableButtons} on:click={() => {presenter.addProfile(_profile)}}><strong>Segui</strong></button>
                     </footer>            
                 </article>
             </div>
