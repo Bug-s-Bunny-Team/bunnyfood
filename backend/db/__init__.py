@@ -40,12 +40,17 @@ def configure_session_from_secrets():
     )
 
 
-def get_session() -> Session:
-    env = os.environ.get('ENV', 'dev')
+def get_session(force_env: Optional[str] = None) -> Session:
+    if force_env:
+        env = force_env
+    else:
+        env = os.environ.get('ENV', 'dev')
+
     if env == 'dev':
         configure_session()
     elif env == 'prod':
         configure_session_from_secrets()
     else:
         raise ValueError(f'ENV "{env}" not recognized')
+
     return SessionLocal()

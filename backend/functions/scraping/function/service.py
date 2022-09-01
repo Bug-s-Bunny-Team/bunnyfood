@@ -47,17 +47,33 @@ class ScrapingService(BaseService):
         downloaded_posts = []
 
         for scraped in scraped_posts:
-            if not scraped.has_location:
-                print('post has no location data, skipping')
+            if not scraped.has_valid_location:
+                print('post has no valid location data, skipping')
             else:
-                location = get_or_create(
-                    self._session,
-                    models.Location,
-                    name=scraped.location_name,
-                    description=scraped.description,
-                    lat=scraped.location_data.lat,
-                    long=scraped.location_data.long,
+                name = (
+                    scraped.location_data.maps_name
+                    if scraped.location_data.maps_name
+                    else scraped.location_name
                 )
+
+                location = None
+                if scraped.location_data.maps_place_id:
+                    location = (
+                        self._session.query(models.Location)
+                        .filter_by(maps_place_id=scraped.location_data.maps_place_id)
+                        .first()
+                    )
+                if not location:
+                    location = get_or_create(
+                        self._session,
+                        models.Location,
+                        name=name,
+                        description=scraped.description,
+                        lat=scraped.location_data.lat,
+                        long=scraped.location_data.long,
+                        address=scraped.location_data.address,
+                        maps_place_id=scraped.location_data.maps_place_id,
+                    )
 
                 post, created = models.Post.from_scraped_post(
                     self._session, scraped, profile, location

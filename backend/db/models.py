@@ -81,12 +81,14 @@ class Location(Base):
     __tablename__ = 'locations'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True)
+    name = Column(String)
     description = Column(Text)
     lat = Column(Float, default=0)
     long = Column(Float, default=0)
     score = Column(Float, nullable=True, default=None)
     last_scored = Column(DateTime, nullable=True, default=None)
+    address = Column(Text, nullable=True, default=None)
+    maps_place_id = Column(String, nullable=True, default=None, unique=True)
 
     posts = relationship('Post', back_populates='location')
 
@@ -116,7 +118,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     profile_id = Column(Integer, ForeignKey('socialprofiles.id'))
-    location_id = Column(Integer, ForeignKey('locations.id'))
+    location_id = Column(Integer, ForeignKey('locations.id', ondelete='CASCADE'))
     shortcode = Column(String, unique=True)
     caption = Column(Text)
     media_type = Column(String)
