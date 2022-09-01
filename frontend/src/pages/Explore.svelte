@@ -15,7 +15,6 @@
 <div id="error"></div>
 
 <div>
-    <h2 class="title">Explore</h2>
     <button class="refresh outline" disabled={disableButtons} on:click={presenter.refresh}>Refresh</button>
     
     {#await profiles}
@@ -29,7 +28,7 @@
                         <header>
                             <strong>Username</strong>: {profile.username}
                         </header>
-                        <strong>Followers</strong>: {profile.followers}
+                        <strong>Followers</strong>: {profile.followers_count}
                         <footer>
                             <button disabled={disableButtons} on:click={() => {presenter.addProfile(profile)}}><strong>Segui</strong></button>
                         </footer>  
@@ -55,12 +54,10 @@
         margin-top: 1em;
         margin-bottom: 1em;
     }
-    .title {
-        display: inline;
-    }
     .refresh {
         display: inline;
         width: fit-content;
+        margin-top: 0.5em;
         margin-left: 0.5em;
         padding: 0.5em;
     }

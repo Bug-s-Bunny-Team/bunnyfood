@@ -46,7 +46,7 @@ export class MapPresenter {
 
   makeIcon() {
     return new L.Icon({
-      iconUrl: './src/assets/icon.png',
+      iconUrl: './icon.png',
       iconSize: [40, 40],
       iconAnchor: [20, 30], // [half of iconSize.x, 3/4 of iconSize.y] dependent on image used
       popupAnchor: [0, -30],
@@ -61,7 +61,7 @@ export class MapPresenter {
 
   createPopup(location: Location) {
     return `<p><a href="./home?details_placeid=${location.id}">${capitalizeFirstLetter(location.name)}</a></p>
-            <p>${Math.round(location.score*10.0)/10.0}/5</p>`;
+            ${location.score !== null ? '<p>'+Math.round(location.score*10.0)/10.0+'/5</p>' : '<p>Score unavailable</p>'}`;
   }
 
   initMap(container: any) {
@@ -110,7 +110,7 @@ export class MapPresenter {
 
     if(!this.lastRefreshPosition || currentPosition.distance(this.lastRefreshPosition)>height/2.0 || Math.abs(zoom-this.lastRefreshZoom)>1) {
       const radius_meters = this.measure_meters(center.lat, bounds.getWest(), center.lat, bounds.getEast());
-      const filter = new Filter(false, currentPosition.lat, currentPosition.long, currentPosition.lat, currentPosition.long, Math.round(radius_meters), 0.0);
+      const filter = new Filter(false, currentPosition.lat, currentPosition.long, Math.round(radius_meters), 0.0);
       this.rankedList.set(ResultsModel.getInstance().getRankedList(filter));
       this.lastRefreshPosition = currentPosition;
       this.lastRefreshZoom = zoom;
@@ -122,10 +122,10 @@ export class MapPresenter {
     var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
     var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
     var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var d = R * c;
     return d * 1000; // meters
-}
+  }
 }

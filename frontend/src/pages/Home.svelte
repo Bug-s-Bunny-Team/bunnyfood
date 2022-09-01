@@ -6,15 +6,7 @@
     export let currentRoute: any;
     currentRoute.queryParams = {};
     let presenter = new HomePresenter();
-
-    function okayPopUp(param: boolean):void {
-        if (param == true) 
-           document.getElementById("overlay").style.display = "block";
-        else 
-            document.getElementById("overlay").style.display = "none";
-    }
 </script>
-<div id="overlay" > </div>
 <div id="error"></div>
 
 <label for="choose view"> 
@@ -29,9 +21,9 @@
 {/if}
 
 {#if currentRoute.queryParams.details_placeid } 
+    <div id="overlay"></div>
     <article class="popup">
-        {okayPopUp(true)}
-        <header> <a href="/home" on:click={() => {okayPopUp(false)} }> Close </a> </header>
+        <header><a href="/home"> Close </a></header>
         <Location placeid={parseInt(currentRoute.queryParams.details_placeid)}/>
     </article>
 {/if} 
@@ -39,9 +31,8 @@
 
 
 <style>
-    #overlay {
+#overlay {
   position: fixed;
-  display: none;
   width: 100%;
   height: 100%;
   top: 0;
@@ -53,22 +44,23 @@
   cursor: pointer;
 }
 
-    .popup {
-        position: absolute;
-        top: 2em;
-        left: 10%;
-        width: 80%;
-        max-height: 80%;
-        overflow-y: auto;
-        z-index: 50;
-        padding: 0.2em;
-        
-    }
-    .popup header {
-        position: sticky;
-        top: 0;
-        z-index: 51;
-    }
+.popup {
+    position: absolute;
+    top: 2em;
+    left: 10%;
+    width: 80%;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 50;
+    padding: 2em;
+    padding-top: 0;
+}
+.popup header {
+    position: sticky;
+    top: 0;
+    z-index: 51;
+}
 
 </style>
 

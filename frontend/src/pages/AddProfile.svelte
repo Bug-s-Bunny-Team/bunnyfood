@@ -45,7 +45,7 @@
                     <header>
                         <strong>Username</strong>: {_profile.username}
                     </header>
-                    <strong>Followers</strong>: {_profile.followers}
+                    <strong>Followers</strong>: {_profile.followers_count}
                     <footer>
                         <button disabled={disableButtons} on:click={() => {presenter.addProfile(_profile)}}><strong>Segui</strong></button>
                     </footer>            

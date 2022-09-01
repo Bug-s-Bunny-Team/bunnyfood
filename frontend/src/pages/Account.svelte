@@ -11,8 +11,7 @@
 
 <div id="error"></div>
 
-<h2>My Account</h2>
-<h3> Your personal information </h3>
+<h1> Your personal information </h1>
 <article>
     <form>
         <p> Name: { presenter.name }</p>
@@ -32,7 +31,7 @@
         <p>
             <details>
                 <summary>Show Followed</summary>
-                <span><Followed/></span>
+                <div><Followed/></div>
             </details>
         </p>
         <button on:click|preventDefault={presenter.logout} disabled={disableButtons} id="logout">Logout</button>
@@ -43,8 +42,10 @@
 </footer>
 
 <style>
-    details > span {
-        display: block;
+    h1 {
+        --font-size: 1.5rem;
+    }
+    details > div {
         padding: 1em 2em;
     }
 </style>

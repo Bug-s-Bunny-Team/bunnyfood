@@ -25,7 +25,7 @@
                         <header>
                             <strong>Username</strong>: {_followed.username}
                         </header>
-                        <strong>Followers</strong>: {_followed.followers}
+                        <strong>Followers</strong>: {_followed.followers_count}
                         <footer>
                             <button disabled={disableButtons} on:click|preventDefault={() => {presenter.removeFollowed(_followed)}}><strong>Rimuovi</strong></button>
                         </footer>  
