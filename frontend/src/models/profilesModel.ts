@@ -48,8 +48,8 @@ export class ProfilesModel {
             if(response.status == 404) return null;
             throw new RequestError(response.status, response.statusText);
         }
+        if(response.status==204) return undefined;
         const res = await response.json();
-        if(res==JSON.parse('{}')) throw new Error(1, "already followed");
         return res;
     }
 

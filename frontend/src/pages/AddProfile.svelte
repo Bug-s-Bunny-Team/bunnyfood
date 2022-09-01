@@ -45,12 +45,14 @@
                     </footer>            
                 </article>
             </div>
+        {:else if _profile === undefined}
+            <p>You already follow this account</p>
         {:else}
             <p>Couldn't find profile. <strong>You must enter the correct and full username of the profile</strong></p>
         {/if}
     {:catch}
         <p>There has been an error, please try again</p>
-    {/await}
+    {/await}    
 {/if}
 
 

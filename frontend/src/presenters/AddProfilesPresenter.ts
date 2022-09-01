@@ -7,7 +7,7 @@ import ErrorSvelte from "../components/Error.svelte";
 export class AddProfilesPresenter {
 
     searchText: Writable<string> = writable('');
-    profile: Writable<Promise<SocialProfile>> = writable(null);
+    profile: Writable<Promise<SocialProfile | null | undefined>> = writable(null);
     disableButtons: Writable<boolean> = writable(false);
     errorTimeout: NodeJS.Timeout = null;
 
@@ -20,14 +20,8 @@ export class AddProfilesPresenter {
     search() : void {
         this.disableButtons.set(true);
         let promise = ProfilesModel.getInstance().getProfile(get(this.searchText));
-        let already_followed: boolean = false;
-        promise
-            .catch((e: RequestError) => { 
-                if(e.code==1) already_followed=true;
-                else throw e;
-            })
-            .finally(() => {this.disableButtons.set(false)});
-        if(!already_followed) this.profile.set(promise);
+        promise.finally(() => {this.disableButtons.set(false)});
+        this.profile.set(promise);
     }
 
     addProfile(profile: SocialProfile) : void {
