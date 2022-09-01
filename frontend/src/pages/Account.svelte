@@ -19,11 +19,11 @@
         <p>
             Choose your predefined guide:
             <label>
-                <input type=radio id="choosePreferenceM" disabled={disableButtons} on:change={presenter.changePreference} bind:group={presenter.preference} value={1}>
+                <input type=radio id="choosePreferenceM" disabled={$disableButtons} on:change={presenter.changePreference} bind:group={presenter.preference} value={1}>
                 List
             </label>
             <label>
-                <input type=radio id="choosePreferenceL" disabled={disableButtons} on:change={presenter.changePreference} bind:group={presenter.preference} value={0}>
+                <input type=radio id="choosePreferenceL" disabled={$disableButtons} on:change={presenter.changePreference} bind:group={presenter.preference} value={0}>
                 Map
             </label>
         </p>
@@ -33,7 +33,7 @@
                 <div><Followed/></div>
             </details>
         </p>
-        <button on:click|preventDefault={presenter.logout} disabled={disableButtons} id="logout">Logout</button>
+        <button on:click|preventDefault={presenter.logout} disabled={$disableButtons} id="logout">Logout</button>
     </form>
 </article>
 
