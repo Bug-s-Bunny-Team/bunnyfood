@@ -29,10 +29,13 @@ export class Location implements Model {
     id: number;
     name: string;
     position: Position;
+    address: string;
+    maps_place_id: string;
     score: number | null;
 
-    constructor(id: number = 0, name: string = 'default name', position: Position = new Position(0.0, 0.0), score: number = 0.0) {
-        this.id = id; this.name = name; this.position = position; this.score = score;
+    constructor(id: number = 0, name: string = 'default name', position: Position = new Position(0.0, 0.0), 
+                address: string = "", maps_place_id: string = '', score: number = null) {
+        this.id = id; this.name = name; this.position = position; this.address = address; this.maps_place_id = maps_place_id; this.score = score;
     }
 }
 
@@ -53,15 +56,18 @@ export class Info {
     img: any;
     address: string;
     score: number;
+    phone_number: string;
 
-    constructor(name: string, img: any, address:string, score:number) {this.name=name; this.img=img; this.address=address; this.score=score;}
+    constructor(name: string, img: any, address:string, score:number, phone_number = '') {
+        this.name=name; this.img=img; this.address=address; this.score=score; this.phone_number=phone_number;
+    }
 }
 
 export class Filter {
     only_from_followed: boolean;
-    current_lat: number;
-    current_long: number;
-    radius: number;
+    current_lat: number | null;
+    current_long: number | null;
+    radius: number | null;
     min_rating: number;
 
     constructor(only_from_followed: boolean=false, current_lat: number=null, current_long: number=null, radius: number=null, min_rating: number=0.0) {
