@@ -47,6 +47,7 @@ class MapsLocationProvider(BaseLocationProvider):
         place = self._maps.place(place_id=maps_place_id)
         address = place['result']['formatted_address']
         name = place['result']['name']
+        types = place['result']['types']
 
         return LocationData(
             lat=coords['lat'],
@@ -54,4 +55,5 @@ class MapsLocationProvider(BaseLocationProvider):
             address=address,
             maps_name=name,
             maps_place_id=maps_place_id,
+            types=types
         )

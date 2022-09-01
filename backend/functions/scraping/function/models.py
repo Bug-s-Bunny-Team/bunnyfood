@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 
 from common.models import LambdaEvent
 
@@ -24,6 +24,7 @@ class LocationData:
     address: Optional[str] = None
     maps_name: Optional[str] = None
     maps_place_id: Optional[str] = None
+    types: Optional[List[str]] = None
 
 
 @dataclass
@@ -38,3 +39,12 @@ class ScrapedPost:
     @property
     def has_location(self) -> bool:
         return all([self.location_name, self.location_data])
+
+    @property
+    def has_valid_location(self) -> bool:
+        if not self.has_location:
+            return False
+        is_type_valid = True
+        if self.location_data.types:
+            is_type_valid = 'food' in self.location_data.types
+        return is_type_valid

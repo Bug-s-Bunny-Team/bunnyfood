@@ -47,8 +47,8 @@ class ScrapingService(BaseService):
         downloaded_posts = []
 
         for scraped in scraped_posts:
-            if not scraped.has_location:
-                print('post has no location data, skipping')
+            if not scraped.has_valid_location:
+                print('post has no valid location data, skipping')
             else:
                 name = (
                     scraped.location_data.maps_name
