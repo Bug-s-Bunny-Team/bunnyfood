@@ -47,13 +47,12 @@ def get_profile_by_id(
 
 @router.get(
     '/profiles/search/{profile_username}',
-    response_model=schemas.SocialProfile,
-    response_model_exclude_unset=True,
 )
 def search_profile(
     profile_username: str,
     response: Response,
     profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
 ):
     profile = profiles.get_by_username(profile_username)
     if not profile:
@@ -65,7 +64,10 @@ def search_profile(
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail='SocialProfile not found'
             )
-    return profile
+    if profile in user.followed_profiles:
+        response.status_code = status.HTTP_204_NO_CONTENT
+    else:
+        return profile
 
 
 @router.get(

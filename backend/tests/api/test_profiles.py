@@ -70,10 +70,18 @@ def test_get_popular_profiles(api_client):
 
 
 def test_profiles_search_existing(api_client):
-    results = api_client.get('/profiles/search/testprofile1')
+    results = api_client.get('/profiles/search/testprofile4')
 
     assert results.status_code == 200
-    assert results.json()['username'] == 'testprofile1'
+    assert results.json()['username'] == 'testprofile4'
+    assert len(s4.runs) == 0
+
+
+def test_profiles_search_following(api_client):
+    results = api_client.get('/profiles/search/testprofile1')
+
+    assert results.status_code == 204
+    assert not results.json()
     assert len(s4.runs) == 0
 
 

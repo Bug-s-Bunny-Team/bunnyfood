@@ -30,7 +30,7 @@ class ProfilesCRUD(BaseCRUD):
             profiles = profiles.limit(limit)
         return profiles.all()
 
-    def get_by_id(self, profile_id: int):
+    def get_by_id(self, profile_id: int) -> Optional[models.SocialProfile]:
         profile = self._db.query(models.SocialProfile).filter_by(id=profile_id).first()
         return profile
 

@@ -24,7 +24,7 @@ class JWTAuthorizationCredentials(BaseModel):
 
 
 class JWKS(BaseModel):
-    keys: List[JWK]
+    keys: List[JWK] = []
 
     @classmethod
     def from_keys_json(cls, keys_url: Optional[str] = None):
@@ -90,38 +90,13 @@ class JWTBearer(HTTPBearer):
             return jwt_credentials
 
 
-class JWTBearerDev(HTTPBearer):
+class JWTBearerDev(JWTBearer):
     """
     Like JWTBearer, but doesn't actually verify the token. Only for dev purposes.
     """
 
     def __init__(self, auto_error: bool = True):
-        super().__init__(auto_error=auto_error)
+        super().__init__(auto_error=auto_error, jwks=JWKS())
 
-    async def __call__(self, request: Request) -> Optional[JWTAuthorizationCredentials]:
-        credentials: HTTPAuthorizationCredentials = await super().__call__(request)
-
-        if credentials:
-            if not credentials.scheme == 'Bearer':
-                raise HTTPException(
-                    status_code=HTTP_403_FORBIDDEN, detail='Wrong authentication method'
-                )
-
-            jwt_token = credentials.credentials
-
-            message, signature = jwt_token.rsplit('.', 1)
-
-            try:
-                jwt_credentials = JWTAuthorizationCredentials(
-                    jwt_token=jwt_token,
-                    header=jwt.get_unverified_header(jwt_token),
-                    claims=jwt.get_unverified_claims(jwt_token),
-                    signature=signature,
-                    message=message,
-                )
-            except JWTError:
-                raise HTTPException(
-                    status_code=HTTP_403_FORBIDDEN, detail='JWK invalid'
-                )
-
-            return jwt_credentials
+    def verify_jwk_token(self, jwt_credentials: JWTAuthorizationCredentials) -> bool:
+        return True
