@@ -5,7 +5,7 @@ import googlemaps
 from db import get_session, models
 
 # change to 'prod' to run in production db
-ENV = 'prod'
+ENV = 'dev'
 
 
 def main():

@@ -19,6 +19,8 @@ class Location(BaseModel):
     lat: float = 0
     long: float = 0
     score: Optional[float] = None
+    address: Optional[str] = None
+    maps_place_id: Optional[str] = None
 
     class Config:
         orm_mode = True
