@@ -47,8 +47,6 @@ def get_profile_by_id(
 
 @router.get(
     '/profiles/search/{profile_username}',
-    response_model=schemas.SocialProfile,
-    response_model_exclude_unset=True,
 )
 def search_profile(
     profile_username: str,
