@@ -21,8 +21,8 @@ export class LocationPresenter {
             }, 10000);
             google_ready.subscribe(_ready => {
                 if(_ready) {
-                    resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
                     if(timeout) clearTimeout(timeout);
+                    resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
                 }
             });
         }));

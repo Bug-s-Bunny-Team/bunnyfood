@@ -46,7 +46,7 @@ export class Account {
     email: string;
     preference: boolean;
 
-    constructor(idtoken: string, accesstoken: string, accountname: string = '', email: string = '', preference: boolean = true) {
+    constructor(idtoken: string = '', accesstoken: string = '', accountname: string = '', email: string = '', preference: boolean = true) {
         this.idtoken=idtoken; this.accesstoken=accesstoken; this.accountname = accountname; this.email=email; this.preference = preference;
     }
 }
@@ -55,12 +55,12 @@ export class Info {
     name: string; 
     img: any;
     address: string;
-    score: number;
+    score: number | null;
     phone_number: string;
     types: string[];
     website: string;
 
-    constructor(name: string, img: any, address:string, score:number, phone_number = '', types: string[] = [], website: string = '') {
+    constructor(name: string = '', img: any = {height: 0, width: 0, url: '', alt: ''}, address: string = '', score: number | null = null, phone_number = '', types: string[] = [], website: string = '') {
         this.name=name; this.img=img; this.address=address; this.score=score; this.phone_number=phone_number; this.types=types; this.website=website;
     }
 }
@@ -81,5 +81,5 @@ export class RequestError extends Error {
     code: number;
     message: string;
 
-    constructor(code: number, message: string) {super(message); this.code=code; this.message=message;}
+    constructor(code: number = 0, message: string = '') {super(message); this.code=code; this.message=message;}
 }
