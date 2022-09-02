@@ -8,11 +8,12 @@ test("capitalizeFirstLetter", () => {
 })
 
 test("removeChildren", () => {
+    const n_childs = 10;
     const root = document.createElement("div");
-    for(let i: number = 0; i<10; ++i)
+    for(let i: number = 0; i<n_childs; ++i)
         root.appendChild(document.createElement("div"));
 
-    expect(root.childElementCount).toBe(10);
+    expect(root.childElementCount).toBe(n_childs);
     removeChildren(root);
     expect(root.childElementCount).toBe(0);
     removeChildren(root);
