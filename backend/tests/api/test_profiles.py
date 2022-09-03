@@ -1,3 +1,5 @@
+import pytest
+
 from api.s4 import s4
 from db import models
 
@@ -33,6 +35,7 @@ def test_get_followed_profiles(api_client):
     assert results[1]['username'] == 'testprofile3'
 
 
+@pytest.mark.vcr
 def test_follow_profile(api_client, session):
     results = api_client.post('/followed/', json={'username': 'antoniorazzi'})
 
@@ -42,6 +45,7 @@ def test_follow_profile(api_client, session):
     assert followed.followers[0].username == 'testuser'
 
 
+@pytest.mark.vcr
 def test_follow_unexisting_user(api_client, session):
     results = api_client.post('/followed/', json={'username': 'thissurelydoesnotexist43058'})
 
@@ -69,6 +73,7 @@ def test_get_popular_profiles(api_client):
     assert results[2]['username'] == 'testprofile2'
 
 
+@pytest.mark.vcr
 def test_profiles_search_existing(api_client):
     results = api_client.get('/profiles/search/testprofile4')
 
@@ -77,6 +82,7 @@ def test_profiles_search_existing(api_client):
     assert len(s4.runs) == 0
 
 
+@pytest.mark.vcr
 def test_profiles_search_following(api_client):
     results = api_client.get('/profiles/search/testprofile1')
 
@@ -85,6 +91,7 @@ def test_profiles_search_following(api_client):
     assert len(s4.runs) == 0
 
 
+@pytest.mark.vcr
 def test_profiles_search_not_existing(api_client):
     results = api_client.get('/profiles/search/thissurelydoesnotexist43058')
 
@@ -92,6 +99,7 @@ def test_profiles_search_not_existing(api_client):
     assert len(s4.runs) == 0
 
 
+@pytest.mark.vcr
 def test_profiles_search_existing_and_create(api_client):
     results = api_client.get('/profiles/search/antoniorazzi')
 

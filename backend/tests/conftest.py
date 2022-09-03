@@ -2,8 +2,13 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from database import populate_db
+from .database import populate_db
 from db import create_connection_url, models
+
+
+@pytest.fixture(scope='session')
+def vcr_config():
+    return {'record_mode': 'once'}
 
 
 @pytest.fixture(scope='session')

@@ -1,0 +1,49 @@
+interactions:
+- request:
+    body: query=antoniorazzi&type=search_api
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '34'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.28.1
+    method: POST
+    uri: https://gramhir.com/app/controllers/ajax.php
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA0rMK8nPy8wvSqyqytQ3NDU3NDIxsbQ0AgAAAP//AwCdyzkNFwAAAA==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 744f3d493db9ba8b-MXP
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Sat, 03 Sep 2022 14:40:18 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=R%2ByO3sVo8d5fihsGQf9T95DzHI0BzwGAiTnPyggay7AVnMWaSidVva%2BR9Wx1TnXgq%2B0XpdR7kY1o228IZ%2BOidtRTmJW9JaCezCyQCjeIwa8yzpJbPKOBNTcvron9"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1
