@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from database import populate_db
+from .database import populate_db
 from db import create_connection_url, models
 
 
