@@ -1,1 +1,2 @@
 pytest==7.1.2
+pytest-recording==0.12.1

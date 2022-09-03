@@ -7,6 +7,11 @@ from db import create_connection_url, models
 
 
 @pytest.fixture(scope='session')
+def vcr_config():
+    return {'record_mode': 'once'}
+
+
+@pytest.fixture(scope='session')
 def engine():
     return create_engine(
         create_connection_url('user', 'password', 'localhost', 'bunnyfood_test')
