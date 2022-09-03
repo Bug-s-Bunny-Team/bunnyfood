@@ -148,7 +148,7 @@ def _calcComprehendScore(sPost: ScoringPost):
     print('FINAL SCORE =', sPost.finalScore)
 
 def _scoreFaceRekognition(sPost: ScoringPost):
-    with open(Path('MockupFiles/facialAnalysisMOC_4.json'), 'r') as f:
+    with open(Path('tests/fixtures/facialAnalysisMOC_4.json'), 'r') as f:
         response = json.load(f)
 
     faceCount = 0
