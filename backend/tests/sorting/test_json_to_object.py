@@ -6,8 +6,7 @@ import json
 
 class TestSorter(TestCase):
     def test_setup(self):
-        with open(Path('/Users/matte/Documents/GitHub/Università/bunnyfood/backend/tests/mockupFiles'
-                       '/reko_analysis_couple_restaurant.json'), 'r') as file:
+        with open(Path('fixtures/reko_analysis_couple_restaurant.json'), 'r') as file:
             data = json.load(file, object_hook=lambda d: SimpleNamespace(**d))
 
             data_test = data.Labels[0]

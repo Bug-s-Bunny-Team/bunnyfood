@@ -22,29 +22,30 @@ export class LocationModel {
         parentNode.append(attribution_div);
 
         // google will be defined once the application runs
-        let latlng = new google.maps.LatLng(location.position.lat, location.position.long);
         let service = new google.maps.places.PlacesService(attribution_div);
-        let fields = ['place_id', 'name', 'formatted_address', 'photos'];
-
+        let fields = ['photos', 'international_phone_number', 'website', 'types'];
         
-        return new Promise((resolve) => {
-            service.findPlaceFromQuery({query: location.name, fields: fields, locationBias: latlng}, 
-                function(results, status) {
+        return new Promise((resolve, reject) => {
+            service.getDetails({placeId: location.maps_place_id, fields: fields}, 
+                function(result, status) {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
-                            resolve(new Info(results[0].name, 
-                                             results[0].photos && results[0].photos[0] ? 
-                                                    {height: results[0].photos[0].height, 
-                                                     width: results[0].photos[0].width, 
-                                                     url: results[0].photos[0].getUrl(), 
+                            resolve(new Info(location.name, 
+                                             result.photos && result.photos[0] ? 
+                                                    {height: result.photos[0].height, 
+                                                     width: result.photos[0].width, 
+                                                     url: result.photos[0].getUrl(), 
                                                      alt: ""}
                                                 :   {height: 20, 
                                                      width: 400,
                                                      url: "",
                                                      alt: "image unavailable"}, 
-                                             results[0].formatted_address,
-                                             location.score));
+                                             location.address,
+                                             location.score,
+                                             result.international_phone_number,
+                                             result.types,
+                                             result.website));
                         } else {
-                            throw new RequestError(status, "Error with request to G_API");
+                            reject(new RequestError(status, "Error with request to G_API"));
                         }
                 });
         });

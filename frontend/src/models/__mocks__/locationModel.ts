@@ -15,6 +15,6 @@ export class LocationModel {
     }
         
     async getInfo(id: number, parentNode: HTMLElement) : Promise<Info> {
-        return  new Info("mocked name", {height: 1, width: 1, url: "mocked url", alt: ""}, "mocked address", 1);
+        return  new Info("mocked name", {height: 1, width: 1, url: "mocked url", alt: ""}, "mocked address", 1, "2938476528193", ["bar", "restaurant"], "www.google.com");
     }
 }

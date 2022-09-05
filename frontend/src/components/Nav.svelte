@@ -2,12 +2,8 @@
 
     import { NavPresenter } from "../presenters/NavPresenter";
     import ThemeSwitch from "./ThemeSwitch.svelte";
-
     const presenter = new NavPresenter();
-    let routes;
-    presenter.routes.subscribe(new_routes => {
-        routes = new_routes;
-    });
+    let {routes} = presenter;
 
     export let currentRoute;
 
@@ -16,7 +12,7 @@
 
 <nav id="bar">
     <ul>
-        {#each routes as route}
+        {#each $routes as route}
             {#if route.visible}
                 <li>
                     <a

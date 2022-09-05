@@ -1,13 +1,9 @@
-interface Model {
-    id: number;
-}
-
-export class SocialProfile implements Model {
+export class SocialProfile {
     id: number;
     username: string;
     followers_count: number;
 
-    constructor(id: number = 0, username: string = 'default username', followers_count: number = 0) {
+    constructor(id: number = 0, username: string = '', followers_count: number = 0) {
         this.id = id; this.username = username; this.followers_count = followers_count;
     }
 }
@@ -25,14 +21,17 @@ export class Position {
     }
 }
 
-export class Location implements Model {
+export class Location {
     id: number;
     name: string;
     position: Position;
+    address: string;
+    maps_place_id: string;
     score: number | null;
 
-    constructor(id: number = 0, name: string = 'default name', position: Position = new Position(0.0, 0.0), score: number = 0.0) {
-        this.id = id; this.name = name; this.position = position; this.score = score;
+    constructor(id: number = 0, name: string = '', position: Position = new Position(0.0, 0.0), 
+                address: string = "", maps_place_id: string = '', score: number = null) {
+        this.id = id; this.name = name; this.position = position; this.address = address; this.maps_place_id = maps_place_id; this.score = score;
     }
 }
 
@@ -43,7 +42,7 @@ export class Account {
     email: string;
     preference: boolean;
 
-    constructor(idtoken: string, accesstoken: string, accountname: string = 'default name', email: string = 'default email', preference: boolean = true) {
+    constructor(idtoken: string = '', accesstoken: string = '', accountname: string = '', email: string = '', preference: boolean = true) {
         this.idtoken=idtoken; this.accesstoken=accesstoken; this.accountname = accountname; this.email=email; this.preference = preference;
     }
 }
@@ -52,16 +51,21 @@ export class Info {
     name: string; 
     img: any;
     address: string;
-    score: number;
+    score: number | null;
+    phone_number: string;
+    types: string[];
+    website: string;
 
-    constructor(name: string, img: any, address:string, score:number) {this.name=name; this.img=img; this.address=address; this.score=score;}
+    constructor(name: string = '', img: any = {height: 0, width: 0, url: '', alt: ''}, address: string = '', score: number | null = null, phone_number = '', types: string[] = [], website: string = '') {
+        this.name=name; this.img=img; this.address=address; this.score=score; this.phone_number=phone_number; this.types=types; this.website=website;
+    }
 }
 
 export class Filter {
     only_from_followed: boolean;
-    current_lat: number;
-    current_long: number;
-    radius: number;
+    current_lat: number | null;
+    current_long: number | null;
+    radius: number | null;
     min_rating: number;
 
     constructor(only_from_followed: boolean=false, current_lat: number=null, current_long: number=null, radius: number=null, min_rating: number=0.0) {
@@ -73,5 +77,5 @@ export class RequestError extends Error {
     code: number;
     message: string;
 
-    constructor(code: number, message: string) {super(message); this.code=code; this.message=message;}
+    constructor(code: number = 0, message: string = '') {super(message); this.code=code; this.message=message;}
 }

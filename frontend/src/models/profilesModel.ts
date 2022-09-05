@@ -48,6 +48,7 @@ export class ProfilesModel {
             if(response.status == 404) return null;
             throw new RequestError(response.status, response.statusText);
         }
+        if(response.status==204) return undefined;
         const res = await response.json();
         return res;
     }

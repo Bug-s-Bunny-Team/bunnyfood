@@ -1,0 +1,92 @@
+interactions:
+- request:
+    body: query=thissurelydoesnotexist43058&type=search_api
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '49'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - python-requests/2.28.1
+    method: POST
+    uri: https://gramhir.com/app/controllers/ajax.php
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 744f3edb0a2583b4-MXP
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Sat, 03 Sep 2022 14:41:27 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=c6n6Xx5pyJmO5cUdl0VqN70%2FQeOASc6bHCVyHAtnEkbZ7lF46d8XxZzZaltDK53NcE2gih4o3FmOXOwIrgkyEMGNymK%2BCX%2Fsi05GsN9KErV7qrK8EXMslNm%2FYp0n"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Status:
+      - 404 Not Found
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    status:
+      code: 404
+      message: Not Found
+version: 1

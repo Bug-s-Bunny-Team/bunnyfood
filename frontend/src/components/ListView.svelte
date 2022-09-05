@@ -1,13 +1,9 @@
 <script lang="ts">
-    import type { Location } from "../models";
     import { ListPresenter } from "../presenters/ListPresenter";
     import { capitalizeFirstLetter } from "../utils";
 
     let presenter = new ListPresenter();
-    let locations: Promise<Location[]>;
-    let disableButtons: boolean;
-    presenter.disableButtons.subscribe(_disableButtons => { disableButtons = _disableButtons; });
-    presenter.rankedList.subscribe(_rankedList => {locations = _rankedList});
+    let {rankedList, disableButtons} = presenter;
 
     import StarRating from 'svelte-star-rating';
 
@@ -22,25 +18,27 @@
 </script>
 
 <div>
-    <button class="refresh outline" disabled={disableButtons} on:click={presenter.refresh}>Refresh</button>
+    <button class="refresh outline" disabled={$disableButtons} on:click={presenter.refresh}>Refresh</button>
     
-    {#await locations}
+    {#await $rankedList}
         <p>Loading locations...</p>
         <progress />
     {:then locations} 
         {#if locations.length > 0}
             <div class="grid">
                 {#each locations as location}
-                    <article>
-                        <header>
-                            <strong>Location</strong>: <a href="./home?details_placeid={location.id}">{capitalizeFirstLetter(location.name)}</a>
-                        </header>
-                        {#if location.score !== null}
-                            <p><strong>Score</strong>: <StarRating rating={Math.round(location.score*10.0)/10.0} {config} {style}/></p>
-                        {:else}
-                            <p>The Score is unavailable</p>
-                        {/if}
-                </article>
+                    {#if location.score}
+                        <article>
+                            <header>
+                                <strong>Location</strong>: <a href="./home?details_placeid={location.id}">{capitalizeFirstLetter(location.name)}</a>
+                            </header>
+                            {#if location.score !== null}
+                                <p><strong>Score</strong>: <StarRating rating={Math.round(location.score*10.0)/10.0} {config} {style}/></p>
+                            {:else}
+                                <p>The Score is unavailable</p>
+                            {/if}
+                        </article>
+                    {/if}
                 {/each}
             </div>
         {:else}

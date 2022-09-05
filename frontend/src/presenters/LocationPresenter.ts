@@ -15,14 +15,14 @@ export class LocationPresenter {
     }
 
     getInfo() : void {
-        this.info.set(new Promise(resolve => {
+        this.info.set(new Promise((resolve, reject) => {
             let timeout = setTimeout(() => {
-                throw new RequestError(404, "Timeout on loading google api");
+                reject(new RequestError(404, "Timeout on loading google api"));
             }, 10000);
             google_ready.subscribe(_ready => {
                 if(_ready) {
+                    clearTimeout(timeout);
                     resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
-                    if(timeout) clearTimeout(timeout);
                 }
             });
         }));
@@ -32,6 +32,11 @@ export class LocationPresenter {
         let _info: Info = await info;
         _info.name = capitalizeFirstLetter(_info.name);
         _info.address = capitalizeFirstLetter(_info.address);
+        if(_info.types.length) {
+            _info.types.forEach((value, index, array) => {array[index] = value.replaceAll('_', ' ')});
+            _info.types.splice(_info.types.findIndex(value => value==='point of interest'), 1);
+            _info.types.splice(_info.types.findIndex(value => value==='establishment'), 1);
+        }
         return _info;
     }
 }
