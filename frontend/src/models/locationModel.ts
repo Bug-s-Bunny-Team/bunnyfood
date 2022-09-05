@@ -24,9 +24,8 @@ export class LocationModel {
         // google will be defined once the application runs
         let service = new google.maps.places.PlacesService(attribution_div);
         let fields = ['photos', 'international_phone_number', 'website', 'types'];
-
         
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             service.getDetails({placeId: location.maps_place_id, fields: fields}, 
                 function(result, status) {
                         if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -46,7 +45,7 @@ export class LocationModel {
                                              result.types,
                                              result.website));
                         } else {
-                            throw new RequestError(status, "Error with request to G_API");
+                            reject(new RequestError(status, "Error with request to G_API"));
                         }
                 });
         });

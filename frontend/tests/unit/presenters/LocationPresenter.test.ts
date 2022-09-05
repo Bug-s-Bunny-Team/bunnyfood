@@ -28,6 +28,8 @@ describe('TUF4', () => {
             google_ready.set(true);
             const presenter = new LocationPresenter(0);
     
+            jest.runAllTimers();
+            expect(get(presenter.info)).resolves.toBeTruthy();
             const info = await get(presenter.info);
             expect(info).toBeTruthy();
             expect(info.address).toBeTruthy();
@@ -54,7 +56,8 @@ describe('TUF4', () => {
             google_ready.set(false);
             const presenter = new LocationPresenter(0);
             expect(presenter.info).toBeTruthy();
-            expect(jest.runAllTimers).toThrow(new RequestError(404, "Timeout on loading google api"));
+            jest.runAllTimers();
+            expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Timeout on loading google api"));
         })
     });
     
