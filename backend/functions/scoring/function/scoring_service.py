@@ -145,7 +145,7 @@ class BasicScoringService(ScoringService):
         print('Successfully analized textual information')
 
     def _calcFinalScore(self, sPost: ScoringPost):
-        # final score= [0,5] con scarti di 0.5     (se presenti tutti e tre i valori)
+        # final score= [0,5]      (se presenti tutti e tre i valori)
         # composta così:   -2 punti per caption score
         #                  -2 punti per face score
         #                  -1 punto per text on image score
