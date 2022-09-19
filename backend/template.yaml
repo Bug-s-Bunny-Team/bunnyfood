@@ -9,12 +9,6 @@ Parameters:
   RegionName:
     Type: String
     Default: 'eu-central-1'
-#  ApiStageName:
-#    Type: String
-#    Default: 'dev'
-  ApiId:
-    Type: String
-    Default: '43uvev6qfk'
   S4Arn:
     Type: String
     Default: 'arn:aws:states:eu-central-1:104582034671:stateMachine:bunnyfood-sfn'
