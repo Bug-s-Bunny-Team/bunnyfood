@@ -23,14 +23,16 @@ export class ResultsModel {
     }
 
     private constructor() { 
-        this.rankedList.subscribe(rankedList => {
+        this.#rankedList.subscribe(rankedList => {
             if(rankedList) window.sessionStorage.setItem('ResultsModel.rankedList', JSON.stringify(rankedList));
             else window.sessionStorage.removeItem('ResultsModel.rankedList');
         });
     }
 
-    rankedList: Writable<Location[]> = writable();
+    #rankedList: Writable<Location[]> = writable();
     
+    get rankedList() { return this.#rankedList }
+
     async getRankedList(filter: Filter) : Promise<Location[]> {        
         const url = new URL('api/locations/', `${window.location.protocol}//${window.location.host}`);
         for (const field in filter) {
@@ -40,8 +42,8 @@ export class ResultsModel {
         if(!response.ok) throw new RequestError(response.status, response.statusText);
         
         const res = await response.json();
-        this.rankedList.set(this.fixLocations(res));
-        return get(this.rankedList);
+        this.#rankedList.set(this.fixLocations(res));
+        return get(this.#rankedList);
     }
 
     fixLocations(list: any[]) : Location[] {
@@ -50,6 +52,6 @@ export class ResultsModel {
     }
 
     getById(id: number) : Location {
-        return get(this.rankedList).find(location => {return location.id == id});
+        return get(this.#rankedList).find(location => {return location.id == id});
     }
 }
