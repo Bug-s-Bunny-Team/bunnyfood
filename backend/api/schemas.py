@@ -5,6 +5,10 @@ from pydantic import BaseModel
 from db.models import GuideType
 
 
+class ErrorResponse(BaseModel):
+    detail: str
+
+
 class User(BaseModel):
     username: str
 

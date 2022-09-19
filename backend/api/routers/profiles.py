@@ -7,6 +7,7 @@ from api.crud.profiles import ProfilesCRUD
 from api.dependencies import get_user, get_profiles_crud
 from api.routers import APIRouter
 from api.s4 import s4
+from api.schemas import ErrorResponse
 from api.utils import search_social_profile
 from db import models
 
@@ -32,6 +33,7 @@ def get_profiles(
     '/profiles/{profile_id}',
     response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
+    responses={404: {'model': ErrorResponse}},
 )
 def get_profile_by_id(
     profile_id: int,
@@ -47,6 +49,15 @@ def get_profile_by_id(
 
 @router.get(
     '/profiles/search/{profile_username}',
+    response_model=schemas.User,
+    responses={
+        404: {'model': ErrorResponse},
+        201: {
+            'description': 'SocialProfile exists and has been added',
+            'model': schemas.User,
+        },
+        204: {'description': 'User is already following this SocialProfile'},
+    },
 )
 def search_profile(
     profile_username: str,
@@ -73,6 +84,9 @@ def search_profile(
 @router.get(
     '/profiles/popular/{limit}',
     response_model=List[schemas.SocialProfile],
+    responses={
+        400: {'model': ErrorResponse, 'description': 'Too many profiles SocialProfiles requested'}
+    },
 )
 def get_most_popular_profiles(
     limit: int,
@@ -112,6 +126,7 @@ def get_followed_profiles(
     response_model=schemas.SocialProfile,
     response_model_exclude_unset=True,
     status_code=status.HTTP_201_CREATED,
+    responses={404: {'model': ErrorResponse}},
 )
 def follow_profile(
     profile: schemas.FollowedSocialProfile,
@@ -133,9 +148,7 @@ def follow_profile(
     return profile
 
 
-@router.post(
-    '/followed/unfollow/',
-)
+@router.post('/followed/unfollow/', responses={404: {'model': ErrorResponse}})
 def unfollow_profile(
     profile: schemas.FollowedSocialProfile,
     user: models.User = Depends(get_user),

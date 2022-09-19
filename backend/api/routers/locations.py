@@ -7,6 +7,7 @@ from api import schemas
 from api.crud.locations import LocationsCRUD
 from api.dependencies import get_user, get_locations_crud
 from api.routers import APIRouter
+from api.schemas import ErrorResponse
 from db import models
 
 router = APIRouter()
@@ -44,6 +45,7 @@ def get_locations(
     '/locations/{location_id}',
     response_model=schemas.Location,
     response_model_exclude_unset=True,
+    responses={404: {'model': ErrorResponse}},
 )
 def get_location(
     location_id: int,
