@@ -5,7 +5,7 @@ from starlette.status import HTTP_404_NOT_FOUND
 
 from api import schemas
 from api.crud.locations import LocationsCRUD
-from api.dependencies import get_user, get_locations_crud
+from api.dependencies import get_user, get_locations_crud, get_username
 from api.routers import APIRouter
 from api.schemas import ErrorResponse
 from db import models
@@ -50,6 +50,7 @@ def get_locations(
 def get_location(
     location_id: int,
     locations: LocationsCRUD = Depends(get_locations_crud),
+    _=Depends(get_username),
 ):
     location = locations.get_by_id(location_id)
     if not location:

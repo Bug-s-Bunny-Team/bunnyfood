@@ -4,7 +4,7 @@ from fastapi import status, Depends, HTTPException, Response
 
 from api import schemas
 from api.crud.profiles import ProfilesCRUD
-from api.dependencies import get_user, get_profiles_crud
+from api.dependencies import get_user, get_profiles_crud, get_username
 from api.routers import APIRouter
 from api.s4 import s4
 from api.schemas import ErrorResponse
@@ -38,6 +38,7 @@ def get_profiles(
 def get_profile_by_id(
     profile_id: int,
     profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    _=Depends(get_username),
 ):
     profile = profiles.get_by_id(profile_id)
     if not profile:
@@ -85,7 +86,10 @@ def search_profile(
     '/profiles/popular/{limit}',
     response_model=List[schemas.SocialProfile],
     responses={
-        400: {'model': ErrorResponse, 'description': 'Too many profiles SocialProfiles requested'}
+        400: {
+            'model': ErrorResponse,
+            'description': 'Too many profiles SocialProfiles requested',
+        }
     },
 )
 def get_most_popular_profiles(
