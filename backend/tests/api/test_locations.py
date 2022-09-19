@@ -21,9 +21,11 @@ def test_get_all_locations_from_followed(api_client):
 
 def test_get_location_by_id(api_client):
     response = api_client.get('/locations/1')
-
     assert response.status_code == 200
     assert response.json()['name'] == 'testlocation1'
+
+    response = api_client.get('/locations/549656987')
+    assert response.status_code == 404
 
 
 def test_get_locations_coords(api_client):

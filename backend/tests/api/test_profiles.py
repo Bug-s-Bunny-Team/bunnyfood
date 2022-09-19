@@ -16,6 +16,14 @@ def test_get_all_unfollowed_profiles(api_client):
     assert results[2]['username'] == 'testprofile5'
 
 
+def test_get_by_id(api_client):
+    results = api_client.get('/profiles/1')
+    assert results.status_code == 200
+
+    results = api_client.get('/profiles/35456546')
+    assert results.status_code == 404
+
+
 def test_get_all_profiles(api_client):
     results = api_client.get('/profiles/?unfollowed_only=false')
 
@@ -54,16 +62,17 @@ def test_follow_unexisting_user(api_client, session):
 
 def test_unfollow_profile(api_client, session):
     results = api_client.post('/followed/unfollow/', json={'username': 'testprofile3'})
-
     assert results.status_code == 200
 
     unfollowed = session.query(models.SocialProfile).filter_by(id=3).first()
     assert len(unfollowed.followers) == 0
 
+    results = api_client.post('/followed/unfollow/', json={'username': 'thisdoesnotexists213234'})
+    assert results.status_code == 404
+
 
 def test_get_popular_profiles(api_client):
     results = api_client.get('/profiles/popular/5')
-
     assert results.status_code == 200
 
     results = results.json()
@@ -71,6 +80,9 @@ def test_get_popular_profiles(api_client):
     assert results[0]['username'] == 'testprofile4'
     assert results[1]['username'] == 'testprofile5'
     assert results[2]['username'] == 'testprofile2'
+
+    results = api_client.get('/profiles/popular/54867')
+    assert results.status_code == 400
 
 
 @pytest.mark.vcr
