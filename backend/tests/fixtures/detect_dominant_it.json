@@ -1,0 +1,20 @@
+{
+  "ResultList": [
+    {
+      "Index": 0,
+      "Languages": [
+        {
+          "LanguageCode": "it",
+          "Score": 0.99
+        }
+      ]
+    }
+  ],
+  "ErrorList": [
+    {
+      "Index": 123,
+      "ErrorCode": "string",
+      "ErrorMessage": "string"
+    }
+  ]
+}
