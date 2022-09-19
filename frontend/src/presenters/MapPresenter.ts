@@ -6,18 +6,18 @@ import ErrorSvelte from "../components/Error.svelte";
 import * as L from 'leaflet';
 
 export class MapPresenter {
-  rankedList: Writable<Promise<Location[]>> = writable(null);
-  map: any;
-  markerLayers: any;
-  errorTimeout: NodeJS.Timeout = null;
+  #rankedList: Writable<Promise<Location[]>> = writable(null);
+  #map: any;
+  #markerLayers: any;
+  #errorTimeout: NodeJS.Timeout = null;
 
-  lastRefreshPosition: Position = null;
-  lastRefreshZoom: number = null;
-  treshold_a: number = 100000.0;
-  treshold_b: number = 6.2;
+  #lastRefreshPosition: Position = null;
+  #lastRefreshZoom: number = null;
 
-  defaultPosition: Position = new Position(45.420, 11.895);
-  defaultZoom: number = 13;
+  #defaultPosition: Position = new Position(45.420, 11.895);
+  #defaultZoom: number = 13;
+
+  get rankedList() { return this.#rankedList }
 
   constructor() {
     this.resizeMap = this.resizeMap.bind(this);
@@ -29,7 +29,7 @@ export class MapPresenter {
   }
 
   createMap(container: any) {
-    let map = L.map(container).setView([this.defaultPosition.lat, this.defaultPosition.long], this.defaultZoom);
+    let map = L.map(container).setView([this.#defaultPosition.lat, this.#defaultPosition.long], this.#defaultZoom);
     L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
       {
@@ -65,55 +65,55 @@ export class MapPresenter {
   }
 
   initMap(container: any) {
-    this.map = this.createMap(container); 
-    this.markerLayers = L.layerGroup();
-    this.markerLayers.addTo(this.map);
+    this.#map = this.createMap(container); 
+    this.#markerLayers = L.layerGroup();
+    this.#markerLayers.addTo(this.#map);
     this.refresh();
-    this.rankedList.subscribe(this.createAllMarkers);
-    this.map.on("moveend", this.refresh);
+    this.#rankedList.subscribe(this.createAllMarkers);
+    this.#map.on("moveend", this.refresh);
     return {
-      destroy: () => { this.map.remove(); this.map=null; }
+      destroy: () => { this.#map.remove(); this.#map=null; }
     };
 	}
 
   createAllMarkers(rankedList: Promise<Location[]>) {
       rankedList.then(locations => {
-        this.markerLayers.clearLayers();
+        this.#markerLayers.clearLayers();
         locations.forEach(location => {
           let marker = this.createMarker([location.position.lat, location.position.long]);
           marker.bindPopup(this.createPopup(location));
-          this.markerLayers.addLayer(marker);
+          this.#markerLayers.addLayer(marker);
         });
       }).catch((e: RequestError) => { 
         removeChildren(document.getElementById('error')); 
         const message = 'An error occurred, please try again';
         new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
-        this.errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
+        this.#errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
       });
   }
 
   destroy() {
-    if(this.errorTimeout) clearTimeout(this.errorTimeout);
+    if(this.#errorTimeout) clearTimeout(this.#errorTimeout);
   }
 
   resizeMap() {
-    if(this.map) this.map.invalidateSize();
+    if(this.#map) this.#map.invalidateSize();
   }
 
   refresh() {
-    const bounds = this.map.getBounds();
-    const zoom = this.map.getZoom();
+    const bounds = this.#map.getBounds();
+    const zoom = this.#map.getZoom();
     const center = bounds.getCenter();
     const height = bounds.getNorth()-bounds.getSouth();
 
     const currentPosition = new Position(center.lat, center.lng);
 
-    if(!this.lastRefreshPosition || currentPosition.distance(this.lastRefreshPosition)>height/2.0 || Math.abs(zoom-this.lastRefreshZoom)>1) {
+    if(!this.#lastRefreshPosition || currentPosition.distance(this.#lastRefreshPosition)>height/2.0 || Math.abs(zoom-this.#lastRefreshZoom)>1) {
       const radius_meters = this.measure_meters(center.lat, bounds.getWest(), center.lat, bounds.getEast());
       const filter = new Filter(false, currentPosition.lat, currentPosition.long, Math.round(radius_meters), 0.0);
-      this.rankedList.set(ResultsModel.getInstance().getRankedList(filter));
-      this.lastRefreshPosition = currentPosition;
-      this.lastRefreshZoom = zoom;
+      this.#rankedList.set(ResultsModel.getInstance().getRankedList(filter));
+      this.#lastRefreshPosition = currentPosition;
+      this.#lastRefreshZoom = zoom;
     }
   }
 

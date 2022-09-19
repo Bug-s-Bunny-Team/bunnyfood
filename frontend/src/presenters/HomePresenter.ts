@@ -1,12 +1,15 @@
+import { writable, Writable } from "svelte/store";
 import { AccountModel } from "../models/accountModel";
 
 export class HomePresenter {
-    mapView: boolean = true;
+    #mapView: Writable<boolean> = writable(null);
+
+    get mapView() { return this.#mapView }
 
     constructor() {
         const account = AccountModel.getInstance().getAccount();
         if(account) {
-            this.mapView = !account.preference;
+            this.#mapView.set(!account.preference);
         }
     }
 }

@@ -6,15 +6,16 @@
     export let currentRoute: any;
     currentRoute.queryParams = {};
     let presenter = new HomePresenter();
+    let { mapView } = presenter;
 </script>
 <div id="error"></div>
 
 <label for="choose view"> 
     View as Map
-    <input type="checkbox" id="choose" role="switch" bind:checked={presenter.mapView}> 
+    <input type="checkbox" id="choose" role="switch" bind:checked={$mapView}> 
 </label>
 
-{#if presenter.mapView}
+{#if $mapView}
     <Map/>
 {:else}
     <ListView/>

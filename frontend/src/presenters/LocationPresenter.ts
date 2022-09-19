@@ -1,12 +1,14 @@
 import { Info, RequestError } from "../models";
 import { LocationModel } from "../models/locationModel";
-import { get, Writable, writable } from "svelte/store";
+import { Writable, writable } from "svelte/store";
 import { google_ready } from "../store";
 import { capitalizeFirstLetter } from "../utils";
 
 export class LocationPresenter {
     #id: number;
-    info: Writable<Promise<Info>> = writable();
+    #info: Writable<Promise<Info>> = writable();
+
+    get info() { return this.#info }
 
     constructor(id: number) {
         this.#id = id;
@@ -15,7 +17,7 @@ export class LocationPresenter {
     }
 
     getInfo() : void {
-        this.info.set(new Promise((resolve, reject) => {
+        this.#info.set(new Promise((resolve, reject) => {
             let timeout = setTimeout(() => {
                 reject(new RequestError(404, "Timeout on loading google api"));
             }, 10000);

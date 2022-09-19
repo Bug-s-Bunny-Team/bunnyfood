@@ -3,8 +3,11 @@ import { Filter, Location } from "../models";
 import { ResultsModel } from "../models/resultsModel";
 
 export class ListPresenter {
-    rankedList: Writable<Promise<Location[]>> = writable(null);
-    disableButtons: Writable<boolean> = writable(false);
+    #rankedList: Writable<Promise<Location[]>> = writable(null);
+    #disableButtons: Writable<boolean> = writable(false);
+
+    get rankedList() { return this.#rankedList }
+    get disableButtons() { return this.#disableButtons }
 
     constructor() {
         this.refresh = this.refresh.bind(this);
@@ -12,9 +15,9 @@ export class ListPresenter {
     }
 
     refresh() : void {
-        this.disableButtons.set(true);
+        this.#disableButtons.set(true);
         let promise = ResultsModel.getInstance().getRankedList(new Filter(false, null, null, null, 0.0));
-        promise.finally(() => {this.disableButtons.set(false)});
-        this.rankedList.set(promise);
+        promise.finally(() => {this.#disableButtons.set(false)});
+        this.#rankedList.set(promise);
     }
 }

@@ -3,7 +3,7 @@
     import Followed from '../components/Followed.svelte';
     import { AccountPresenter } from '../presenters/AccountPresenter';
     let presenter = new AccountPresenter();
-    let {disableButtons} = presenter;
+    let {disableButtons, preference, name, email } = presenter;
 
     onDestroy(presenter.destroy);
 </script>
@@ -13,17 +13,17 @@
 <h1> Your personal information </h1>
 <article>
     <form>
-        <p> Name: { presenter.name }</p>
-        <p> Email: { presenter.email }</p>
+        <p> Name: { $name }</p>
+        <p> Email: { $email }</p>
 
         <p>
             Choose your predefined guide:
             <label>
-                <input type=radio id="choosePreferenceM" disabled={$disableButtons} on:change={presenter.changePreference} bind:group={presenter.preference} value={1}>
+                <input type=radio id="choosePreferenceM" disabled={$disableButtons} on:change={presenter.changePreference} bind:group={$preference} value={1}>
                 List
             </label>
             <label>
-                <input type=radio id="choosePreferenceL" disabled={$disableButtons} on:change={presenter.changePreference} bind:group={presenter.preference} value={0}>
+                <input type=radio id="choosePreferenceL" disabled={$disableButtons} on:change={presenter.changePreference} bind:group={$preference} value={0}>
                 Map
             </label>
         </p>
