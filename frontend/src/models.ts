@@ -1,8 +1,4 @@
-interface Model {
-    id: number;
-}
-
-export class SocialProfile implements Model {
+export class SocialProfile {
     id: number;
     username: string;
     followers_count: number;
@@ -25,7 +21,7 @@ export class Position {
     }
 }
 
-export class Location implements Model {
+export class Location {
     id: number;
     name: string;
     position: Position;

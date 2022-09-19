@@ -25,7 +25,8 @@ export class RequestOptions {
     static getRequestOptions(account: Account = null) : RequestInit {
         if(!account) account = AccountModel.getInstance().getAccount();
         if(!account) return null;
-        const options = this.#get_request_options;
+        let options : RequestInit  = {};
+        Object.assign(options, this.#get_request_options);
         options.headers['Authorization'] = 'Bearer ' + account.idtoken;
         return options;
     }
@@ -33,7 +34,8 @@ export class RequestOptions {
     static postRequestOptions(account: Account = null) {
         if(!account) account = AccountModel.getInstance().getAccount();
         if(!account) return null;
-        const options = this.#post_request_options;
+        let options : RequestInit = {};
+        Object.assign(options, this.#post_request_options);
         options.headers['Authorization'] = 'Bearer ' + account.idtoken;
         return options;
     }
