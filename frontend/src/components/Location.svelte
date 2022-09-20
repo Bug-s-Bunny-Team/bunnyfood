@@ -1,10 +1,8 @@
-<script lang="ts">
-    import type { Info } from "../models";
-    import type { Writable } from "svelte/store";
+<script>
     import { LocationPresenter } from "../presenters/LocationPresenter";
-    export let placeid: number;
-    let presenter: LocationPresenter;
-    let info: Writable<Promise<Info>> = null;
+    export let placeid;
+    let presenter;
+    let info = null;
 
     onMount(() => {
         presenter = new LocationPresenter(placeid);

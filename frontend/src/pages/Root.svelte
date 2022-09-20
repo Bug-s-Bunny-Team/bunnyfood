@@ -1,6 +1,6 @@
-<script lang="ts">
+<script>
     import { AccountModel } from "../models/accountModel";
-    let completed: Promise<boolean>;
+    let completed;
     
     if(!AccountModel.getInstance().getAccount()) {
         completed = (async () => {

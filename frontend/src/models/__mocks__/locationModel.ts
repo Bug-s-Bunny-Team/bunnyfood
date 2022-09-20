@@ -1,4 +1,5 @@
-import { Info } from '../../models'
+import { Info, RequestError } from '../../models'
+import Infos from '../../../mock/info.json'
 
 export class LocationModel {
     private static locationModelInstance : LocationModel = LocationModel.construct_session();
@@ -15,6 +16,13 @@ export class LocationModel {
     }
         
     async getInfo(id: number, parentNode: HTMLElement) : Promise<Info> {
-        return  new Info("mocked name", {height: 1, width: 1, url: "mocked url", alt: ""}, "mocked address", 1, "2938476528193", ["bar", "restaurant"], "www.google.com");
+        let _info: Info = null;
+        (Infos as any[]).forEach(info => {
+            if(info.id == id) {
+                _info = new Info(info.name, info.img, info.address, info.score, info.phone_number, info.types, info.website);
+            }
+        });
+        if(_info) return _info;
+        else throw new RequestError(404, "Error with request to G_API");
     }
 }

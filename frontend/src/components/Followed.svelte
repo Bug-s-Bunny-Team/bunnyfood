@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import { onDestroy } from 'svelte/internal';
     import { FollowedPresenter } from '../presenters/FollowedPresenter';
     import { Navigate } from 'svelte-router-spa'

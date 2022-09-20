@@ -14,21 +14,23 @@ export class AccountModel {
 
     private constructor() {}
 
-    account: Writable<Account> = writable();
+    #account: Writable<Account> = writable();
+
+    get account() { return this.#account }
     
     async createAccount(): Promise<void> {
-        this.account.set(new Account("", "", "mock accountname", "mock email", false));
+        this.#account.set(new Account("mock_idtoken", "mock_accesstoken", "mock accountname", "mock email", false));
     }
 
     async cambiaPreferenza(newPref: boolean) : Promise<void> {        
-        this.account.update(account => { account.preference = newPref; return account; });
+        this.#account.update(account => { account.preference = newPref; return account; });
     }
 
     logout() : void {
-        this.account.set(null);
+        this.#account.set(null);
     }
 
     getAccount() {
-        return get(this.account);
+        return get(this.#account);
     }
 }

@@ -2,7 +2,7 @@
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVMx0kLnfUJbOXiiEBaQHL7CmtUDTkreI&libraries=places&callback=google_initialize" type="text/javascript"></script>
 </svelte:head>
 
-<script lang="ts">
+<script lang='ts'>
     import './style.css';
     import { Router } from "svelte-router-spa";
     import { AppPresenter } from './presenters/AppPresenter';

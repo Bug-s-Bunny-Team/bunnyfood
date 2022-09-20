@@ -1,4 +1,6 @@
-import { JSDOM } from "jsdom"
-const dom = new JSDOM()
-global.document = dom.window.document
-global.window = dom.window
+import { jest } from '@jest/globals'
+import { AccountModel } from './src/models/accountModel';
+
+jest.mock('./src/models/accountModel');
+
+AccountModel.getInstance().createAccount();

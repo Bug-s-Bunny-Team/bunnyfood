@@ -8,8 +8,6 @@ export class HomePresenter {
 
     constructor() {
         const account = AccountModel.getInstance().getAccount();
-        if(account) {
-            this.#mapView.set(!account.preference);
-        }
+        this.#mapView.set(!account.preference);
     }
 }

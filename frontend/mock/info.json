@@ -1,0 +1,93 @@
+[
+    {
+      "id": 0,
+      "name": "pedrocchi",
+      "address": "Via VIII Febbraio, 15, 35122 Padova PD, Italia",
+      "img": {
+        "width": 200,
+        "height": 400,
+        "url": "www.google.com",
+        "alt": ""
+      }, 
+      "score": 2.5,
+      "phone_number": "347242536",
+      "types": ["bar", "restaurant"],
+      "website": ""
+    },
+    {
+      "id": 1,
+      "name": "bar dei osei",
+      "address": "Via del Portello, 12, 35131 Padova PD, Italia",
+      "img": {
+        "width": 20,
+        "height": 400,
+        "url": "",
+        "alt": "image unavailable"
+      }, 
+      "score": 0,
+      "phone_number": "",
+      "types": [],
+      "website": ""
+    },
+    {
+      "id": 2,
+      "name": "fly bar",
+      "address": "Galleria Tito Livio, 4, 35123 Padova PD, Italia",
+      "img": {
+        "width": 20,
+        "height": 400,
+        "url": "",
+        "alt": "image unavailable"
+      }, 
+      "score": 0,
+      "phone_number": "",
+      "types": [],
+      "website": ""
+    },
+    {
+      "id": 3,
+      "name": "caffeine",
+      "address": "Via Roma, 96, 35122 Padova PD, Italia",
+      "img": {
+        "width": 20,
+        "height": 400,
+        "url": "",
+        "alt": "image unavailable"
+      }, 
+      "score": 0,
+      "phone_number": "",
+      "types": [],
+      "website": ""
+    },
+    {
+      "id": 4,
+      "name": "otvim",
+      "address": "Via Roma, 69, 35122 Padova PD, Italia",
+      "img": {
+        "width": 20,
+        "height": 400,
+        "url": "",
+        "alt": "image unavailable"
+      }, 
+      "score": 0,
+      "phone_number": "",
+      "types": [],
+      "website": ""
+    },
+    {
+      "id": 5,
+      "name": "sumiti",
+      "address": "Via Giambattista Belzoni, 8, 35121 Padova PD, Italia",
+      "img": {
+        "width": 20,
+        "height": 400,
+        "url": "",
+        "alt": "image unavailable"
+      }, 
+      "score": null,
+      "phone_number": "",
+      "types": [],
+      "website": ""
+    }
+]
+  

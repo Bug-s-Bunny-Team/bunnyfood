@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import { ListPresenter } from "../presenters/ListPresenter";
     import { capitalizeFirstLetter } from "../utils";
 
