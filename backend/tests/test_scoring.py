@@ -48,7 +48,8 @@ def test_calcFinalScore(scorer, scored):
     sPost.faceScore = 1
     sPost.textsScore = {0: 1}
     sPost.captionScore = 1
-    score = scorer._calcFinalScore(sPost)
+    scorer._calcFinalScore(sPost)
+    score = sPost.finalScore
 
     assert score == 5
 
