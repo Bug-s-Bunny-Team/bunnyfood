@@ -45,13 +45,20 @@ def test_calcFinalScore(scorer, scored):
             FOR NOW STOP
     '''
     sPost = scored
+
     sPost.faceScore = 1
     sPost.textsScore = {0: 1}
     sPost.captionScore = 1
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
-
     assert score == 5
+
+    sPost.faceScore = 0
+    sPost.textsScore = {0: -1}
+    sPost.captionScore = -1
+    scorer._calcFinalScore(sPost)
+    score = sPost.finalScore
+    assert score == 0
 
 
 
