@@ -1,5 +1,5 @@
-<script lang="ts">
-    export let message: string;
+<script>
+    export let message;
 </script>
 
 <article>

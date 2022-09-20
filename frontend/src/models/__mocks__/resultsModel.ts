@@ -16,11 +16,13 @@ export class ResultsModel {
     private constructor() { 
     }
 
-    rankedList: Writable<Location[]> = writable();
+    #rankedList: Writable<Location[]> = writable();
+   
+    get rankedList() { return this.#rankedList }
     
     async getRankedList(filter: Filter) : Promise<Location[]> {
-        this.rankedList.set(this.fixLocations(locations));
-        return get(this.rankedList);
+        this.#rankedList.set(this.fixLocations(locations));
+        return get(this.#rankedList);
     }
 
     fixLocations(list: any[]) : Location[] {
@@ -28,6 +30,6 @@ export class ResultsModel {
     }
 
     getById(id: number) : Location {
-        return get(this.rankedList).find(location => {return location.id == id});
+        return get(this.#rankedList).find(location => {return location.id == id});
     }
 }

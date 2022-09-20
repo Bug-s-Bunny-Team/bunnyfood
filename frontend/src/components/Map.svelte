@@ -1,6 +1,6 @@
-<script lang="ts">
+<script>
     import { onDestroy } from 'svelte/internal';
-    import { MapPresenter } from '../presenters/MapPresenter.js';
+    import { MapPresenter } from '../presenters/MapPresenter';
     let presenter=new MapPresenter();
     let {rankedList} = presenter;
     onDestroy(presenter.destroy);

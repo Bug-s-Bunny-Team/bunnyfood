@@ -1,7 +1,7 @@
 import { test, expect, describe } from "@jest/globals"
 import { capitalizeFirstLetter, removeChildren } from "../../src/utils";
 
-describe('TUF3', () => {
+describe('TUF2', () => {
     test("1 - capitalizeFirstLetter", () => {
         expect(capitalizeFirstLetter("ciao")).toStrictEqual("Ciao");
         expect(capitalizeFirstLetter("Ciao")).toStrictEqual("Ciao");

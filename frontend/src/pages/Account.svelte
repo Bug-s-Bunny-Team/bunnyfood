@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import { onDestroy } from 'svelte/internal';
     import Followed from '../components/Followed.svelte';
     import { AccountPresenter } from '../presenters/AccountPresenter';

@@ -24,14 +24,16 @@ export class AccountModel {
     }
 
     private constructor() { 
-        this.account.subscribe(account => {
+        this.#account.subscribe(account => {
             if(account) window.sessionStorage.setItem('AccountModel.account', JSON.stringify(account));
             else window.sessionStorage.removeItem('AccountModel.account');
         });
     }
 
-    account: Writable<Account> = writable();
+    #account: Writable<Account> = writable();
     
+    get account() { return this.#account }
+
     async createAccount(): Promise<void> {
         const params = this.getSearchParams();
         const idtoken = params.get('id_token');
@@ -47,7 +49,7 @@ export class AccountModel {
 
         const res = await response.json();
         account.preference = res.default_guide_view == "list" ? true : false;
-        this.account.set(account);
+        this.#account.set(account);
     }
 
     async cambiaPreferenza(newPref: boolean) : Promise<void> {        
@@ -56,15 +58,15 @@ export class AccountModel {
         options.body = JSON.stringify({default_guide_view: newPref == true ? 'list' : 'map'});
         const response = await fetch('api/preferences/', options);
         if(!response.ok) throw new RequestError(response.status, response.statusText);
-        this.account.update(account => { account.preference = newPref; return account; });
+        this.#account.update(account => { account.preference = newPref; return account; });
     }
 
     logout() : void {
-        this.account.set(null);
+        this.#account.set(null);
     }
 
     getAccount() {
-        return get(this.account);
+        return get(this.#account);
     }
 
     private getSearchParams() : URLSearchParams {

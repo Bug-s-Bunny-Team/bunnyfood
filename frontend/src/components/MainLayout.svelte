@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import { Route } from "svelte-router-spa";
     import Nav from "./Nav.svelte";
 
@@ -8,5 +8,5 @@
 
 <Nav {currentRoute} />
 <main class="container">
-    <Route {currentRoute} {params} />
+    <Route {currentRoute} params={params} />
 </main>

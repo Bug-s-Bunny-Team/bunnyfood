@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 
     import { NavPresenter } from "../presenters/NavPresenter";
     import ThemeSwitch from "./ThemeSwitch.svelte";
