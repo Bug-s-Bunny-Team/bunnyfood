@@ -27,3 +27,10 @@ def test_get_last_post(scraper):
     post = scraper.get_last_post('antoniorazzi')
 
     assert post
+
+
+@pytest.mark.vcr
+def test_get_last_posts(scraper):
+    posts = scraper.get_last_posts('antoniorazzi', 5)
+
+    assert len(posts) == 5
