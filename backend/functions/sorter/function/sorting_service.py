@@ -157,3 +157,7 @@ class SorterService(BaseService):
                 valid_posts.append({'id': sorting_post.id})
 
         return {'posts_count': len(valid_posts), 'posts': valid_posts}
+
+    @property
+    def rekognition(self):
+        return self._rekognition
