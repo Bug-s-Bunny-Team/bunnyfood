@@ -13,7 +13,7 @@ export class SocialProfile {
         id: number().required().integer().min(0),
         username: string().required().min(1),
         followers_count: number().required().integer().min(0)
-    })
+    });
 }
 
 export class Position {
@@ -31,7 +31,7 @@ export class Position {
     static schema = object({
         lat: number().positive(),
         long: number().positive()
-    })
+    });
 }
 
 export class Location {
@@ -54,7 +54,7 @@ export class Location {
         address: string().required().min(1),
         maps_placeid: string().required().length(27),
         score: number().nullable().min(0.0).max(5.0)
-    })
+    });
 }
 
 export class Account {
@@ -74,7 +74,7 @@ export class Account {
         accountname: string().required().min(1),
         email: string().required().email(),
         preference: boolean().required()
-    })
+    });
 }
 
 export class Info {
@@ -108,7 +108,7 @@ export class Info {
         phone_number: string().required().min(0),
         types: array().required(),
         website: string().required().min(0)
-    })
+    });
 }
 
 export class Filter {
@@ -128,7 +128,7 @@ export class Filter {
         current_long: number().nullable(),
         radius: number().nullable(),
         min_rating: number().required().min(0.0).max(5.0)
-    })
+    });
 }
 
 export class RequestError extends Error {
@@ -140,5 +140,5 @@ export class RequestError extends Error {
     static schema = object({
         code: number().required().min(0).max(600),
         message: string().required().min(1)
-    })
+    });
 }

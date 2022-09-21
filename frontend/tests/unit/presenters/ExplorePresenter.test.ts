@@ -2,11 +2,11 @@ import { jest, test, expect, beforeEach, describe } from '@jest/globals';
 import { get } from 'svelte/store';
 import { RequestError, SocialProfile } from '../../../src/models';
 import { ProfilesModel } from '../../../src/models/profilesModel';
-import { FollowedPresenter } from '../../../src/presenters/FollowedPresenter'
+import { ExplorePresenter } from '../../../src/presenters/ExplorePresenter'
 import { removeChildren } from '../../../src/utils';
 
 jest.mock('../../../src/models/profilesModel');
-ProfilesModel.getInstance().removeFollowed = jest.fn()  .mockResolvedValueOnce(undefined)
+ProfilesModel.getInstance().followProfile = jest.fn()   .mockResolvedValueOnce(undefined)
                                                         .mockRejectedValueOnce(new RequestError(400, "a"))
                                                         .mockRejectedValueOnce(new RequestError(400, "a"));
 
@@ -18,17 +18,17 @@ beforeEach(() => {
 
 describe('TUF8', () => {
     test('1 - constructor', () => {
-        const tmp = FollowedPresenter.prototype.refresh;
-        FollowedPresenter.prototype.refresh = jest.fn();
+        const tmp = ExplorePresenter.prototype.refresh;
+        ExplorePresenter.prototype.refresh = jest.fn();
         
-        new FollowedPresenter();
-        expect(FollowedPresenter.prototype.refresh).toHaveBeenCalledTimes(1);
+        new ExplorePresenter();
+        expect(ExplorePresenter.prototype.refresh).toHaveBeenCalledTimes(1);
         
-        FollowedPresenter.prototype.refresh = tmp;
+        ExplorePresenter.prototype.refresh = tmp;
     })
     
     test('2 - refresh', async () => {
-        let presenter = new FollowedPresenter();
+        let presenter = new ExplorePresenter();
         await get(presenter.profiles);
     
         expect(get(presenter.disableButtons)).toStrictEqual(false);
@@ -46,15 +46,15 @@ describe('TUF8', () => {
         })
     })
 
-    describe('3 - removeFollowed', () => {
+    describe('3 - addProfile', () => {
         test('noexcept', async () => {
-            let presenter = new FollowedPresenter();
+            let presenter = new ExplorePresenter();
             presenter.refresh = jest.fn();
 
             const list = await get(presenter.profiles)
         
-            let promise = presenter.removeFollowed(list[0]);
-            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledWith(list[0]);
+            let promise = presenter.addProfile(list[0]);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledWith(list[0]);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
             expect(presenter.refresh).not.toHaveBeenCalled();
             
@@ -65,13 +65,13 @@ describe('TUF8', () => {
         })
 
         test('exception', async () => {
-            let presenter = new FollowedPresenter();
+            let presenter = new ExplorePresenter();
             presenter.refresh = jest.fn();
     
             const list = await get(presenter.profiles)
             
-            let promise = presenter.removeFollowed(list[0]);
-            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledWith(list[0]);
+            let promise = presenter.addProfile(list[0]);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledWith(list[0]);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
             expect(presenter.refresh).not.toHaveBeenCalled();
             
@@ -89,11 +89,11 @@ describe('TUF8', () => {
 
     describe('4 - destroy', () => {
         test('running timer', async () => {
-            let presenter = new FollowedPresenter();
+            let presenter = new ExplorePresenter();
             presenter.refresh = jest.fn();
     
             const list = await get(presenter.profiles)
-            await presenter.removeFollowed(list[0]);
+            await presenter.addProfile(list[0]);
             expect(jest.getTimerCount()).toStrictEqual(1);
             expect(document.getElementById('error').childElementCount).toStrictEqual(1); // one error
             
@@ -104,7 +104,7 @@ describe('TUF8', () => {
         })
 
         test('no running timer', () => {
-            let presenter = new FollowedPresenter();
+            let presenter = new ExplorePresenter();
             presenter.destroy();
             
             expect(jest.getTimerCount()).toStrictEqual(0);

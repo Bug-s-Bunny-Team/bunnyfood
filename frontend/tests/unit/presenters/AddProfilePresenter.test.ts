@@ -2,11 +2,11 @@ import { jest, test, expect, beforeEach, describe } from '@jest/globals';
 import { get } from 'svelte/store';
 import { RequestError, SocialProfile } from '../../../src/models';
 import { ProfilesModel } from '../../../src/models/profilesModel';
-import { FollowedPresenter } from '../../../src/presenters/FollowedPresenter'
+import { AddProfilesPresenter } from '../../../src/presenters/AddProfilesPresenter'
 import { removeChildren } from '../../../src/utils';
 
 jest.mock('../../../src/models/profilesModel');
-ProfilesModel.getInstance().removeFollowed = jest.fn()  .mockResolvedValueOnce(undefined)
+ProfilesModel.getInstance().followProfile = jest.fn()   .mockResolvedValueOnce(undefined)
                                                         .mockRejectedValueOnce(new RequestError(400, "a"))
                                                         .mockRejectedValueOnce(new RequestError(400, "a"));
 
@@ -16,68 +16,64 @@ beforeEach(() => {
     removeChildren(document.getElementById('error'));
 })
 
+const test_username = "antoniorazzi";
+
 describe('TUF8', () => {
-    test('1 - constructor', () => {
-        const tmp = FollowedPresenter.prototype.refresh;
-        FollowedPresenter.prototype.refresh = jest.fn();
-        
-        new FollowedPresenter();
-        expect(FollowedPresenter.prototype.refresh).toHaveBeenCalledTimes(1);
-        
-        FollowedPresenter.prototype.refresh = tmp;
-    })
     
-    test('2 - refresh', async () => {
-        let presenter = new FollowedPresenter();
-        await get(presenter.profiles);
+    test('1 - search', async () => {
+        let presenter = new AddProfilesPresenter();
+        await get(presenter.profile);
+        presenter.searchText.set(test_username);
     
         expect(get(presenter.disableButtons)).toStrictEqual(false);
-        presenter.refresh();
+        presenter.search();
         expect(get(presenter.disableButtons)).toStrictEqual(true);
     
-        const profiles_prom = get(presenter.profiles);
+        const profiles_prom = get(presenter.profile);
         expect(profiles_prom).toBeTruthy();
-        const profiles = await profiles_prom;
+        const profile = await profiles_prom;
         expect(get(presenter.disableButtons)).toStrictEqual(false);
     
-        expect(profiles.length).toBeGreaterThan(0);
-        profiles.forEach(profile => {
-            expect(SocialProfile.schema.isValid(profile)).toBeTruthy();
-        })
+        expect(SocialProfile.schema.isValid(profile)).toBeTruthy();
+        expect(profile.username).toStrictEqual(test_username);
     })
 
-    describe('3 - removeFollowed', () => {
+    describe('2 - addProfile', () => {
         test('noexcept', async () => {
-            let presenter = new FollowedPresenter();
-            presenter.refresh = jest.fn();
+            let presenter = new AddProfilesPresenter();
+            presenter.searchText.set(test_username);
+            presenter.search();
 
-            const list = await get(presenter.profiles)
+            const profile = await get(presenter.profile)
         
-            let promise = presenter.removeFollowed(list[0]);
-            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledWith(list[0]);
+            let promise = presenter.addProfile(profile);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledWith(profile);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
-            expect(presenter.refresh).not.toHaveBeenCalled();
             
             await expect(promise).resolves.toStrictEqual(undefined);
             expect(document.getElementById('error').childElementCount).toStrictEqual(0); // no errors
-            expect(presenter.refresh).toHaveBeenCalledTimes(1); // successfully finished promise
+            expect(get(presenter.searchText)).toStrictEqual('');
+            expect(get(presenter.profile)).toStrictEqual(null);
+            expect(get(presenter.disableButtons)).toStrictEqual(false);
             expect(jest.getTimerCount()).toStrictEqual(0);
         })
 
         test('exception', async () => {
-            let presenter = new FollowedPresenter();
-            presenter.refresh = jest.fn();
-    
-            const list = await get(presenter.profiles)
-            
-            let promise = presenter.removeFollowed(list[0]);
-            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledWith(list[0]);
+            let presenter = new AddProfilesPresenter();
+            presenter.searchText.set(test_username);
+            presenter.search();
+
+            const profile = await get(presenter.profile)
+        
+            let promise = presenter.addProfile(profile);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledWith(profile);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
-            expect(presenter.refresh).not.toHaveBeenCalled();
             
             await expect(promise).resolves.toStrictEqual(undefined);
             expect(document.getElementById('error').childElementCount).toStrictEqual(1); // one error
-            expect(presenter.refresh).toHaveBeenCalledTimes(1); // successfully finished promise
+            expect(get(presenter.searchText)).toStrictEqual('');
+            expect(get(presenter.profile)).toStrictEqual(null);
+            expect(get(presenter.disableButtons)).toStrictEqual(false);
             expect(jest.getTimerCount()).toStrictEqual(1);
 
             jest.runAllTimers();
@@ -87,13 +83,14 @@ describe('TUF8', () => {
         })
     })
 
-    describe('4 - destroy', () => {
+    describe('3 - destroy', () => {
         test('running timer', async () => {
-            let presenter = new FollowedPresenter();
-            presenter.refresh = jest.fn();
-    
-            const list = await get(presenter.profiles)
-            await presenter.removeFollowed(list[0]);
+            let presenter = new AddProfilesPresenter();
+            presenter.searchText.set(test_username);
+            presenter.search();
+
+            const profile = await get(presenter.profile)
+            await presenter.addProfile(profile);
             expect(jest.getTimerCount()).toStrictEqual(1);
             expect(document.getElementById('error').childElementCount).toStrictEqual(1); // one error
             
@@ -104,7 +101,7 @@ describe('TUF8', () => {
         })
 
         test('no running timer', () => {
-            let presenter = new FollowedPresenter();
+            let presenter = new AddProfilesPresenter();
             presenter.destroy();
             
             expect(jest.getTimerCount()).toStrictEqual(0);

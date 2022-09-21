@@ -28,9 +28,9 @@ export class AddProfilesPresenter {
         this.#profile.set(promise);
     }
 
-    addProfile(profile: SocialProfile) : void {
+    async addProfile(profile: SocialProfile) : Promise<void> {
         this.#disableButtons.set(true);
-        ProfilesModel.getInstance().followProfile(profile)
+        return ProfilesModel.getInstance().followProfile(profile)
             .catch((e: RequestError) => { 
                 removeChildren(document.getElementById('error')); 
                 const message = 'An error occurred, please try again';
