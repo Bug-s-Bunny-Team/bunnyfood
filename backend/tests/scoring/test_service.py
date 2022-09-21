@@ -1,10 +1,7 @@
-import boto3
 import pytest
-from functions.scoring.function.scoring_service import BasicScoringService
-from functions.scoring.function.models import ScoringPost
-from sqlalchemy.orm import Session
-from mocks import ClientMock
 
+from functions.scoring.function.models import ScoringPost
+from functions.scoring.function.scoring_service import BasicScoringService
 
 '''class RekoMock(ClientMock):
     def __init__(
@@ -27,14 +24,16 @@ from mocks import ClientMock
         return self.load_json_fixture(self.detect_text_resp)
 '''
 
+
 @pytest.fixture
-def scorer():
-    session = Session()
+def scorer(session):
     return BasicScoringService(session)
+
 
 @pytest.fixture
 def scored():
-    return ScoringPost('0','ab','0',{0: ''})
+    return ScoringPost('0', 'ab', '0', {0: ''})
+
 
 def test_calcFinalScore(scorer, scored):
     '''
@@ -59,6 +58,3 @@ def test_calcFinalScore(scorer, scored):
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
     assert score == 0
-
-
-
