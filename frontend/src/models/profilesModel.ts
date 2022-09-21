@@ -16,7 +16,7 @@ export class ProfilesModel {
     private constructor() { 
     }
 
-    async getFollowed() {        
+    async getFollowed() : Promise<SocialProfile[]> {        
         const response = await fetch('api/followed/', RequestOptions.getRequestOptions());
         if(!response.ok) throw new RequestError(response.status, response.statusText);
         

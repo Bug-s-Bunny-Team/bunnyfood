@@ -1,6 +1,6 @@
 import type { RequestError, SocialProfile } from "../models";
 import { ProfilesModel } from "../models/profilesModel";
-import { writable, Writable } from "svelte/store";
+import { get, writable, Writable } from "svelte/store";
 import { error_duration, removeChildren } from "../utils";
 import ErrorSvelte from "../components/Error.svelte";
 
@@ -21,16 +21,19 @@ export class FollowedPresenter {
     }
 
     refresh() : void {
+        if(get(this.#profiles) !== null) console.log("finally")
         this.#disableButtons.set(true);
         let promise = ProfilesModel.getInstance().getFollowed();
         promise.finally(() => {this.#disableButtons.set(false)});
         this.#profiles.set(promise);    
     }
 
-    removeFollowed(followed: SocialProfile) : void {
+    async removeFollowed(followed: SocialProfile) : Promise<void> {
         this.#disableButtons.set(true);
-        ProfilesModel.getInstance().removeFollowed(followed)
+        return ProfilesModel.getInstance().removeFollowed(followed)
+            .then(() => console.log("success"))
             .catch((e: RequestError) => { 
+                console.log("error");
                 removeChildren(document.getElementById('error')); 
                 const message = 'An error occurred, please try again';
                 new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
@@ -40,6 +43,9 @@ export class FollowedPresenter {
     }
 
     destroy() {
-        if(this.#errorTimeout) clearTimeout(this.#errorTimeout);
+        if(this.#errorTimeout) {
+            removeChildren(document.getElementById('error'));
+            clearTimeout(this.#errorTimeout)
+        }
     }
 }

@@ -5,20 +5,19 @@ describe('TUF1', () => {
     describe("SocialProfile", () => {
         const test_cases: {id: any, username: any, followers_count: any}[] = [
             {id: 13, username: "test user", followers_count: 64},
-            {id: 0, username: "", followers_count: 0},
-            {id: null, username: null, followers_count: null},
-            {id: undefined, username: undefined, followers_count: undefined}
+            {id: 0, username: "", followers_count: 0}
         ]
     
         test.each(test_cases)("1 - constructor", test_case => {
             const {id, username, followers_count} = test_case;
-            const soc = new SocialProfile(id, username, followers_count);
-            expect(soc.id)
+            const mod = new SocialProfile(id, username, followers_count);
+            expect(mod.id)
                 .toStrictEqual(id !== undefined ? id as number : 0);
-            expect(soc.username)
+            expect(mod.username)
                 .toStrictEqual(username !== undefined ? username as string : '');
-            expect(soc.followers_count)
+            expect(mod.followers_count)
                 .toStrictEqual(followers_count !== undefined ? followers_count as number : 0);
+            expect(SocialProfile.schema.isValid(mod)).toBeTruthy();
         })
         test.each(test_cases)("2 - equality", test_case => {
             const {id, username, followers_count} = test_case;
@@ -37,9 +36,7 @@ describe('TUF1', () => {
     describe("Position", () => {
         const test_cases: {lat: any, long: any}[] = [
             {lat: 15.2, long: 100.4},
-            {lat: 0.0, long: 0.0},
-            {lat: null, long: null},
-            {lat: undefined, long: undefined}
+            {lat: 0.0, long: 0.0}
         ]
     
         test.each(test_cases)("1 - constructor", test_case => {
@@ -47,6 +44,7 @@ describe('TUF1', () => {
             const mod = new Position(lat, long);
             expect(mod.lat)
                 .toStrictEqual(lat !== undefined ? lat as number : 0);
+            expect(Position.schema.isValid(mod)).toBeTruthy();
         })
         test.each(test_cases)("2 - equality", test_case => {
             const {lat, long} = test_case;
@@ -71,10 +69,9 @@ describe('TUF1', () => {
     
     describe("Location", () => {
         const test_cases: {id: any, name: any, position: any, address: any, maps_place_id: any, score: any}[] = [
-            {id: 15, name: "test name", position: new Position(34.2, 12.1), address: "test address", maps_place_id: "test placeid", score: 4.2},
-            {id: 0, name: "", position: new Position(0.0, 0.0), address: "", maps_place_id: "", score: 0.0},
-            {id: null, name: null, position: null, address: null, maps_place_id: null, score: null},
-            {id: undefined, name: undefined, position: undefined, address: undefined, maps_place_id: undefined, score: undefined}
+            {id: 15, name: "test name", position: new Position(34.2, 12.1), address: "test address", maps_place_id: "ChIJzR55PvjPfkcRJ7lxtptJGLM", score: 4.2},
+            {id: 0, name: "", position: new Position(0.1, 0.1), address: "", maps_place_id: "ChIJzR55PvjPfkcRJ7lxtptJGLM", score: 0.0},
+            {id: 13, name: "test name", position: new Position(0.1, 0.1), address: "", maps_place_id: "ChIJzR55PvjPfkcRJ7lxtptJGLM", score: null},
         ]
     
         test.each(test_cases)("1 - constructor", (test_case) => {
@@ -92,6 +89,7 @@ describe('TUF1', () => {
                 .toStrictEqual(maps_place_id !== undefined ? maps_place_id as string : '');
             expect(mod.score)
                 .toStrictEqual(score !== undefined ? score as number : null);
+            expect(Location.schema.isValid(mod)).toBeTruthy();
         })
         test.each(test_cases)("2 - equality", (test_case) => {
             const {id, name, position, address, maps_place_id, score} = test_case;
@@ -108,10 +106,8 @@ describe('TUF1', () => {
     
     describe("Account", () => {
         const test_cases: {idtoken: any, accesstoken: any, accountname: any, email: any, preference: any}[] = [
-            {idtoken: "test idtoken", accesstoken: "test accesstoken", accountname: "test accountname", email: "test email", preference: true},
-            {idtoken: "", accesstoken: "", accountname: "", email: "", preference: false},        
-            {idtoken: null, accesstoken: null, accountname: null, email: null, preference: null},        
-            {idtoken: undefined, accesstoken: undefined, accountname: undefined, email: undefined, preference: undefined},        
+            {idtoken: "test idtoken", accesstoken: "test accesstoken", accountname: "test accountname", email: "smxcnvladihf@gmail.com", preference: true},
+            {idtoken: "a", accesstoken: "a", accountname: "a", email: "google@gmail.com", preference: false},      
         ]
     
         test.each(test_cases)("1 - constructor", (test_case) => {
@@ -127,6 +123,7 @@ describe('TUF1', () => {
                 .toStrictEqual(email !== undefined ? email as string: '');
             expect(mod.preference)
                 .toStrictEqual(preference !== undefined ? preference as boolean : true);
+            expect(Account.schema.isValid(mod)).toBeTruthy();
         })
         test.each(test_cases)("2 - equality", (test_case) => {
             const {idtoken, accesstoken, accountname, email, preference} = test_case;
@@ -141,10 +138,8 @@ describe('TUF1', () => {
     
     describe("Info", () => {
         const test_cases: {name: any, img: any, address: any, score: any, phone_number: any, types: any, website: any}[] = [
-            {name: 15, img: {height: 4000, width: 2000, url: 'www.google.com', alt: 'test alt'}, address: "test address", score: 3.0, types: ["test type 1", "test type 2"], phone_number: "94327569238", website: "www.google.com"},
-            {name: 0, img: {height: 0, width: 0, url: '', alt: ''}, address: "", score: 0.0, types: [], phone_number: "", website: ""},
-            {name: null, img: {height: null, width: null, url: null, alt: null}, address: null, score: null, types: null, phone_number: null, website: null},
-            {name: undefined, img: undefined, address: undefined, score: undefined, types: undefined, phone_number: undefined, website: undefined}
+            {name: "Pedrocchi", img: {height: 4000, width: 2000, url: 'www.google.com', alt: ''}, address: "test address", score: 3.0, types: ["test type 1", "test type 2"], phone_number: "94327569238", website: "www.google.com"},
+            {name: "a", img: {height: 20, width: 400, url: '', alt: 'image unavailable'}, address: "", score: 0.0, types: [], phone_number: "", website: ""}
         ]
     
         test.each(test_cases)("1 - constructor", (test_case) => {
@@ -164,6 +159,7 @@ describe('TUF1', () => {
                 .toStrictEqual(types !== undefined ? types as string[] : []);
             expect(mod.website)
                 .toStrictEqual(website !== undefined ? website as string : '');
+            expect(Info.schema.isValid(mod)).toBeTruthy();
         })
         test.each(test_cases)("2 - equality", (test_case) => {
             const {name, img, address, score, phone_number, types, website} = test_case;
@@ -182,8 +178,7 @@ describe('TUF1', () => {
         const test_cases: {only_from_followed: any, current_lat: any, current_long: any, radius: any, min_rating: any}[] = [
             {only_from_followed: true, current_lat: 54.5, current_long: 45.4, radius: 3000, min_rating: 1.2},
             {only_from_followed: false, current_lat: 0.0, current_long: 0.0, radius: 0, min_rating: 0.0},
-            {only_from_followed: null, current_lat: null, current_long: null, radius: null, min_rating: null},
-            {only_from_followed: undefined, current_lat: undefined, current_long: undefined, radius: undefined, min_rating: undefined}
+            {only_from_followed: false, current_lat: null, current_long: null, radius: null, min_rating: 0.0},
         ]
     
         test.each(test_cases)("1 - constructor", (test_case) => {
@@ -199,6 +194,7 @@ describe('TUF1', () => {
                 .toStrictEqual(radius !== undefined ? radius as number : null);
             expect(mod.min_rating)
                 .toStrictEqual(min_rating !== undefined ? min_rating as number : 0.0);
+            expect(Filter.schema.isValid(mod)).toBeTruthy();
         })
         test.each(test_cases)("2 - equality", (test_case) => {
             const {only_from_followed, current_lat, current_long, radius, min_rating} = test_case;
@@ -216,9 +212,7 @@ describe('TUF1', () => {
     describe("RequestError", () => {
         const test_cases: {code: any, message: any}[] = [
             {code: 400, message: "test message"},
-            {code: 0, message: ""},
-            {code: null, message: null},
-            {code: undefined, message: undefined}
+            {code: 0, message: "a"},
         ]
     
         test.each(test_cases)("1 - constructor", (test_case) => {
@@ -228,6 +222,7 @@ describe('TUF1', () => {
                 .toStrictEqual(code !== undefined ? code as number : 0);
             expect(mod.message)
                 .toStrictEqual(message !== undefined ? message as string : '');
+            expect(RequestError.schema.isValid(mod)).toBeTruthy();
         })
         test.each(test_cases)("2 - equality", (test_case) => {
             const {code, message} = test_case;

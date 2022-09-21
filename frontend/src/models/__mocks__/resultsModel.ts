@@ -1,6 +1,6 @@
 import { get, Writable, writable } from 'svelte/store';
 import { Filter, Location, Position } from '../../models'
-import locations from '../../../mock/locations.json'
+import Locations from '../../../mock/locations.json'
 
 export class ResultsModel {
     private static resultsModelInstance : ResultsModel = ResultsModel.construct_session();
@@ -21,7 +21,7 @@ export class ResultsModel {
     get rankedList() { return this.#rankedList }
     
     async getRankedList(filter: Filter) : Promise<Location[]> {
-        this.#rankedList.set(this.fixLocations(locations));
+        this.#rankedList.set(this.fixLocations(Locations));
         return get(this.#rankedList);
     }
 

@@ -1,5 +1,6 @@
 import { jest, test, expect, beforeEach, describe } from '@jest/globals';
 import { get } from 'svelte/store';
+import { Location } from '../../../src/models';
 import { ListPresenter } from '../../../src/presenters/ListPresenter'
 
 jest.mock('../../../src/models/resultsModel');
@@ -34,15 +35,7 @@ describe('TUF3', () => {
     
         expect(list.length).toBeGreaterThan(0);
         list.forEach(location => {
-            expect(location).toBeTruthy();
-            expect(location.id).toBeGreaterThanOrEqual(0);
-            expect(location.name).toBeTruthy();
-            expect(location.position).toBeTruthy();
-            expect(location.position.lat).toBeTruthy();
-            expect(location.position.long).toBeTruthy();
-            expect(location.score).not.toStrictEqual(undefined);
-            expect(location.address).toBeTruthy();
-            expect(location.maps_place_id).toBeTruthy();
+            expect(Location.schema.isValid(location)).toBeTruthy();
         })
     })
 })

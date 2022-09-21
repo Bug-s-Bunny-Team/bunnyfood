@@ -40,6 +40,9 @@ export class ExplorePresenter {
     }
 
     destroy() {
-        if(this.#errorTimeout) clearTimeout(this.#errorTimeout);
+        if(this.#errorTimeout) {
+          removeChildren(document.getElementById('error'));
+          clearTimeout(this.#errorTimeout)
+        } 
     }
 }

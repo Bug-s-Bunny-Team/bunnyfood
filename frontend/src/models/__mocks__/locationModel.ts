@@ -16,13 +16,8 @@ export class LocationModel {
     }
         
     async getInfo(id: number, parentNode: HTMLElement) : Promise<Info> {
-        let _info: Info = null;
-        (Infos as any[]).forEach(info => {
-            if(info.id == id) {
-                _info = new Info(info.name, info.img, info.address, info.score, info.phone_number, info.types, info.website);
-            }
-        });
-        if(_info) return _info;
+        let info: Info = Infos.find(info => info.id==id);
+        if(info) return new Info(info.name, info.img, info.address, info.score, info.phone_number, info.types, info.website);
         else throw new RequestError(404, "Error with request to G_API");
     }
 }

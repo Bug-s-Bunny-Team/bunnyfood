@@ -1,6 +1,6 @@
 import { jest, test, describe, expect, beforeEach } from '@jest/globals';
 import { get } from 'svelte/store';
-import { RequestError } from '../../../src/models';
+import { Info, RequestError } from '../../../src/models';
 import { LocationPresenter } from '../../../src/presenters/LocationPresenter'
 import { google_ready } from '../../../src/store';
 
@@ -34,22 +34,7 @@ describe.each(test_cases)('TUF4', id => {
                 jest.runAllTimers();
                 expect(get(presenter.info)).resolves.toBeTruthy();
                 const info = await get(presenter.info);
-                expect(info).toBeTruthy();
-                expect(info.address).toBeTruthy();
-                expect(info.img).toBeTruthy();
-                if(!info.img.alt) {
-                    expect(info.img.height).toBeTruthy();
-                    expect(info.img.width).toBeTruthy();
-                    expect(info.img.url).toBeDefined();
-                    expect(info.img.alt).toBeDefined();
-                }
-                expect(info.name).toBeTruthy();
-                expect(info.score).not.toStrictEqual(undefined);
-                expect(info.phone_number).toBeDefined();
-                expect(info.website).toBeDefined();
-                expect(info.types).toBeTruthy();
-                expect(info.types).not.toContain("establishment");
-                expect(info.types).not.toContain("point of interest");
+                expect(Info.schema.isValid(info)).toBeTruthy();
         
                 expect(info.name.charAt(0) == info.name.charAt(0).toUpperCase()).toBeTruthy();
                 expect(info.address.charAt(0) == info.address.charAt(0).toUpperCase()).toBeTruthy();

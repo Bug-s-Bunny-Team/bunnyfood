@@ -1,5 +1,6 @@
 import { Writable, writable, get } from 'svelte/store';
 import { Account } from '../../models'
+import Preference from '../../../mock/preferences.json'
 
 export class AccountModel {
     private static accountModelInstance : AccountModel = AccountModel.construct_session();
@@ -19,7 +20,7 @@ export class AccountModel {
     get account() { return this.#account }
     
     async createAccount(): Promise<void> {
-        this.#account.set(new Account("mock_idtoken", "mock_accesstoken", "mock accountname", "mock email", false));
+        this.#account.set(new Account("mock_idtoken", "mock_accesstoken", "mock accountname", "mock email", Preference.default_guide_view == 'map' ? true : false));
     }
 
     async cambiaPreferenza(newPref: boolean) : Promise<void> {        
