@@ -20,10 +20,13 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_profiles(
-    unfollowed_only: bool = True,
-    profiles: ProfilesCRUD = Depends(get_profiles_crud),
-    user: models.User = Depends(get_user),
+        unfollowed_only: bool = True,
+        profiles: ProfilesCRUD = Depends(get_profiles_crud),
+        user: models.User = Depends(get_user),
 ):
+    """
+    Get all SocialProfiles. By default only unfollowed by the user.
+    """
     if unfollowed_only:
         return profiles.get_all(user)
     return profiles.get_all()
@@ -36,10 +39,13 @@ def get_profiles(
     responses={404: {'model': ErrorResponse}},
 )
 def get_profile_by_id(
-    profile_id: int,
-    profiles: ProfilesCRUD = Depends(get_profiles_crud),
-    _=Depends(get_username),
+        profile_id: int,
+        profiles: ProfilesCRUD = Depends(get_profiles_crud),
+        _=Depends(get_username),
 ):
+    """
+    Get a SocialProfile by its ID
+    """
     profile = profiles.get_by_id(profile_id)
     if not profile:
         raise HTTPException(
@@ -61,11 +67,15 @@ def get_profile_by_id(
     },
 )
 def search_profile(
-    profile_username: str,
-    response: Response,
-    profiles: ProfilesCRUD = Depends(get_profiles_crud),
-    user: models.User = Depends(get_user),
+        profile_username: str,
+        response: Response,
+        profiles: ProfilesCRUD = Depends(get_profiles_crud),
+        user: models.User = Depends(get_user),
 ):
+    """
+    Search a SocialProfile by its username. If already existing, just return it.
+    If new, start S4 on such profile and return it.
+    """
     profile = profiles.get_by_username(profile_username)
     if not profile:
         if search_social_profile(profile_username):
@@ -93,10 +103,15 @@ def search_profile(
     },
 )
 def get_most_popular_profiles(
-    limit: int,
-    profiles: ProfilesCRUD = Depends(get_profiles_crud),
-    user: models.User = Depends(get_user),
+        limit: int,
+        profiles: ProfilesCRUD = Depends(get_profiles_crud),
+        user: models.User = Depends(get_user),
 ):
+    """
+    Get the most followed SocialProfiles.
+    If the number of popular profiles is less than specified, more will be added
+    even if without any followers.
+    """
     if limit > 20:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -118,9 +133,12 @@ def get_most_popular_profiles(
     response_model_exclude_unset=True,
 )
 def get_followed_profiles(
-    user: models.User = Depends(get_user),
-    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+        user: models.User = Depends(get_user),
+        profiles: ProfilesCRUD = Depends(get_profiles_crud),
 ):
+    """
+    Get all followed SocialProfiles by the user.
+    """
     followed = profiles.get_user_followed(user)
     return followed
 
@@ -133,10 +151,13 @@ def get_followed_profiles(
     responses={404: {'model': ErrorResponse}},
 )
 def follow_profile(
-    profile: schemas.FollowedSocialProfile,
-    profiles: ProfilesCRUD = Depends(get_profiles_crud),
-    user: models.User = Depends(get_user),
+        profile: schemas.FollowedSocialProfile,
+        profiles: ProfilesCRUD = Depends(get_profiles_crud),
+        user: models.User = Depends(get_user),
 ):
+    """
+    Follow a SocialProfile, by its username.
+    """
     profile_username = profile.username
     profile = profiles.get_by_username(profile_username)
 
@@ -154,10 +175,13 @@ def follow_profile(
 
 @router.post('/followed/unfollow/', responses={404: {'model': ErrorResponse}})
 def unfollow_profile(
-    profile: schemas.FollowedSocialProfile,
-    user: models.User = Depends(get_user),
-    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+        profile: schemas.FollowedSocialProfile,
+        user: models.User = Depends(get_user),
+        profiles: ProfilesCRUD = Depends(get_profiles_crud),
 ):
+    """
+    Unfollow a SocialProfile followed by the user.
+    """
     db_profile = profiles.get_by_username(profile.username)
     if not db_profile:
         raise HTTPException(
