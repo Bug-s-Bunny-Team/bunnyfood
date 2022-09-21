@@ -15,9 +15,12 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_user_prefs(
-    user: models.User = Depends(get_user),
-    prefs: PreferencesCRUD = Depends(get_prefs_crud),
+        user: models.User = Depends(get_user),
+        prefs: PreferencesCRUD = Depends(get_prefs_crud),
 ):
+    """
+    Get the user saved preferences.
+    """
     return prefs.get_from_user(user)
 
 
@@ -27,8 +30,11 @@ def get_user_prefs(
     response_model_exclude_unset=True,
 )
 def update_user_prefs(
-    updated_prefs: schemas.UserPreferences,
-    user: models.User = Depends(get_user),
-    prefs: PreferencesCRUD = Depends(get_prefs_crud),
+        updated_prefs: schemas.UserPreferences,
+        user: models.User = Depends(get_user),
+        prefs: PreferencesCRUD = Depends(get_prefs_crud),
 ):
+    """
+    Update the user preferences.
+    """
     return prefs.update(updated_prefs, user)
