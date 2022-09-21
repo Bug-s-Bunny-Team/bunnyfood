@@ -1,4 +1,5 @@
 import pytest
+from sqlalchemy.orm import Session
 
 from functions.scoring.function.models import ScoringPost
 from functions.scoring.function.scoring_service import BasicScoringService
@@ -26,7 +27,8 @@ from functions.scoring.function.scoring_service import BasicScoringService
 
 
 @pytest.fixture
-def scorer(session):
+def scorer():
+    session = Session()
     return BasicScoringService(session)
 
 
