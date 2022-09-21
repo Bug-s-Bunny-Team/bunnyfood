@@ -55,7 +55,6 @@ def test_calcFinalScore_all_present(scorer, scored, face_score, texts_score, cap
     score = sPost.finalScore
     assert score == expected_final_score
 
-
 def test_calcFinalScore_all_missing(scorer, scored):
     sPost = scored
 
@@ -66,7 +65,6 @@ def test_calcFinalScore_all_missing(scorer, scored):
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
     assert score is None
-
 
 @pytest.mark.parametrize("face_score, texts_score, caption_score, caption, expected_final_score",[
     (1,{},None,' ', 5),
@@ -83,7 +81,6 @@ def test_calcFinalScore_one_present(scorer, scored, face_score, texts_score, cap
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
     assert score == expected_final_score
-
 
 @pytest.mark.parametrize("face_score, texts_score, caption_score, caption, expected_final_score", [
     (1, {0:1}, None, ' ', 5),
