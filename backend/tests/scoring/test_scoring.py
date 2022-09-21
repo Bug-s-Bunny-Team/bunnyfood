@@ -1,29 +1,9 @@
+import json
 import pytest
+from pathlib import Path
 from sqlalchemy.orm import Session
-
 from functions.scoring.function.models import ScoringPost
 from functions.scoring.function.scoring_service import BasicScoringService
-
-'''class RekoMock(ClientMock):
-    def __init__(
-        self,
-        detect_faces_resp: str = 'detect_faces.json',
-        detect_labels_resp: str = 'detect_labels.json',
-        detect_text_resp: str = 'detect_text.json'
-    ):
-        self.detect_faces_resp = detect_faces_resp
-        self.detect_labels_resp = detect_labels_resp
-        self.detect_text_resp = detect_text_resp
-
-    def detect_faces(self, *args, **kwargs):
-        return self.load_json_fixture(self.detect_faces_resp)
-
-    def detect_labels(self, *args, **kwargs):
-        return self.load_json_fixture(self.detect_labels_resp)
-
-    def detect_text(self, *args, **kwargs):
-        return self.load_json_fixture(self.detect_text_resp)
-'''
 
 
 '''@pytest.fixture
@@ -40,6 +20,12 @@ def scored():
     return ScoringPost('0', 'ab', '0', {0: ''})
 
 
+def load_json_fixture(path: str) -> dict:
+
+    path = '../tests/fixtures' / Path(path)
+    with open(path, 'r') as f:
+        return json.load(f)
+
 @pytest.mark.parametrize("face_score, texts_score, caption_score, expected_final_score",[
     (1,{0:1},1,5),
     (0,{0:-1},-1,0),
@@ -47,23 +33,22 @@ def scored():
 ])
 def test_calcFinalScore_all_present(scorer, scored, face_score, texts_score, caption_score, expected_final_score):
     sPost = scored
-
     sPost.faceScore = face_score
     sPost.textsScore = texts_score
     sPost.captionScore = caption_score
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
+
     assert score == expected_final_score
 
 def test_calcFinalScore_all_missing(scorer, scored):
     sPost = scored
-
     sPost.caption = ' '
     sPost.textsScore = {}
     sPost.faceScore = None
-
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
+
     assert score is None
 
 @pytest.mark.parametrize("face_score, texts_score, caption_score, caption, expected_final_score",[
@@ -73,13 +58,13 @@ def test_calcFinalScore_all_missing(scorer, scored):
 ])
 def test_calcFinalScore_one_present(scorer, scored, face_score, texts_score, caption_score, caption, expected_final_score):
     sPost = scored
-
     sPost.caption=caption
     sPost.faceScore = face_score
     sPost.textsScore = texts_score
     sPost.captionScore = caption_score
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
+
     assert score == expected_final_score
 
 @pytest.mark.parametrize("face_score, texts_score, caption_score, caption, expected_final_score", [
@@ -87,38 +72,34 @@ def test_calcFinalScore_one_present(scorer, scored, face_score, texts_score, cap
     (1, {}, 1, 'aba', 5),
     (None, {0:1}, 1, 'aba', 5)
 ])
-def test_calcFinalScore_two_present(scorer, scored, face_score, texts_score, caption_score, caption,
-                                    expected_final_score):
+def test_calcFinalScore_two_present(scorer, scored, face_score, texts_score, caption_score, caption, expected_final_score):
     sPost = scored
-
     sPost.caption = caption
     sPost.faceScore = face_score
     sPost.textsScore = texts_score
     sPost.captionScore = caption_score
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
+
     assert score == expected_final_score
 
-@pytest.fixture
-def text_result():
-
-
-@pytest.fixture
-def face_result():
-
-
-def test__parse_rekognition_response(scorer, scored, text_result, face_result):
+@pytest.mark.parametrize("face_result_path, expected_score", [
+    ("facialAnalysisMOC_empty.json", None),
+    ("facialAnalysisMOC_max_happy.json",1),
+])
+def test_face_scoring(scorer, scored, face_result_path, expected_score):
     '''
-    TODO:   text on screen empty, face empty
-            text on screen empty, face all not valid
-            text on screen empty, face max happy
-            text on screen empty, face max calm
-            text on screen empty, face mid happy mid disgust
-            text on screen not empty, face empty
-            tex on screen empty, face max
-            MIGHT BE GOOD TO TEST FACES AND TEXT ON SCREEN SEPARETELY
+    TODO:   face empty
+            face all not valid
+            face max happy
+            face max calm
+            face mid happy mid disgust
     '''
     sPost = scored
+    text_result={}
+    face_result=load_json_fixture(face_result_path)
     scorer.__parse_rekognition_response(sPost,text_result,face_result)
+    '''error: BasicScoringService object has no attribute __parse_rekognition_response'''
 
-    assert sPost.texts[id==0]=='testcase'
+    assert sPost.faceScore == expected_score
+
