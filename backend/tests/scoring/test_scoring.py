@@ -26,37 +26,78 @@ from functions.scoring.function.scoring_service import BasicScoringService
 '''
 
 
+'''@pytest.fixture
+def scorer(session):
+    return BasicScoringService(session)'''
+
 @pytest.fixture
 def scorer():
     session = Session()
     return BasicScoringService(session)
-
 
 @pytest.fixture
 def scored():
     return ScoringPost('0', 'ab', '0', {0: ''})
 
 
-def test_calcFinalScore(scorer, scored):
-    '''
-    TODO:   all max score
-            all min score
-            one max rest none (foreach)
-            all none
-            FOR NOW STOP
-    '''
+@pytest.mark.parametrize("face_score, texts_score, caption_score, expected_final_score",[
+    (1,{0:1},1,5),
+    (0,{0:-1},-1,0),
+    (0.5,{0:0},0,2.5)
+])
+def test_calcFinalScore_all_present(scorer, scored, face_score, texts_score, caption_score, expected_final_score):
     sPost = scored
 
-    sPost.faceScore = 1
-    sPost.textsScore = {0: 1}
-    sPost.captionScore = 1
+    sPost.faceScore = face_score
+    sPost.textsScore = texts_score
+    sPost.captionScore = caption_score
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
-    assert score == 5
+    assert score == expected_final_score
 
-    sPost.faceScore = 0
-    sPost.textsScore = {0: -1}
-    sPost.captionScore = -1
+
+def test_calcFinalScore_all_missing(scorer, scored):
+    sPost = scored
+
+    sPost.caption = ' '
+    sPost.textsScore = {}
+    sPost.faceScore = None
+
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
-    assert score == 0
+    assert score is None
+
+
+@pytest.mark.parametrize("face_score, texts_score, caption_score, caption, expected_final_score",[
+    (1,{},None,' ', 5),
+    (None, {0:1}, None, ' ', 5),
+    (None, {}, 1, 'aba', 5)
+])
+def test_calcFinalScore_one_present(scorer, scored, face_score, texts_score, caption_score, caption, expected_final_score):
+    sPost = scored
+
+    sPost.caption=caption
+    sPost.faceScore = face_score
+    sPost.textsScore = texts_score
+    sPost.captionScore = caption_score
+    scorer._calcFinalScore(sPost)
+    score = sPost.finalScore
+    assert score == expected_final_score
+
+
+@pytest.mark.parametrize("face_score, texts_score, caption_score, caption, expected_final_score", [
+    (1, {0:1}, None, ' ', 5),
+    (1, {}, 1, 'aba', 5),
+    (None, {0:1}, 1, 'aba', 5)
+])
+def test_calcFinalScore_two_present(scorer, scored, face_score, texts_score, caption_score, caption,
+                                    expected_final_score):
+    sPost = scored
+
+    sPost.caption = caption
+    sPost.faceScore = face_score
+    sPost.textsScore = texts_score
+    sPost.captionScore = caption_score
+    scorer._calcFinalScore(sPost)
+    score = sPost.finalScore
+    assert score == expected_final_score
