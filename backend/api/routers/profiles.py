@@ -20,9 +20,9 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_profiles(
-        unfollowed_only: bool = True,
-        profiles: ProfilesCRUD = Depends(get_profiles_crud),
-        user: models.User = Depends(get_user),
+    unfollowed_only: bool = True,
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
 ):
     """
     Get all SocialProfiles. By default only unfollowed by the user.
@@ -39,9 +39,9 @@ def get_profiles(
     responses={404: {'model': ErrorResponse}},
 )
 def get_profile_by_id(
-        profile_id: int,
-        profiles: ProfilesCRUD = Depends(get_profiles_crud),
-        _=Depends(get_username),
+    profile_id: int,
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    _=Depends(get_username),
 ):
     """
     Get a SocialProfile by its ID
@@ -67,10 +67,10 @@ def get_profile_by_id(
     },
 )
 def search_profile(
-        profile_username: str,
-        response: Response,
-        profiles: ProfilesCRUD = Depends(get_profiles_crud),
-        user: models.User = Depends(get_user),
+    profile_username: str,
+    response: Response,
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
 ):
     """
     Search a SocialProfile by its username. If already existing, just return it.
@@ -103,9 +103,9 @@ def search_profile(
     },
 )
 def get_most_popular_profiles(
-        limit: int,
-        profiles: ProfilesCRUD = Depends(get_profiles_crud),
-        user: models.User = Depends(get_user),
+    limit: int,
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
 ):
     """
     Get the most followed SocialProfiles.
@@ -133,8 +133,8 @@ def get_most_popular_profiles(
     response_model_exclude_unset=True,
 )
 def get_followed_profiles(
-        user: models.User = Depends(get_user),
-        profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
 ):
     """
     Get all followed SocialProfiles by the user.
@@ -151,9 +151,9 @@ def get_followed_profiles(
     responses={404: {'model': ErrorResponse}},
 )
 def follow_profile(
-        profile: schemas.FollowedSocialProfile,
-        profiles: ProfilesCRUD = Depends(get_profiles_crud),
-        user: models.User = Depends(get_user),
+    profile: schemas.FollowedSocialProfile,
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    user: models.User = Depends(get_user),
 ):
     """
     Follow a SocialProfile, by its username.
@@ -175,9 +175,9 @@ def follow_profile(
 
 @router.post('/followed/unfollow/', responses={404: {'model': ErrorResponse}})
 def unfollow_profile(
-        profile: schemas.FollowedSocialProfile,
-        user: models.User = Depends(get_user),
-        profiles: ProfilesCRUD = Depends(get_profiles_crud),
+    profile: schemas.FollowedSocialProfile,
+    user: models.User = Depends(get_user),
+    profiles: ProfilesCRUD = Depends(get_profiles_crud),
 ):
     """
     Unfollow a SocialProfile followed by the user.

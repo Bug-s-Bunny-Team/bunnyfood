@@ -19,15 +19,15 @@ router = APIRouter()
     response_model_exclude_unset=True,
 )
 def get_locations(
-        only_from_followed: bool = True,
-        lat: Optional[float] = None,
-        long: Optional[float] = None,
-        current_lat: Optional[float] = None,
-        current_long: Optional[float] = None,
-        radius: Optional[int] = None,
-        min_rating: Optional[float] = None,
-        user: models.User = Depends(get_user),
-        locations: LocationsCRUD = Depends(get_locations_crud),
+    only_from_followed: bool = True,
+    lat: Optional[float] = None,
+    long: Optional[float] = None,
+    current_lat: Optional[float] = None,
+    current_long: Optional[float] = None,
+    radius: Optional[int] = None,
+    min_rating: Optional[float] = None,
+    user: models.User = Depends(get_user),
+    locations: LocationsCRUD = Depends(get_locations_crud),
 ):
     """
     Get a list of all scraped Locations.
@@ -51,9 +51,9 @@ def get_locations(
     responses={404: {'model': ErrorResponse}},
 )
 def get_location(
-        location_id: int,
-        locations: LocationsCRUD = Depends(get_locations_crud),
-        _=Depends(get_username),
+    location_id: int,
+    locations: LocationsCRUD = Depends(get_locations_crud),
+    _=Depends(get_username),
 ):
     """
     Get a Location by its ID.
