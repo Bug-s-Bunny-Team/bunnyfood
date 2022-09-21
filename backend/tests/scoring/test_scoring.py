@@ -98,3 +98,27 @@ def test_calcFinalScore_two_present(scorer, scored, face_score, texts_score, cap
     scorer._calcFinalScore(sPost)
     score = sPost.finalScore
     assert score == expected_final_score
+
+@pytest.fixture
+def text_result():
+
+
+@pytest.fixture
+def face_result():
+
+
+def test__parse_rekognition_response(scorer, scored, text_result, face_result):
+    '''
+    TODO:   text on screen empty, face empty
+            text on screen empty, face all not valid
+            text on screen empty, face max happy
+            text on screen empty, face max calm
+            text on screen empty, face mid happy mid disgust
+            text on screen not empty, face empty
+            tex on screen empty, face max
+            MIGHT BE GOOD TO TEST FACES AND TEXT ON SCREEN SEPARETELY
+    '''
+    sPost = scored
+    scorer.__parse_rekognition_response(sPost,text_result,face_result)
+
+    assert sPost.texts[id==0]=='testcase'
