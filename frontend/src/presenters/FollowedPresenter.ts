@@ -21,7 +21,6 @@ export class FollowedPresenter {
     }
 
     refresh() : void {
-        if(get(this.#profiles) !== null) console.log("finally")
         this.#disableButtons.set(true);
         let promise = ProfilesModel.getInstance().getFollowed();
         promise.finally(() => {this.#disableButtons.set(false)});
@@ -31,9 +30,7 @@ export class FollowedPresenter {
     async removeFollowed(followed: SocialProfile) : Promise<void> {
         this.#disableButtons.set(true);
         return ProfilesModel.getInstance().removeFollowed(followed)
-            .then(() => console.log("success"))
             .catch((e: RequestError) => { 
-                console.log("error");
                 removeChildren(document.getElementById('error')); 
                 const message = 'An error occurred, please try again';
                 new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
