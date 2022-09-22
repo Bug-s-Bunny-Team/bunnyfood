@@ -133,3 +133,14 @@ def test_caption_scoring(scorer, scored, comprehend_result_path, expected_score)
     scorer._BasicScoringService__parse_comprehend_response(sPost, comprehend_result)
 
     assert sPost.textsScore == expected_score
+
+@pytest.mark.parametrize("dominant_language_response_path, expected_result",[
+    ("dominantLanguageResponseMOC_it.json", 'it'),
+    ("dominantLanguageResponseMOC_en.json", 'en'),
+    ("dominantLanguageResponseMOC_de.json", 'de')
+])
+def test_dominant_language_parsing(scorer, dominant_language_response_path, expected_result):
+    dominant_language_response = load_json_fixture(dominant_language_response_path)
+    result = scorer._BasicScoringService__parse_dominant_language_response(dominant_language_response)
+
+    assert result == expected_result
