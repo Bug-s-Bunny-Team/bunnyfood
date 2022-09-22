@@ -20,7 +20,7 @@ def scorer():
 
 @pytest.fixture
 def scored():
-    return ScoringPost('0', 'ab', '0', {0: ''})
+    return ScoringPost('0', 'caption', '0', {0: ''})
 
 
 def load_json_fixture(path: str) -> dict:
@@ -183,5 +183,17 @@ def test_caption_scoring(scorer, scored, comprehend_result_path, expected_score)
 def test_dominant_language_parsing(scorer, dominant_language_response_path, expected_result):
     dominant_language_response = load_json_fixture(dominant_language_response_path)
     result = scorer._BasicScoringService__parse_dominant_language_response(dominant_language_response)
+
+    assert result == expected_result
+
+@pytest.mark.parametrize("texts, expected_result", [
+    ({0: 'FIRST', 1: 'SECOND', 2: 'THIRD'}, ['CAPTION', 'FIRST', 'SECOND', 'THIRD']),
+    ({}, ['CAPTION'])
+])
+def test_post_unpacker_for_comprehend(scorer, scored, texts, expected_result):
+    sPost = scored
+    sPost.caption = 'CAPTION'
+    sPost.texts = texts
+    result = scorer._BasicScoringService__unpack_post_for_comprehend(sPost)
 
     assert result == expected_result
