@@ -56,14 +56,17 @@ def get_profile_by_id(
 
 @router.get(
     '/profiles/search/{profile_username}',
-    response_model=schemas.User,
+    response_model=schemas.SocialProfile,
     responses={
-        404: {'model': ErrorResponse},
+        200: {
+            'description': 'SocialProfile exists and already added',
+        },
         201: {
             'description': 'SocialProfile exists and has been added',
-            'model': schemas.User,
+            'model': schemas.SocialProfile,
         },
         204: {'description': 'User is already following this SocialProfile'},
+        404: {'model': ErrorResponse},
     },
 )
 def search_profile(
