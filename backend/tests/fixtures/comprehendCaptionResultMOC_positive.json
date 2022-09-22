@@ -1,0 +1,26 @@
+{
+  "ResultList": [
+    {
+      "Index": 0,
+      "Sentiment": "POSITIVE",
+      "SentimentScore": {
+        "Positive": 1,
+        "Negative": 0,
+        "Neutral": 0,
+        "Mixed": 0
+      }
+    }
+  ],
+  "ErrorList": [],
+  "ResponseMetadata": {
+    "RequestId": "3b371595-f6de-4515-8d59-a91c27fff23a",
+    "HTTPStatusCode": 200,
+    "HTTPHeaders": {
+      "x-amzn-requestid": "3b371595-f6de-4515-8d59-a91c27fff23a",
+      "content-type": "application/x-amz-json-1.1",
+      "content-length": "911",
+      "date": "Thu, 22 Sep 2022 13:52:26 GMT"
+    },
+    "RetryAttempts": 0
+  }
+}
