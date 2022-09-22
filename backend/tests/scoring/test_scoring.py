@@ -85,21 +85,27 @@ def test_calcFinalScore_two_present(scorer, scored, face_score, texts_score, cap
 
 @pytest.mark.parametrize("face_result_path, expected_score", [
     ("facialAnalysisMOC_empty.json", None),
+    ("facialAnalysisMOC_all_not_valid.json", None),
     ("facialAnalysisMOC_max_happy.json",1),
+    ("facialAnalysisMOC_max_calm.json",0.5),
+    ("facialAnalysisMOC_half_happy_half_disgusted.json",0)
 ])
 def test_face_scoring(scorer, scored, face_result_path, expected_score):
-    '''
-    TODO:   face empty
-            face all not valid
-            face max happy
-            face max calm
-            face mid happy mid disgust
-    '''
     sPost = scored
-    text_result={}
+    text_result=load_json_fixture('textOnPictureMOC_empty.json')
     face_result=load_json_fixture(face_result_path)
-    scorer.__parse_rekognition_response(sPost,text_result,face_result)
-    '''error: BasicScoringService object has no attribute __parse_rekognition_response'''
+    scorer._BasicScoringService__parse_rekognition_response(sPost,text_result,face_result)
 
     assert sPost.faceScore == expected_score
 
+@pytest.mark.parametrize("text_result_path, expected_text", [
+    ("textOnPictureMOC_empty.json", {}),
+    ("textOnPictureMOC_not_empty.json", {0: 'FIRST', 1: 'SECOND', 2: 'THIRD'})
+])
+def test_text_on_picture(scorer, scored, text_result_path, expected_text):
+    sPost = scored
+    text_result = load_json_fixture(text_result_path)
+    face_result = load_json_fixture("facialAnalysisMOC_empty.json")
+    scorer._BasicScoringService__parse_rekognition_response(sPost, text_result, face_result)
+
+    assert sPost.texts == expected_text
