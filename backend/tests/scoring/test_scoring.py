@@ -109,3 +109,27 @@ def test_text_on_picture(scorer, scored, text_result_path, expected_text):
     scorer._BasicScoringService__parse_rekognition_response(sPost, text_result, face_result)
 
     assert sPost.texts == expected_text
+
+@pytest.mark.parametrize("comprehend_result_path, expected_score", [
+    ("comprehendCaptionResultMOC_positive.json", 1),
+    ("comprehendCaptionResultMOC_negative.json", -1),
+    ("comprehendCaptionResultMOC_neutral.json", 0)
+])
+def test_caption_scoring(scorer, scored, comprehend_result_path, expected_score):
+    sPost = scored
+    comprehend_result = load_json_fixture(comprehend_result_path)
+    scorer._BasicScoringService__parse_comprehend_response(sPost, comprehend_result)
+
+    assert sPost.captionScore == expected_score
+
+@pytest.mark.parametrize("comprehend_result_path, expected_score", [
+    ("comprehendTextsResultMOC_positive.json", {0: 1, 1: 1, 2: 1}),
+    ("comprehendTextsResultMOC_negative.json", {0: -1, 1: -1, 2: -1}),
+    ("comprehendTextsResultMOC_neutral.json", {0: 0, 1: 0, 2: 0})
+])
+def test_caption_scoring(scorer, scored, comprehend_result_path, expected_score):
+    sPost = scored
+    comprehend_result = load_json_fixture(comprehend_result_path)
+    scorer._BasicScoringService__parse_comprehend_response(sPost, comprehend_result)
+
+    assert sPost.textsScore == expected_score
