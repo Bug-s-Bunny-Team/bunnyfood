@@ -39,24 +39,24 @@ def _chooseMOC():
     #moc = '1'
     if moc == '1':
         print('Scelto pizza lab ferragosto')
-        captionPath = 'MockupFiles/captionMOC_1_pizzaLab_ferragosto.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
+        captionPath = '../fixtures/captionMOC_1_pizzaLab_ferragosto.txt'
+        textOnPicturePath = '../fixtures/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     elif moc == '2':
         print('Scelto corte dei ciliegi aperitivo')
-        captionPath = 'MockupFiles/captionMOC_2_laCorte_apericorte.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_2_laCorte_apericorte.json'
+        captionPath = '../fixtures/captionMOC_2_laCorte_apericorte.txt'
+        textOnPicturePath = '../fixtures/textOnPictureMOC_2_laCorte_apericorte.json'
     elif moc == '3':
         print('Scelta caption riscritta, textOnPicture pizza lab ferragosto')
-        captionPath = 'MockupFiles/captionMOC_3.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
+        captionPath = '../fixtures/captionMOC_3.txt'
+        textOnPicturePath = '../fixtures/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     elif moc == '4':
         print('Scelta caption vuota, textOnPicture pizza lab ferragosto')
-        captionPath = 'MockupFiles/captionMOC_empty.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_1_pizzaLab_ferragosto.json'
+        captionPath = '../fixtures/captionMOC_empty.txt'
+        textOnPicturePath = '../fixtures/textOnPictureMOC_1_pizzaLab_ferragosto.json'
     elif moc == '5':
         print('Scelta caption riscritta, textOnPicture vuota')
-        captionPath = 'MockupFiles/captionMOC_3.txt'
-        textOnPicturePath = 'MockupFiles/textOnPictureMOC_empty.json'
+        captionPath = '../fixtures/captionMOC_3.txt'
+        textOnPicturePath = '../fixtures/textOnPictureMOC_empty.json'
     else:
         print('not valid')
 
@@ -176,12 +176,14 @@ def _scoreFaceRekognition(sPost: ScoringPost):
                 if disgusted == False:
                     scoreSum = scoreSum + faceSum #se volto disgusted value >= allora face value = 0
             #UN VOLTO STORTO VIENE IGNORATO NEL CALCOLO
-        faceScore = (scoreSum / faceCount) # =[0,100]
-        if faceScore < 0 or faceScore > 100:
-            raise Exception('faceScore invalid')
-        sPost.faceScore = faceScore / 100  # =[0,1]
+        if faceCount == 0:
+            sPost.faceScore = None
+        else:
+            faceScore = scoreSum / faceCount  # =[0,100]
+            sPost.faceScore = faceScore / 100  # normalizzato a [0,1]
     else:
-        sPost.faceScore = None #se non ci sono facce metto nullo il facescore
+        # se num facce =0 si ignora nel calcolo di final Score
+        sPost.faceScore = None
 
     print('Facce analizzate=', faceCount)
     print('Score Immagine=' ,sPost.faceScore)
@@ -259,12 +261,15 @@ def _setScores(sPost: ScoringPost):
 
 def _printAllScores(sPost: ScoringPost):
     print('Print all scores: {')
-    textScore = sum(sPost.textsScore.values()) / len(sPost.textsScore)
-    print('textScore=', textScore)
+    if len(sPost.textsScore) != 0:
+        textScore = sum(sPost.textsScore.values()) / len(sPost.textsScore)
+        print('textScore=', textScore)
     print('captionScore=', sPost.captionScore)
     print('faceScore=', sPost.faceScore)
     print('finalScore=', sPost.finalScore)
     print('}')
+
+
 
 _parse_text_on_image(sPost)
 __unpack_post_for_comprehend(sPost)
@@ -275,3 +280,5 @@ _scoreFaceRekognition(sPost)
 #_setScores(sPost)
 _calcFinalScore(sPost)
 _printAllScores(sPost)
+
+print("sPost.text = ", sPost.texts)
