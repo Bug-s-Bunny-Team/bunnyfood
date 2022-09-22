@@ -96,6 +96,9 @@ def __parse_comprehend_response(sPost: ScoringPost, compResult):
     print('##########################################')
     print('__parse_comprehend_response')
     print('ANALISI SENTIMENT ALREADY DONE, ORA SI SCORA')
+
+    #with open('compResult_moc.json', 'w') as f:
+    #    json.dump(compResult, f)
     #n_texts = len(sPost.texts) unused?
     if len(compResult['ErrorList']) > 0:
         raise Exception(compResult['ErrorList'])
@@ -114,13 +117,9 @@ def __parse_comprehend_response(sPost: ScoringPost, compResult):
             else 0.0
         )
         if idx == 0:
-            if float_score <-1 or float_score > 1:
-                raise Exception('captionScore invalid')
             sPost.captionScore = float_score
             print('captionScore=', float_score) #caption score è una sola
         else:
-            if float_score <-1 or float_score > 1:
-                raise Exception('textScore invalid')
             sPost.textsScore[idx - 1] = float_score #texts score fa una score per ogni pezzo di testo
             print('textsScore=', float_score)
     print('########################################')
@@ -281,4 +280,16 @@ _scoreFaceRekognition(sPost)
 _calcFinalScore(sPost)
 _printAllScores(sPost)
 
-print("sPost.text = ", sPost.texts)
+print("comprehend recieves = ", __unpack_post_for_comprehend(sPost))
+print("sPost.textsScore = ", sPost.textsScore)
+print("sPost.texts = ", sPost.texts)
+print("sPost.captionScore = ", sPost.captionScore)
+
+'''
+moc 3 
+sPost.textsScore =  {0: 0.34172263741493225, 1: 0.9993118318161578, 2: 0.00025387581263203174, 3: 0.0004275954997865483}
+sPost.captionScore =  0.9022633681015577
+moc 4
+sPost.textsScore =  {0: 0.34172263741493225, 1: 0.9993118318161578, 2: 0.00025387581263203174, 3: 0.0004275954997865483}
+sPost.captionScore =  0.007738790009170771
+'''
