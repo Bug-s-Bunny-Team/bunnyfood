@@ -29,8 +29,8 @@ export class Position {
     }
 
     static schema = object({
-        lat: number().positive(),
-        long: number().positive()
+        lat: number().min(0.0),
+        long: number().min(0.0)
     });
 }
 
@@ -49,10 +49,10 @@ export class Location {
     
     static schema = object({
         id: number().required().integer().min(0),
-        name: string().required().min(1),
-        position: object().test(pos => Position.schema.isValid(pos)),
-        address: string().required().min(1),
-        maps_placeid: string().required().length(27),
+        name: string().required(),
+        position: object().test(async pos => await Position.schema.isValid(pos)),
+        address: string(),
+        maps_place_id: string().required().length(27),
         score: number().nullable().min(0.0).max(5.0)
     });
 }
@@ -69,9 +69,9 @@ export class Account {
     }
 
     static schema = object({
-        idtoken: string().required().min(1),
-        accesstoken: string().required().min(1),
-        accountname: string().required().min(1),
+        idtoken: string().required(),
+        accesstoken: string().required(),
+        accountname: string().required(),
         email: string().required().email(),
         preference: boolean().required()
     });
@@ -91,23 +91,23 @@ export class Info {
     }
 
     static schema = object({
-        name: string().required().min(1),
+        name: string().required(),
         img: object({
-            width: number().required().min(20),
-            height: number().required().min(400),
-            url: string().required().when(
+            height: number().required().min(20),
+            width: number().required().min(400),
+            url: string().when(
                 'alt', {
                 is: (str: string) => str.length==0, 
-                then: schema => schema.url().min(1),
+                then: schema => schema.url().required(),
                 otherwise: schema => schema.max(0)
             }),
-            alt: string().required()
+            alt: string()
         }).required(),
-        address: string().required().min(1),
+        address: string(),
         score: number().nullable().min(0.0).max(5.0),
-        phone_number: string().required().min(0),
+        phone_number: string(),
         types: array().required(),
-        website: string().required().min(0)
+        website: string()
     });
 }
 

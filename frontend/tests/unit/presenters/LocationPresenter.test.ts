@@ -34,7 +34,7 @@ describe.each(test_cases)('TUF4', id => {
                 jest.runAllTimers();
                 expect(get(presenter.info)).resolves.toBeTruthy();
                 const info = await get(presenter.info);
-                expect(Info.schema.isValid(info)).toBeTruthy();
+                await Info.schema.validate(info);
         
                 expect(info.name.charAt(0) == info.name.charAt(0).toUpperCase()).toBeTruthy();
                 expect(info.address.charAt(0) == info.address.charAt(0).toUpperCase()).toBeTruthy();

@@ -4,9 +4,9 @@
       "name": "pedrocchi",
       "address": "Via VIII Febbraio, 15, 35122 Padova PD, Italia",
       "img": {
-        "width": 200,
-        "height": 400,
-        "url": "www.google.com",
+        "width": 400,
+        "height": 200,
+        "url": "http://www.google.com",
         "alt": ""
       }, 
       "score": 2.5,
@@ -19,8 +19,8 @@
       "name": "bar dei osei",
       "address": "Via del Portello, 12, 35131 Padova PD, Italia",
       "img": {
-        "width": 20,
-        "height": 400,
+        "width": 400,
+        "height": 20,
         "url": "",
         "alt": "image unavailable"
       }, 
@@ -34,8 +34,8 @@
       "name": "fly bar",
       "address": "Galleria Tito Livio, 4, 35123 Padova PD, Italia",
       "img": {
-        "width": 20,
-        "height": 400,
+        "width": 400,
+        "height": 20,
         "url": "",
         "alt": "image unavailable"
       }, 
@@ -49,8 +49,8 @@
       "name": "caffeine",
       "address": "Via Roma, 96, 35122 Padova PD, Italia",
       "img": {
-        "width": 20,
-        "height": 400,
+        "width": 400,
+        "height": 20,
         "url": "",
         "alt": "image unavailable"
       }, 
@@ -64,8 +64,8 @@
       "name": "otvim",
       "address": "Via Roma, 69, 35122 Padova PD, Italia",
       "img": {
-        "width": 20,
-        "height": 400,
+        "width": 400,
+        "height": 20,
         "url": "",
         "alt": "image unavailable"
       }, 
@@ -79,8 +79,8 @@
       "name": "sumiti",
       "address": "Via Giambattista Belzoni, 8, 35121 Padova PD, Italia",
       "img": {
-        "width": 20,
-        "height": 400,
+        "width": 400,
+        "height": 20,
         "url": "",
         "alt": "image unavailable"
       }, 
