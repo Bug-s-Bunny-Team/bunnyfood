@@ -45,7 +45,7 @@ class FollowedSocialProfile(BaseModel):
 class SocialProfile(FollowedSocialProfile):
     id: int = Field(..., title='ID')
     followers_count: Optional[int] = Field(
-        None,
+        0,
         title='Followers count',
         description='Number of users following this profile',
     )
