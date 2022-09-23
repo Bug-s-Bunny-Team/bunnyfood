@@ -1,49 +1,43 @@
 import '@testing-library/jest-dom';
 import {render, fireEvent, screen} from '@testing-library/svelte';
 import ThemeSwitch from '../../frontend/src/components/ThemeSwitch.svelte';
-//import Account from '../../frontend/src/components/Account.svelte';
-import App from './App.svelte';
+import Error from '../../frontend/src/components/Error.svelte';
+import AddProfile from '../../frontend/src/pages/AddProfile.svelte';
 
-/*describe('ThemeSwitch', () => {
-    test('Il tema cambia se premuto lo switch', async () => {
-
-        render(ThemeSwitch);
-        const checkBTheme = screen.getByRole('switch' , { hidden: true });
-        
-        await fireEvent.click(checkBTheme);
-         
-        render(App)
-        expect(App).toHaveStyle(`root[data-theme]: light;`);
-        //expect(checkBTheme).toEqual('dark');
-        //expect(checkBTheme).toEqual(true);
-    })
-})*/
-
-describe('ThemeSwitch', () => {
+describe('1 - ThemeSwitch', () => {
     test('Il tema cambia se premuto lo switch', async () => {
 
         const { container } = render(ThemeSwitch);
         const input = container.querySelector("input[type=checkbox]");
 
-        await fireEvent.change(input, { target: { value: "light" } });
+        //await fireEvent.change(input, { target: { value: "light" } });
+        await fireEvent.click(input);
 
-        expect(input.value).toBe("light");
+        expect(input).toBeChecked();
+        expect(input).toHaveStyle({
+            'background-color': 'white'
+        })
+        //expect(input.value).toBe("light");
     })
-})
+});
 
+describe('2 - Visualizzazione errore', () => {
+    test('Viene visualizzato un messaggio di errore', async () => {
 
-/*describe('Reindirizzamento alla pagina di account premendo bottone Account', () => {
-    test('Vado nella pagina di account', async () => {
-
+        render(Error, {message: 'Error Message'})
+        const heading = screen.getByText('Error Message')
+        expect(heading).toBeInTheDocument()
     })
-})*/
+});
 
-/*
-describe('Logout', () => {
-    test('Il bottone di logout viene cliccato') , async() => {
-        render(Account);
-        const logout = screen.getByRole('button');
-        await fireEvent.click(logout);
-        expect(logout.onclick).toEqual('1');
-    }
-}*/
+describe('3 - Visualizzazione errore Not Found Profile', () => {
+    test('Not Found Profile', async () => {
+
+        const { container } = render(AddProfile);
+        const input = screen.getByPlaceholderText('testuser123');
+        fireEvent.change(input, {target: {value: 'tulliovardanegaa'}});
+        expect(container.get).toBe("Couldn't find profile. You must enter the correct and full username of the profile");
+    })
+});
+
+//Messaggi di errore dentro pagina;
