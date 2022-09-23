@@ -15,16 +15,18 @@ expect.extend({toSatisfyApiSpec,toSatisfySchemaInApiSpec});
 let openapi_spec: any;
 let initialized = false;
 
-function toValidatorRequest(url: string, config: RequestInit, params: any) : any {
+function toValidatorRequest(url: string, config: RequestInit, params: any, query: any) : any {
     return {
         headers: config.headers,
         body: config.body ? JSON.parse((config.body as BodyInit).toString()) : {},
         params: params,
+        query: query
     }
 }    
 
-function formatUrl(url: string, config: RequestInit) : {method: string, path: string, params: any} {
-    let params : any = {};
+function formatUrl(url: string, config: RequestInit) : {method: string, path: string, params: any, query: any} {
+    let params: any = {};
+    let query: any = {};
     if(url.match(/\/api\/profiles\/search\/.*/)) {
         params.profile_username = url.split('/api/profiles/search/')[1];
         url = '/api/profiles/search/{profile_username}';
@@ -34,12 +36,15 @@ function formatUrl(url: string, config: RequestInit) : {method: string, path: st
     } else if(url.match(/\/api\/profiles\/.+/)) {
         params.profile_id = JSON.parse(url.split('/api/profiles/')[1]);
         url = '/api/profiles/{profile_id}';
+    } else if(url.match(/\/api\/locations\/?.+/)) {
+        const params = Object.fromEntries(new URL(`${window.location.protocol}//${window.location.hostname}` + url).searchParams.entries());
+        url = '/api/locations/';
     } else if(url.match(/\/api\/locations\/.+/)) {
         params.location_id = JSON.parse(url.split('/api/locations/')[1]);
         url = '/api/locations/{location_id}';
     }
 
-    return {method: config.method as string, path: url, params: params}
+    return {method: config.method as string, path: url, params: params, query: query}
 }
 
 function createPathValidator(obj: {method: string, path: string, params: any}) : OpenApiRequestValidator {
@@ -61,16 +66,16 @@ export async function init() {
 }
 
 export async function fetch(url: RequestInfo | URL, options?: RequestInit) : Promise<any> {
-    let _url = '/' + url.toString();
+    url = url.toString();
     if(!initialized) throw new Error('Must call AND AWAIT integration.ts.init() before calling fetch');
 
-    const formattedRequest = formatUrl(_url, options as RequestInit);
-    const validatorRequest = toValidatorRequest(_url, options as RequestInit, formattedRequest.params);
+    const formattedRequest = formatUrl(url, options as RequestInit);
+    const validatorRequest = toValidatorRequest(url, options as RequestInit, formattedRequest.params, formattedRequest.query);
 
     expect(createPathValidator(formattedRequest)
               .validateRequest(validatorRequest)).toBeFalsy();
     
-    const res = await getResponse(formattedRequest.path, options as RequestInit, formattedRequest.params);
+    const res = await getResponse(formattedRequest.path, options as RequestInit, formattedRequest.params, formattedRequest.query);
     res.request = formattedRequest;
     expect(res).toSatisfyApiSpec();
 

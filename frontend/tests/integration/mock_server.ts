@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios'
 import axios from 'axios'
 
-export async function getResponse(url: string, options: RequestInit, params: any) : Promise<AxiosResponse<any>> {
+export async function getResponse(url: string, options: RequestInit, params: any, query: any) : Promise<AxiosResponse<any>> {
     let res: any = {};
     let _res: any;
     const body = options.body ? JSON.parse(options.body.toString()) : undefined;
