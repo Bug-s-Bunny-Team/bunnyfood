@@ -29,8 +29,8 @@ export class Position {
     }
 
     static schema = object({
-        lat: number().min(0.0),
-        long: number().min(0.0)
+        lat: number().required().min(0.0),
+        long: number().required().min(0.0)
     });
 }
 
@@ -50,8 +50,8 @@ export class Location {
     static schema = object({
         id: number().required().integer().min(0),
         name: string().required(),
-        position: object().test(async pos => await Position.schema.isValid(pos)),
-        address: string(),
+        position: object().required().test(async pos => await Position.schema.isValid(pos)),
+        address: string().defined(),
         maps_place_id: string().required().length(27),
         score: number().nullable().min(0.0).max(5.0)
     });
@@ -99,15 +99,15 @@ export class Info {
                 'alt', {
                 is: (str: string) => str.length==0, 
                 then: schema => schema.url().required(),
-                otherwise: schema => schema.max(0)
+                otherwise: schema => schema.max(0).defined()
             }),
-            alt: string()
+            alt: string().defined()
         }).required(),
-        address: string(),
+        address: string().defined(),
         score: number().nullable().min(0.0).max(5.0),
-        phone_number: string(),
+        phone_number: string().defined(),
         types: array().required(),
-        website: string()
+        website: string().defined()
     });
 }
 

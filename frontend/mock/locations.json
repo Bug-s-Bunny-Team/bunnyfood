@@ -2,6 +2,7 @@
   {
     "id": 0,
     "name": "pedrocchi",
+    "description": "",
     "lat": 45.4076980, 
     "long": 11.8772232,
     "score": 4.25,
@@ -11,15 +12,16 @@
   {
     "id": 1,
     "name": "bar dei osei",
+    "description": "",
     "lat": 45.4074661, 
     "long": 11.8757466,
-    "score": null,
     "maps_place_id": "ChIJ9XPKBVDafkcRRVLjyezunpg",
     "address": "Via del Portello, 12, 35131 Padova PD, Italia"
   },
   {
     "id": 2,
     "name": "fly bar",
+    "description": "",
     "lat": 45.4042886, 
     "long": 11.8762006,
     "score": 3.75,
@@ -29,6 +31,7 @@
   {
     "id": 3,
     "name": "caffeine",
+    "description": "",
     "lat": 45.4041443, 
     "long": 11.8757413,
     "score": 4.5,
@@ -38,6 +41,7 @@
   {
     "id": 4,
     "name": "otvim",
+    "description": "",
     "lat": 45.4046744, 
     "long": 11.8761003,
     "score": 4.0,
@@ -47,6 +51,7 @@
   {
     "id": 5,
     "name": "sumiti",
+    "description": "",
     "lat": 45.4075226, 
     "long": 11.8859662,
     "score": 5.0,

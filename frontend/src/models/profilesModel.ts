@@ -17,7 +17,7 @@ export class ProfilesModel {
     }
 
     async getFollowed() : Promise<SocialProfile[]> {        
-        const response = await fetch('api/followed/', RequestOptions.getRequestOptions());
+        const response = await fetch('/api/followed/', RequestOptions.getRequestOptions());
         if(!response.ok) throw new RequestError(response.status, response.statusText);
         
         const res = await response.json();
@@ -27,7 +27,7 @@ export class ProfilesModel {
     async removeFollowed(profile: SocialProfile) : Promise<void> {        
         const options = RequestOptions.postRequestOptions();
         options.body = JSON.stringify({username: profile.username});
-        const response = await fetch('api/followed/unfollow/', options);
+        const response = await fetch('/api/followed/unfollow/', options);
         if(!response.ok) throw new RequestError(response.status, response.statusText);
         
         const res = await response.json();
@@ -35,7 +35,7 @@ export class ProfilesModel {
     }
 
     async getMostPopularProfiles(quantity: number = 20) : Promise<SocialProfile[]> {        
-        const response = await fetch(`api/profiles/popular/${quantity}`, RequestOptions.getRequestOptions());
+        const response = await fetch(`/api/profiles/popular/${quantity}`, RequestOptions.getRequestOptions());
         if(!response.ok) throw new RequestError(response.status, response.statusText);
         
         const res = await response.json();
@@ -43,7 +43,7 @@ export class ProfilesModel {
     }
 
     async getProfile(ricerca: string) : Promise<SocialProfile> {        
-        const response = await fetch(`api/profiles/search/${encodeURIComponent(ricerca)}`, RequestOptions.getRequestOptions());
+        const response = await fetch(`/api/profiles/search/${encodeURIComponent(ricerca)}`, RequestOptions.getRequestOptions());
         if(!response.ok) {
             if(response.status == 404) return null;
             throw new RequestError(response.status, response.statusText);
@@ -56,7 +56,7 @@ export class ProfilesModel {
     async followProfile(profile: SocialProfile) : Promise<void> {        
         const options = RequestOptions.postRequestOptions();
         options.body = JSON.stringify({username: profile.username});
-        const response = await fetch('api/followed/', options);
+        const response = await fetch('/api/followed/', options);
         if(!response.ok) throw new RequestError(response.status, response.statusText);
     }
 }  

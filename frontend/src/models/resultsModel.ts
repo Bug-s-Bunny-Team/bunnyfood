@@ -38,7 +38,7 @@ export class ResultsModel {
         for (const field in filter) {
             if(filter[field] !== null) url.searchParams.append(field, filter[field]);
         }
-        const response = await fetch(url, RequestOptions.getRequestOptions());
+        const response = await fetch(url.pathname, RequestOptions.getRequestOptions());
         if(!response.ok) throw new RequestError(response.status, response.statusText);
         
         const res = await response.json();
