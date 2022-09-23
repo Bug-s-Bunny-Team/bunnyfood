@@ -131,14 +131,14 @@ export class Filter {
     });
 }
 
-export class RequestError extends Error {
+export class RequestError {
     code: number;
     message: string;
 
-    constructor(code: number = 0, message: string = '') {super(message); this.code=code; this.message=message;}
+    constructor(code: number = 0, message: string = '') {this.code=code; this.message=message;}
 
     static schema = object({
         code: number().required().min(0).max(600),
-        message: string().required().min(1)
+        message: string().defined()
     });
 }

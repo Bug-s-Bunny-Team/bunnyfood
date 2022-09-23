@@ -212,7 +212,7 @@ describe('TUF1', () => {
     describe("RequestError", () => {
         const test_cases: {code: any, message: any}[] = [
             {code: 400, message: "test message"},
-            {code: 0, message: "a"},
+            {code: 0, message: ""},
         ]
     
         test.each(test_cases)("1 - constructor", async test_case => {
@@ -222,7 +222,7 @@ describe('TUF1', () => {
                 .toStrictEqual(code !== undefined ? code as number : 0);
             expect(mod.message)
                 .toStrictEqual(message !== undefined ? message as string : '');
-            await RequestError.schema.validate({code: mod.code, message: mod.message});
+            await RequestError.schema.validate(mod);
         })
         test.each(test_cases)("2 - equality", (test_case) => {
             const {code, message} = test_case;
