@@ -31,10 +31,10 @@ function formatUrl(url: string, config: RequestInit) : {method: string, path: st
     } else if(url.match(/\/api\/profiles\/popular\/.*/)) {
         params.limit = url.split('/api/profiles/popular/')[1];
         url = '/api/profiles/popular/{limit}';
-    } else if(url.match(/\/api\/profiles\/.*/)) {
+    } else if(url.match(/\/api\/profiles\/.+/)) {
         params.profile_id = url.split('/api/profiles/')[1];
         url = '/api/profiles/{profile_id}';
-    } else if(url.match(/\/api\/locations\/.*/)) {
+    } else if(url.match(/\/api\/locations\/.+/)) {
         params.profile_id = url.split('/api/locations/')[1];
         url = '/api/locations/{location_id}';
     }
@@ -75,7 +75,7 @@ export async function fetch(url: RequestInfo | URL, options?: RequestInit) : Pro
     expect(res).toSatisfyApiSpec();
 
     return {
-        ok: (200<=res.status || 299<=res.status),
+        ok: (200<=res.status && res.status<=299),
         status: res.status,
         statusText: res.statusText,
         json: () => res.data

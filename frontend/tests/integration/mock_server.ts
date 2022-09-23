@@ -1,4 +1,4 @@
-import { AxiosResponse, Method } from 'axios'
+import { AxiosResponse } from 'axios'
 import axios from 'axios'
 
 export async function getResponse(url: string, options: RequestInit, params: any) : Promise<AxiosResponse<any>> {
@@ -17,10 +17,10 @@ export async function getResponse(url: string, options: RequestInit, params: any
             }
             return res;
         
-        case 'GET /api/profiles':
+        case 'GET /api/profiles/':
             return await axios.get('http://localhost:5000/mock/followed.json');
 
-        case 'GET /api/profiles/search/{profile_id}':
+        case 'GET /api/profiles/{profile_id}':
             res = await axios.get('http://localhost:5000/mock/followed.json');
             res.data = res.data.find((profile: any) => { return profile.id == params.profile_id });
             switch(res.data.id) {
@@ -61,7 +61,7 @@ export async function getResponse(url: string, options: RequestInit, params: any
         case 'GET /api/followed/':
            return await axios.get('http://localhost:5000/mock/follower.json');
 
-        case 'POST /api/followed':
+        case 'POST /api/followed/':
             res = await axios.get('http://localhost:5000/mock/follower.json');
             switch(res.data.id) {
                 case 0: res.status = 201; break;
