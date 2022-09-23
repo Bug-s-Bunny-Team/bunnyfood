@@ -101,7 +101,7 @@ def search_profile(
     responses={
         400: {
             'model': ErrorResponse,
-            'description': 'Too many profiles SocialProfiles requested',
+            'description': 'Too many profiles requested',
         }
     },
 )
