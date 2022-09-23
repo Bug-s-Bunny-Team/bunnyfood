@@ -34,6 +34,7 @@
 
 <label for="dark-switch">
     <input
+        value="dark"
         type="checkbox"
         id="dark-switch"
         role="switch"
