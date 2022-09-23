@@ -59,10 +59,10 @@ export async function getResponse(url: string, options: RequestInit, params: any
             return res;
 
         case 'GET /api/followed/':
-           return await axios.get('http://localhost:5000/mock/follower.json');
+           return await axios.get('http://localhost:5000/mock/followed.json');
 
         case 'POST /api/followed/':
-            res = await axios.get('http://localhost:5000/mock/follower.json');
+            res = await axios.get('http://localhost:5000/mock/followed.json');
             switch(res.data.id) {
                 case 0: res.status = 201; break;
 
@@ -71,7 +71,7 @@ export async function getResponse(url: string, options: RequestInit, params: any
             return res;
 
         case 'POST /api/followed/unfollow/':
-            res = await axios.get('http://localhost:5000/mock/follower.json');
+            res = await axios.get('http://localhost:5000/mock/followed.json');
             switch(res.data.id) {
                 case 0: res.status = 201; break;
 
