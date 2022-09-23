@@ -46,7 +46,7 @@ export class ResultsModel {
         return get(this.#rankedList);
     }
 
-    fixLocations(list: any[]) : Location[] {
+    private fixLocations(list: any[]) : Location[] {
         return list.map(location => {return new Location(location.id, location.name, new Position(location.lat, location.long), 
                                                          location.address, location.maps_place_id, location.score)})
     }
