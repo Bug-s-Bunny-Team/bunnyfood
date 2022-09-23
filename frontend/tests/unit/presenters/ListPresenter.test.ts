@@ -1,6 +1,7 @@
 import { jest, test, expect, beforeEach, describe } from '@jest/globals';
 import { get } from 'svelte/store';
 import { Location } from '../../../src/models';
+import { ResultsModel } from '../../../src/models/resultsModel';
 import { ListPresenter } from '../../../src/presenters/ListPresenter'
 
 jest.mock('../../../src/models/resultsModel');
@@ -23,6 +24,7 @@ describe('TUF3', () => {
     test('2 - refresh', async () => {
         let presenter = new ListPresenter();
         await get(presenter.rankedList);
+        expect(ResultsModel.getInstance().getRankedList).toHaveBeenCalledTimes(1);
     
         expect(get(presenter.disableButtons)).toStrictEqual(false);
         presenter.refresh();
@@ -30,12 +32,8 @@ describe('TUF3', () => {
     
         const list_prom = get(presenter.rankedList);
         expect(list_prom).toBeTruthy();
-        const list = await list_prom;
+        await list_prom;
         expect(get(presenter.disableButtons)).toStrictEqual(false);
-    
-        expect(list.length).toBeGreaterThan(0);
-        list.forEach(location => {
-            expect(Location.schema.isValid(location)).toBeTruthy();
-        })
+        expect(ResultsModel.getInstance().getRankedList).toHaveBeenCalledTimes(2);
     })
 })

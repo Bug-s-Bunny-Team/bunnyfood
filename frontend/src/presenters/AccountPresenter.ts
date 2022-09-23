@@ -32,6 +32,10 @@ export class AccountPresenter {
             this.#name.set(account.accountname);
             this.#email.set(account.email);
             this.#preference.set(account.preference ? 1 : 0);
+        } else {
+            this.#name.set(null);
+            this.#email.set(null);
+            this.#preference.set(null);
         }
     }
 
@@ -42,18 +46,16 @@ export class AccountPresenter {
         AccountModel.getInstance().logout();
     }
 
-    changePreference() : void {
-        if(get(this.isLogged)) {
-            this.#disableButtons.set(true);
-            AccountModel.getInstance().cambiaPreferenza(!(get(this.#preference) == 1 ? true : false))
-                .catch((e: RequestError) => { 
-                    removeChildren(document.getElementById('error')); 
-                    const message = 'An error occurred, please try again';
-                    new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
-                    this.#errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
-                })
-                .finally(() => {this.#disableButtons.set(false)});
-        }
+    async changePreference() : Promise<void> {
+        this.#disableButtons.set(true);
+        return AccountModel.getInstance().cambiaPreferenza(!(get(this.#preference) == 1 ? true : false))
+            .catch((e: RequestError) => { 
+                removeChildren(document.getElementById('error')); 
+                const message = 'An error occurred, please try again';
+                new ErrorSvelte({props: {message: message}, target: document.getElementById('error')});
+                this.#errorTimeout = setTimeout(() => {removeChildren(document.getElementById('error'))}, error_duration);
+            })
+            .finally(() => {this.#disableButtons.set(false)});
     }
 
     destroy() {

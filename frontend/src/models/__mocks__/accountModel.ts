@@ -23,13 +23,13 @@ export class AccountModel {
         this.#account.set(new Account("mock_idtoken", "mock_accesstoken", "mock accountname", "mock email", Preference.default_guide_view == 'map' ? true : false));
     }
 
-    async cambiaPreferenza(newPref: boolean) : Promise<void> {        
+    cambiaPreferenza = jest.fn(async function(newPref: boolean) : Promise<void> {        
         this.#account.update(account => { account.preference = newPref; return account; });
-    }
+    });
 
-    logout() : void {
+    logout = jest.fn(function () : void {
         this.#account.set(null);
-    }
+    });
 
     getAccount() {
         return get(this.#account);

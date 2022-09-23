@@ -20,10 +20,10 @@ export class ResultsModel {
    
     get rankedList() { return this.#rankedList }
     
-    async getRankedList(filter: Filter) : Promise<Location[]> {
+    getRankedList = jest.fn(async function(filter: Filter) : Promise<Location[]> {
         this.#rankedList.set(this.fixLocations(Locations));
         return get(this.#rankedList);
-    }
+    });
 
     fixLocations(list: any[]) : Location[] {
         return list.map(location => {return new Location(location.id, location.name, new Position(location.lat, location.long), location.address, location.maps_place_id, location.score)})

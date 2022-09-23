@@ -14,6 +14,7 @@ jest.useFakeTimers();
 
 beforeEach(() => {
     removeChildren(document.getElementById('error'));
+    jest.clearAllMocks();
 })
 
 describe('TUF8', () => {
@@ -30,6 +31,7 @@ describe('TUF8', () => {
     test('2 - refresh', async () => {
         let presenter = new FollowedPresenter();
         await get(presenter.profiles);
+        expect(ProfilesModel.getInstance().getFollowed).toHaveBeenCalledTimes(1);
     
         expect(get(presenter.disableButtons)).toStrictEqual(false);
         presenter.refresh();
@@ -37,13 +39,9 @@ describe('TUF8', () => {
     
         const profiles_prom = get(presenter.profiles);
         expect(profiles_prom).toBeTruthy();
-        const profiles = await profiles_prom;
+        await profiles_prom;
         expect(get(presenter.disableButtons)).toStrictEqual(false);
-    
-        expect(profiles.length).toBeGreaterThan(0);
-        profiles.forEach(profile => {
-            expect(SocialProfile.schema.isValid(profile)).toBeTruthy();
-        })
+        expect(ProfilesModel.getInstance().getFollowed).toHaveBeenCalledTimes(2);
     })
 
     describe('3 - removeFollowed', () => {
@@ -54,7 +52,8 @@ describe('TUF8', () => {
             const list = await get(presenter.profiles)
         
             let promise = presenter.removeFollowed(list[0]);
-            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledWith(list[0]);
+            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledTimes(1);
+            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenLastCalledWith(list[0]);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
             expect(presenter.refresh).not.toHaveBeenCalled();
             
@@ -71,7 +70,8 @@ describe('TUF8', () => {
             const list = await get(presenter.profiles)
             
             let promise = presenter.removeFollowed(list[0]);
-            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledWith(list[0]);
+            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenCalledTimes(1);
+            expect(ProfilesModel.getInstance().removeFollowed).toHaveBeenLastCalledWith(list[0]);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
             expect(presenter.refresh).not.toHaveBeenCalled();
             

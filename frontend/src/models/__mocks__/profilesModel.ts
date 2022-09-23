@@ -18,21 +18,21 @@ export class ProfilesModel {
     private constructor() { 
     }
 
-    async getFollowed() : Promise<SocialProfile[]> {
+    getFollowed = jest.fn(async function() : Promise<SocialProfile[]> {
         return Followed;
-    }
+    });
 
     removeFollowed = jest.fn();
 
-    async getMostPopularProfiles(quantity: number = 20) : Promise<SocialProfile[]> {
+    getMostPopularProfiles = jest.fn(async function(quantity: number = 20) : Promise<SocialProfile[]> {
         return Popular;
-    }
+    });
 
-    async getProfile(ricerca: string) : Promise<SocialProfile> {
+    getProfile = jest.fn(async function(ricerca: string) : Promise<SocialProfile> {
         let profile: SocialProfile = Profiles.find((profile: SocialProfile) => profile.username==ricerca);
         if(profile) return profile;
         else throw new RequestError(404, "Profile not found");
-    }
+    });
 
     followProfile = jest.fn();
 }  

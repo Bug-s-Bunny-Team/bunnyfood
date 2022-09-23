@@ -13,7 +13,8 @@ ProfilesModel.getInstance().followProfile = jest.fn()   .mockResolvedValueOnce(u
 jest.useFakeTimers();
 
 beforeEach(() => {
-    removeChildren(document.getElementById('error'));
+    removeChildren(document.getElementById('error') as HTMLElement);
+    jest.clearAllMocks();
 })
 
 describe('TUF8', () => {
@@ -30,7 +31,8 @@ describe('TUF8', () => {
     test('2 - refresh', async () => {
         let presenter = new ExplorePresenter();
         await get(presenter.profiles);
-    
+        expect(ProfilesModel.getInstance().getMostPopularProfiles).toHaveBeenCalledTimes(1);
+
         expect(get(presenter.disableButtons)).toStrictEqual(false);
         presenter.refresh();
         expect(get(presenter.disableButtons)).toStrictEqual(true);
@@ -39,11 +41,7 @@ describe('TUF8', () => {
         expect(profiles_prom).toBeTruthy();
         const profiles = await profiles_prom;
         expect(get(presenter.disableButtons)).toStrictEqual(false);
-    
-        expect(profiles.length).toBeGreaterThan(0);
-        profiles.forEach(profile => {
-            expect(SocialProfile.schema.isValid(profile)).toBeTruthy();
-        })
+        expect(ProfilesModel.getInstance().getMostPopularProfiles).toHaveBeenCalledTimes(2);
     })
 
     describe('3 - addProfile', () => {
@@ -54,12 +52,13 @@ describe('TUF8', () => {
             const list = await get(presenter.profiles)
         
             let promise = presenter.addProfile(list[0]);
-            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledWith(list[0]);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledTimes(1);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenLastCalledWith(list[0]);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
             expect(presenter.refresh).not.toHaveBeenCalled();
             
             await expect(promise).resolves.toStrictEqual(undefined);
-            expect(document.getElementById('error').childElementCount).toStrictEqual(0); // no errors
+            expect((document.getElementById('error') as HTMLElement).childElementCount).toStrictEqual(0); // no errors
             expect(presenter.refresh).toHaveBeenCalledTimes(1); // successfully finished promise
             expect(jest.getTimerCount()).toStrictEqual(0);
         })
@@ -71,19 +70,20 @@ describe('TUF8', () => {
             const list = await get(presenter.profiles)
             
             let promise = presenter.addProfile(list[0]);
-            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledWith(list[0]);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenCalledTimes(1);
+            expect(ProfilesModel.getInstance().followProfile).toHaveBeenLastCalledWith(list[0]);
             expect(get(presenter.disableButtons)).toStrictEqual(true);
             expect(presenter.refresh).not.toHaveBeenCalled();
             
             await expect(promise).resolves.toStrictEqual(undefined);
-            expect(document.getElementById('error').childElementCount).toStrictEqual(1); // one error
+            expect((document.getElementById('error') as HTMLElement).childElementCount).toStrictEqual(1); // one error
             expect(presenter.refresh).toHaveBeenCalledTimes(1); // successfully finished promise
             expect(jest.getTimerCount()).toStrictEqual(1);
 
             jest.runAllTimers();
 
             expect(jest.getTimerCount()).toStrictEqual(0);
-            expect(document.getElementById('error').childElementCount).toStrictEqual(0); // error removed
+            expect((document.getElementById('error') as HTMLElement).childElementCount).toStrictEqual(0); // error removed
         })
     })
 
@@ -95,12 +95,12 @@ describe('TUF8', () => {
             const list = await get(presenter.profiles)
             await presenter.addProfile(list[0]);
             expect(jest.getTimerCount()).toStrictEqual(1);
-            expect(document.getElementById('error').childElementCount).toStrictEqual(1); // one error
+            expect((document.getElementById('error') as HTMLElement).childElementCount).toStrictEqual(1); // one error
             
             presenter.destroy();
             
             expect(jest.getTimerCount()).toStrictEqual(0);
-            expect(document.getElementById('error').childElementCount).toStrictEqual(0); // error removed
+            expect((document.getElementById('error') as HTMLElement).childElementCount).toStrictEqual(0); // error removed
         })
 
         test('no running timer', () => {
@@ -108,7 +108,7 @@ describe('TUF8', () => {
             presenter.destroy();
             
             expect(jest.getTimerCount()).toStrictEqual(0);
-            expect(document.getElementById('error').childElementCount).toStrictEqual(0); // error removed
+            expect((document.getElementById('error') as HTMLElement).childElementCount).toStrictEqual(0); // error removed
         })
     })
 })

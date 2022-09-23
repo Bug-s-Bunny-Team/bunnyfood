@@ -44,7 +44,7 @@ export class MapPresenter {
     return map;
   }
 
-  makeIcon() {
+  private makeIcon() {
     return new L.Icon({
       iconUrl: './icon.png',
       iconSize: [40, 40],
@@ -54,12 +54,12 @@ export class MapPresenter {
     });
 	}
 
-  createMarker(loc: [number, number]) {
+  private createMarker(loc: [number, number]) {
 		let marker = L.marker(loc, {icon: this.makeIcon()});
 		return marker;
 	}
 
-  createPopup(location: Location) {
+  private createPopup(location: Location) {
     return `<p><a href="./home?details_placeid=${location.id}">${capitalizeFirstLetter(location.name)}</a></p>
             ${location.score !== null ? '<p>'+Math.round(location.score*10.0)/10.0+'/5</p>' : '<p>Score unavailable</p>'}`;
   }
@@ -76,7 +76,7 @@ export class MapPresenter {
     };
 	}
 
-  createAllMarkers(rankedList: Promise<Location[]>) {
+  private createAllMarkers(rankedList: Promise<Location[]>) {
       rankedList.then(locations => {
         this.#markerLayers.clearLayers();
         locations.forEach(location => {
@@ -103,7 +103,7 @@ export class MapPresenter {
     if(this.#map) this.#map.invalidateSize();
   }
 
-  refresh() {
+  private refresh() {
     const bounds = this.#map.getBounds();
     const zoom = this.#map.getZoom();
     const center = bounds.getCenter();
@@ -120,7 +120,7 @@ export class MapPresenter {
     }
   }
 
-  measure_meters(lat1: number, lon1: number, lat2: number, lon2: number) : number {  // generally used geo measurement function
+  private measure_meters(lat1: number, lon1: number, lat2: number, lon2: number) : number {  // generally used geo measurement function
     var R = 6378.137; // Radius of earth in KM
     var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
     var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
