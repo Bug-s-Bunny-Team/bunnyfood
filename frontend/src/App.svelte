@@ -16,5 +16,17 @@
     }
 </script>
 
+<div id="error"></div>
+
 <Router routes={$routes}/>
+
+<style>
+    #error {
+    position: fixed;
+    top: 0;
+    width: 40%;
+    left: 30%;
+    z-index: 200;
+    }
+</style>
 

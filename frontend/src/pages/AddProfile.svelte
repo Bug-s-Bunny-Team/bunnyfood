@@ -6,8 +6,6 @@
     onDestroy(presenter.destroy);
 </script>
 
-<div id="error"></div>
-
 <article> 
     <form on:submit|preventDefault={presenter.search} autocomplete="off">
     <div class="grid">

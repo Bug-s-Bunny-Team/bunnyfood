@@ -8,8 +8,6 @@
     onDestroy(presenter.destroy);
 </script>
 
-<div id="error"></div>
-
 <h1> Your personal information </h1>
 <article>
     <form>

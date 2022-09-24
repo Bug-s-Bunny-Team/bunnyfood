@@ -8,8 +8,6 @@
     onDestroy(presenter.destroy);
 </script>
 
-<div id="error"></div>
-
 <div>
     <button class="refresh outline" disabled={$disableButtons} on:click={presenter.refresh}>Refresh</button>
     
