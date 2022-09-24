@@ -5,6 +5,8 @@ const app = new App({
   target: document.getElementById('app')
 })
 
-window.fetch = mock_fetch;
+if(import.meta.env.DEV) {
+  window.fetch = mock_fetch;
+}
 
 export default app
