@@ -48,10 +48,3 @@
    --border-color: none !important;
    padding: 0 !important;
 }
-
-#error {
-  position: fixed;
-  top: 0;
-  width: 40%;
-  left: 30%;
-}

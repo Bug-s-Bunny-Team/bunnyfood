@@ -8,7 +8,6 @@
     let presenter = new HomePresenter();
     let { mapView } = presenter;
 </script>
-<div id="error"></div>
 
 <label for="choose view"> 
     View as Map

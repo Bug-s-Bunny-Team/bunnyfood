@@ -7,7 +7,7 @@ import axios from 'axios'
 import http from 'axios/lib/adapters/http'
 import OpenApiRequestValidator from 'openapi-request-validator'
 
-import { getResponse } from './mock_server';
+import { getResponse, formatUrl } from './mock_server';
 
 let openapi_spec: any;
 let initialized = false;
@@ -19,29 +19,6 @@ function toValidatorRequest(url: string, config: RequestInit, params: any, query
         params: params,
         query: query
     }
-}    
-
-function formatUrl(url: string, config: RequestInit) : {method: string, path: string, params: any, query: any} {
-    let params: any = {};
-    let query: any = {};
-    if(url.match(/\/api\/profiles\/search\/.*/)) {
-        params.profile_username = url.split('/api/profiles/search/')[1];
-        url = '/api/profiles/search/{profile_username}';
-    } else if(url.match(/\/api\/profiles\/popular\/.*/)) {
-        params.limit = JSON.parse(url.split('/api/profiles/popular/')[1]);
-        url = '/api/profiles/popular/{limit}';
-    } else if(url.match(/\/api\/profiles\/.+/)) {
-        params.profile_id = JSON.parse(url.split('/api/profiles/')[1]);
-        url = '/api/profiles/{profile_id}';
-    } else if(url.match(/\/api\/locations\/?.+/)) {
-        const params = Object.fromEntries(new URL(`${window.location.protocol}//${window.location.hostname}` + url).searchParams.entries());
-        url = '/api/locations/';
-    } else if(url.match(/\/api\/locations\/.+/)) {
-        params.location_id = JSON.parse(url.split('/api/locations/')[1]);
-        url = '/api/locations/{location_id}';
-    }
-
-    return {method: config.method as string, path: url, params: params, query: query}
 }
 
 function createPathValidator(obj: {method: string, path: string, params: any}) : OpenApiRequestValidator {
@@ -71,22 +48,9 @@ export async function test_fetch(url: RequestInfo | URL, options?: RequestInit) 
     expect(createPathValidator(formattedRequest)
               .validateRequest(validatorRequest)).toBeFalsy();
     
-    const res = await getResponse(formattedRequest.path, options as RequestInit, formattedRequest.params, formattedRequest.query);
+    const res = await getResponse(formattedRequest.path, options as RequestInit, formattedRequest.params, formattedRequest.query, false);
     res.request = formattedRequest;
     expect(res).toSatisfyApiSpec();
-
-    return {
-        ok: (200<=res.status && res.status<=299),
-        status: res.status,
-        statusText: res.statusText,
-        json: () => res.data
-    };
-}
-
-export async function mock_fetch(url: RequestInfo | URL, options?: RequestInit) : Promise<any> {
-    url = url.toString();
-    const formattedRequest = formatUrl(url, options as RequestInit);
-    const res = await getResponse(formattedRequest.path, options as RequestInit, formattedRequest.params, formattedRequest.query);
 
     return {
         ok: (200<=res.status && res.status<=299),
