@@ -1,7 +1,7 @@
 module.exports = {
   testEnvironment: 'jsdom',
   verbose: true,
-  setupFiles: [
+  setupFilesAfterEnv: [
     "./jest.environment.js"
   ],
   transform: {

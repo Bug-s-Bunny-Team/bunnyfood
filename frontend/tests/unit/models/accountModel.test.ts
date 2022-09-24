@@ -1,12 +1,6 @@
 import { AccountModel } from "../../../src/models/accountModel";
-import { init, fetch } from '../../integration/integration'
 import { expect, test, beforeAll, describe, jest } from '@jest/globals'
 import { Account, RequestError } from '../../../src/models';
-
-beforeAll(async () => {
-    await init();
-    window.fetch = fetch;
-})
 
 const mock_idtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQwMjE0NDksImV4cCI6MTY5NTU1NzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsImVtYWlsIjoidGVzdEBnbWFpbC5jb20ifQ.QeUGbaE3XT-bcS2gI8bbFjFBrVv7xuOvHlbamr7k3Cw';
 const mock_accesstoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQwMjE0NDksImV4cCI6MTY5NTU1NzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoidGVzdCB1c2VybmFtZSJ9.g_ypyq8Fd_0U8zmrTUnLIP5RuK1Xx0ht6fqCi-cbogA'

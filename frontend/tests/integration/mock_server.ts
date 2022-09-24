@@ -1,38 +1,52 @@
-import { AxiosResponse } from 'axios'
-import axios from 'axios'
+import type { AxiosResponse } from 'axios'
+import Locations from '../../mock/locations.json'
+import Followed from '../../mock/followed.json'
+import Profiles from '../../mock/social_profiles.json'
+import PopularProfiles from '../../mock/popular_profiles.json'
+import Preference from '../../mock/preferences.json'
 
 export async function getResponse(url: string, options: RequestInit, params: any, query: any) : Promise<AxiosResponse<any>> {
     let res: any = {};
-    let _res: any;
     const body = options.body ? JSON.parse(options.body.toString()) : undefined;
     switch((options.method as string).toUpperCase() + ' ' + url) {
         case 'GET /api/locations/':
-            return await axios.get('http://localhost:5000/mock/locations.json');
+            res.data = Locations;
+            res.status = 200;
+            res.statusText = 'OK';
+            return res;
             
         case 'GET /api/locations/{location_id}':
-            res = await axios.get('http://localhost:5000/mock/locations.json');
+            res.data = Locations;
+            res.status = 200;
+            res.statusText = 'OK'
             res.data = res.data.find((location: any) => { return location.id == params.location_id });
             switch(res.data.id) {
                 case 0: res.status=200; break;
-                case 1: res.status=404; res.data = { detail: "" }; break;
+                case 1: res.status=404; res.statusText='Not Found'; res.data = { detail: "" }; break;
             }
             return res;
         
         case 'GET /api/profiles/':
-            return await axios.get('http://localhost:5000/mock/followed.json');
+            res.data = Profiles;
+            res.status = 200;
+            res.statusText = 'OK';
+            return res;
 
         case 'GET /api/profiles/{profile_id}':
-            res = await axios.get('http://localhost:5000/mock/followed.json');
+            res.data = Profiles;
+            res.status = 200;
+            res.statusText = 'OK';
             res.data = res.data.find((profile: any) => { return profile.id == params.profile_id });
             switch(res.data.id) {
                 case 0: res.status = 200; break;
                     
-                case 1: res.status = 404; res.data = { detail: "" }; break;
+                case 1: res.status = 404; res.statusText='Not Found'; res.data = { detail: "" }; break;
             }
             return res;
 
         case 'GET /api/profiles/search/{profile_username}':
-            res = await axios.get('http://localhost:5000/mock/followed.json');
+            res.data = Profiles;
+            res.statusText = 'OK';
             res.data = res.data.find((profile: any) => { return profile.username == params.profile_username });
             switch(res.data.id) {
                 case 0: res.status = 200; break;
@@ -41,47 +55,55 @@ export async function getResponse(url: string, options: RequestInit, params: any
 
                 case 2: res.status = 204; res.data = undefined; break;
 
-                case 3: res.status = 404; res.data = { detail: "" }; break;
+                case 3: res.status = 404; res.statusText='Not Found'; res.data = { detail: "" }; break;
             }
             return res;
         
         case 'GET /api/profiles/popular/{limit}':
-            res = await axios.get('http://localhost:5000/mock/popular_profiles.json');
-            switch(res.data.id) {
-                case 0: res.status = 200; break;
-
-                case 1: res.status = 400; res.data = { detail: "" }; break;
-            }
+            res.data = PopularProfiles;
+            res.status = 200;
+            res.statusText = 'OK';
             return res;
 
         case 'GET /api/followed/':
-           return await axios.get('http://localhost:5000/mock/followed.json');
+            res.data = Followed;
+            res.status = 200;
+            res.statusText = 'OK';
+            return res;
 
         case 'POST /api/followed/':
-            _res =  await axios.get('http://localhost:5000/mock/followed.json');
-            const follow_profile = _res.data.find((profile: any) => {return profile.username == body.username});
+            res.data = Profiles;
+            res.statusText = 'OK';
+            const follow_profile = res.data.find((profile: any) => {return profile.username == body.username});
             switch(follow_profile.id) {
                 case 0: res.status = 201; res.data = follow_profile; break;
 
-                case 1: res.status = 404; res.data = { detail: "" }; break;
+                case 1: res.status = 404; res.statusText='Not Found'; res.data = { detail: "" }; break;
             }
             return res;
 
         case 'POST /api/followed/unfollow/':
-            _res = await axios.get('http://localhost:5000/mock/followed.json');
-            const unfollow_profile = _res.data.find((profile: any) => {return profile.username == body.username});
+            res.data = Followed;
+            res.statusText = 'OK';
+            const unfollow_profile = res.data.find((profile: any) => {return profile.username == body.username});
             switch(unfollow_profile.id) {
                 case 0: res.status = 200; res.data = unfollow_profile; break;
 
-                case 1: res.status = 404; res.data = { detail: "" }; break;
+                case 1: res.status = 404; res.statusText='Not Found'; res.data = { detail: "" }; break;
             }
             return res;
         
         case 'GET /api/preferences/':
-            return await axios.get('http://localhost:5000/mock/preferences.json');
+            res.data = Preference;
+            res.status = 200;
+            res.statusText = 'OK';
+            return res;
 
         case 'PUT /api/preferences/':
-            return await axios.get('http://localhost:5000/mock/preferences.json');
+            res.data = Preference;
+            res.status = 200;
+            res.statusText = 'OK';
+            return res;
 
         default: throw new Error('Invalid path');
     }

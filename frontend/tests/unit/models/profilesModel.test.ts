@@ -1,4 +1,3 @@
-import { init, fetch } from '../../integration/integration'
 import { expect, test, beforeAll, describe, jest } from '@jest/globals'
 import { ProfilesModel } from '../../../src/models/profilesModel'
 import { RequestError, SocialProfile } from '../../../src/models';
@@ -7,8 +6,6 @@ import { AccountModel } from '../../../src/models/accountModel';
 jest.mock('../../../src/models/accountModel')
 
 beforeAll(async () => {
-    await init();
-    window.fetch = fetch;
     await AccountModel.getInstance().createAccount();
 })
 

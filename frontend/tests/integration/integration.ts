@@ -9,9 +9,6 @@ import OpenApiRequestValidator from 'openapi-request-validator'
 
 import { getResponse } from './mock_server';
 
-
-expect.extend({toSatisfyApiSpec,toSatisfySchemaInApiSpec});
-
 let openapi_spec: any;
 let initialized = false;
 
@@ -56,18 +53,17 @@ function createPathValidator(obj: {method: string, path: string, params: any}) :
 }
 
 
-export async function init() {
-    if(!initialized) {
-        const res = await axios.get('https://d18v2wlpbu3jpw.cloudfront.net/api/openapi.json', {adapter: http});
-        openapi_spec = res.data; 
-        jestOpenAPI(res.data);
-        initialized = true;
-    }
+async function test_init(test: boolean = false) {
+    expect.extend({toSatisfyApiSpec,toSatisfySchemaInApiSpec}) 
+    const res = await axios.get('https://d18v2wlpbu3jpw.cloudfront.net/api/openapi.json', {adapter: http});
+    openapi_spec = res.data; 
+    jestOpenAPI(res.data);
+    initialized = true;
 }
 
-export async function fetch(url: RequestInfo | URL, options?: RequestInit) : Promise<any> {
+export async function test_fetch(url: RequestInfo | URL, options?: RequestInit) : Promise<any> {
     url = url.toString();
-    if(!initialized) throw new Error('Must call AND AWAIT integration.ts.init() before calling fetch');
+    if(!initialized) await test_init();
 
     const formattedRequest = formatUrl(url, options as RequestInit);
     const validatorRequest = toValidatorRequest(url, options as RequestInit, formattedRequest.params, formattedRequest.query);
@@ -78,6 +74,19 @@ export async function fetch(url: RequestInfo | URL, options?: RequestInit) : Pro
     const res = await getResponse(formattedRequest.path, options as RequestInit, formattedRequest.params, formattedRequest.query);
     res.request = formattedRequest;
     expect(res).toSatisfyApiSpec();
+
+    return {
+        ok: (200<=res.status && res.status<=299),
+        status: res.status,
+        statusText: res.statusText,
+        json: () => res.data
+    };
+}
+
+export async function mock_fetch(url: RequestInfo | URL, options?: RequestInit) : Promise<any> {
+    url = url.toString();
+    const formattedRequest = formatUrl(url, options as RequestInit);
+    const res = await getResponse(formattedRequest.path, options as RequestInit, formattedRequest.params, formattedRequest.query);
 
     return {
         ok: (200<=res.status && res.status<=299),
