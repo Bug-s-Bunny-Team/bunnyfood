@@ -5,9 +5,11 @@ import { AppPresenter } from '../../../src/presenters/AppPresenter';
 
 jest.mock('../../../src/models/accountModel');
 
+
 describe('TUF6', () => {
     describe('1 - constructor', () => {
-        test('logged', () => {
+        test('logged', async () => {
+            await AccountModel.getInstance().createAccount();
             let presenter = new AppPresenter();
             const routes = get(presenter.routes);
             expect(routes).toBeTruthy();
@@ -20,7 +22,6 @@ describe('TUF6', () => {
             const routes = get(presenter.routes);
             expect(routes).toBeTruthy();
             expect(routes).toHaveLength(6);
-            AccountModel.getInstance().createAccount();
         })
     })
 })

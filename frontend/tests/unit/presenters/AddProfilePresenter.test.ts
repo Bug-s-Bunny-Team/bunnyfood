@@ -6,14 +6,16 @@ import { AddProfilesPresenter } from '../../../src/presenters/AddProfilesPresent
 import { removeChildren } from '../../../src/utils';
 
 jest.mock('../../../src/models/profilesModel');
-ProfilesModel.getInstance().followProfile = jest.fn()   .mockResolvedValueOnce(undefined)
-                                                        .mockRejectedValueOnce(new RequestError(400, "a"))
-                                                        .mockRejectedValueOnce(new RequestError(400, "a"));
+
+(ProfilesModel.getInstance().followProfile as any) = jest.fn()   .mockResolvedValueOnce(undefined)
+                                                                 .mockRejectedValueOnce(new RequestError(400, "a"))
+                                                                 .mockRejectedValueOnce(new RequestError(400, "a"));
 
 jest.useFakeTimers();
 
-beforeEach(() => {
-    removeChildren(document.getElementById('error') as HTMLElement);
+beforeEach(async () => {
+    removeChildren((document.getElementById('error') as HTMLElement));
+    jest.clearAllTimers();
     jest.clearAllMocks();
 })
 

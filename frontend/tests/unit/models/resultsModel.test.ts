@@ -1,20 +1,23 @@
 import { init, fetch } from '../../integration/integration'
-import { expect, test, beforeAll, describe } from '@jest/globals'
+import { expect, test, beforeAll, describe, jest } from '@jest/globals'
 import { ResultsModel } from '../../../src/models/resultsModel'
 import { RequestError, Location, Filter } from '../../../src/models';
-import { get } from 'svelte/store';
+import { AccountModel } from '../../../src/models/accountModel';
+
+jest.mock('../../../src/models/accountModel')
 
 beforeAll(async () => {
     await init();
     window.fetch = fetch;
+    await AccountModel.getInstance().createAccount();
 })
 
 const filter_test_cases = [
     new Filter(false, 2.0, 35.1, 10000.0, 0.0),
-    new Filter(false, null, null, null, 0.0)
+    new Filter(false, null as any, null as any, null as any, 0.0)
 ]
 
-describe('TUF10', () => {
+describe('TUF11', () => {
     describe('1 - Session Storage update', () => {
         test('rankedList defined', async () => {
             ResultsModel.getInstance().rankedList.set([]);
@@ -22,7 +25,7 @@ describe('TUF10', () => {
         })
 
         test('rankedList not defined', () => {
-            ResultsModel.getInstance().rankedList.set(null);
+            ResultsModel.getInstance().rankedList.set(null as any);
             expect((window.sessionStorage as any).getItem('ResultsModel.rankedList')).toBeFalsy();     
         })
     })

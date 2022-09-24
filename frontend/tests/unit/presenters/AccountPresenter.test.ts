@@ -1,14 +1,15 @@
 import { jest, test, expect, beforeEach, describe } from '@jest/globals';
 import { get } from 'svelte/store';
-import { RequestError, SocialProfile } from '../../../src/models';
+import { RequestError } from '../../../src/models';
 import { AccountModel } from '../../../src/models/accountModel';
 import { AccountPresenter } from '../../../src/presenters/AccountPresenter'
 import { removeChildren } from '../../../src/utils';
 
 jest.mock('../../../src/models/accountModel');
-(AccountModel.getInstance().cambiaPreferenza as jest.MockedFunction<Promise<void>>) .mockResolvedValueOnce(undefined)
-                                                                                    .mockRejectedValueOnce(new RequestError(400, "a"))
-                                                                                    .mockRejectedValueOnce(new RequestError(400, "a"));
+
+(AccountModel.getInstance().cambiaPreferenza as any) .mockResolvedValueOnce(undefined)
+                                                     .mockRejectedValueOnce(new RequestError(400, "a"))
+                                                     .mockRejectedValueOnce(new RequestError(400, "a"));
 
 jest.useFakeTimers();
 

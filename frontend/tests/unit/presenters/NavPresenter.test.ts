@@ -7,7 +7,8 @@ jest.mock('../../../src/models/accountModel');
 
 describe('TUF5', () => {
     describe('1 - constructor', () => {
-        test('logged', () => {
+        test('logged', async () => {
+            await AccountModel.getInstance().createAccount();
             let presenter = new NavPresenter();
             const routes = get(presenter.routes);
             expect(routes).toBeTruthy();
@@ -20,7 +21,6 @@ describe('TUF5', () => {
             const routes = get(presenter.routes);
             expect(routes).toBeTruthy();
             expect(routes).toHaveLength(0);
-            AccountModel.getInstance().createAccount();
         })
     })
 })
