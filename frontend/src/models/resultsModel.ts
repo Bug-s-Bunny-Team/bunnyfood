@@ -34,7 +34,7 @@ export class ResultsModel {
     get rankedList() { return this.#rankedList }
 
     async getRankedList(filter: Filter) : Promise<Location[]> {        
-        const url = new URL('api/locations/', `${window.location.protocol}//${window.location.host}`);
+        const url = new URL('/api/locations/', `${window.location.protocol}//${window.location.host}`);
         for (const field in filter) {
             if(filter[field] !== null) url.searchParams.append(field, filter[field]);
         }
