@@ -7,7 +7,7 @@ import axios from 'axios'
 import http from 'axios/lib/adapters/http'
 import OpenApiRequestValidator from 'openapi-request-validator'
 
-import { getResponse, formatUrl } from './mock_server';
+import { getResponse, formatUrl, getDetails } from './mock_server';
 
 let openapi_spec: any;
 let initialized = false;
@@ -59,3 +59,24 @@ export async function test_fetch(url: RequestInfo | URL, options?: RequestInit) 
         json: () => res.data
     };
 }
+
+export let test_google: any = {
+    maps: {
+        places: {
+            PlacesServiceStatus: {
+                OK: 200
+            },
+            PlacesService: class PlacesService{
+                getDetails( params: {placeId: string, fields: string[]}, callback: (result: {photos: {height: number, width: number, getUrl: () => string}[], international_phone_number: string, types: string[], website: string}, status: number) => void) {
+                    expect(params).toBeTruthy()
+                    expect(params.placeId).toMatch(/^[a-z,A-Z,0-9]{27}$/);
+                    expect(params.fields).toBeDefined();
+                    expect(callback).toBeDefined();
+                    getDetails(params.placeId)
+                        .then(info => callback(info, test_google.maps.places.PlacesServiceStatus.OK))
+                        .catch(() => callback(undefined, 404));
+                }
+            }
+        } 
+    }
+};

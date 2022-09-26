@@ -4,6 +4,7 @@ import Followed from '../../mock/followed.json'
 import Profiles from '../../mock/social_profiles.json'
 import PopularProfiles from '../../mock/popular_profiles.json'
 import Preference from '../../mock/preferences.json'
+import Infos from '../../mock/info.json'
 
 export async function getResponse(url: string, options: RequestInit, params: any, query: any, fake_delay=false) : Promise<AxiosResponse<any>> {
     let res: any = {};
@@ -117,6 +118,20 @@ export async function getResponse(url: string, options: RequestInit, params: any
     }
 }
 
+export async function getDetails(maps_place_id: string, fake_delay = false) {
+    if(fake_delay) await new Promise(r => {setTimeout(() => { r(undefined) }, 200)});
+    let info: any = Infos.find(info => info.maps_place_id == maps_place_id);
+    if(!info) throw new Error("Not Found");
+    info.photos = [
+        {
+            width: info.img.width,
+            height: info.img.height,
+            getUrl: () => info.img.url as string
+        }
+    ]
+    return info;
+}
+
 export function formatUrl(url: string, config: RequestInit) : {method: string, path: string, params: any, query: any} {
     let params: any = {};
     let query: any = {};
@@ -152,3 +167,20 @@ export async function mock_fetch(url: RequestInfo | URL, options?: RequestInit) 
         json: () => res.data
     };
 }
+
+export let mock_google: any = {
+    maps: {
+        places: {
+            PlacesServiceStatus: {
+                OK: 200
+            },
+            PlacesService: class PlacesService{
+                getDetails( params: {placeId: string, fields: string[]}, callback: (result: {photos: {height: number, width: number, getUrl: () => string}[], international_phone_number: string, types: string[], website: string}, status: number) => void) {
+                    getDetails(params.placeId)
+                        .then(info => callback(info, mock_google.maps.places.PlacesServiceStatus.OK))
+                        .catch(() => callback(undefined, 404));
+                }
+            }
+        } 
+    }
+};

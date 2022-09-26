@@ -82,7 +82,6 @@ describe('TUF10', () => {
             let promise = ProfilesModel.getInstance().getProfile(username);
             
             await expect(promise).resolves.not.toThrow();
-            //else await expect(promise).rejects.toBeInstanceOf(RequestError);
             
             if(validobj) await SocialProfile.schema.validate(await promise); 
             else expect(await promise).toStrictEqual(test_case.obj);

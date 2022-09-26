@@ -25,14 +25,14 @@ describe.each(test_cases)('TUF4', id => {
         LocationPresenter.prototype.getInfo = tmp;
     })
 
-    if(id != 6) {
+    if(id != 1 && id != 6) {
         describe('2 - get info - should find', () => {
             test('google api ready', async () => {
                 google_ready.set(true);
                 const presenter = new LocationPresenter(id);
         
                 jest.runAllTimers();
-                expect(get(presenter.info)).resolves.toBeTruthy();
+                await expect(get(presenter.info)).resolves.toBeTruthy();
                 const info = await get(presenter.info);
                 await Info.schema.validate(info);
         
@@ -40,12 +40,26 @@ describe.each(test_cases)('TUF4', id => {
                 expect(info.address.charAt(0) == info.address.charAt(0).toUpperCase()).toBeTruthy();
             })
         
-            test('google api not ready', () => {
+            test('google api not ready', async () => {
                 google_ready.set(false);
                 const presenter = new LocationPresenter(id);
-                expect(presenter.info).toBeTruthy();
+                expect(get(presenter.info)).toBeTruthy();
                 jest.runAllTimers();
-                expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Timeout on loading google api"));
+                await expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Timeout on loading google api"));
+            })
+
+            test('google api not ready -> ready', async () => {
+                google_ready.set(false);
+                const presenter = new LocationPresenter(id);
+                expect(get(presenter.info)).toBeTruthy();
+                google_ready.set(true);
+                jest.runAllTimers();
+                await expect(get(presenter.info)).resolves.toBeTruthy();
+                const info = await get(presenter.info);
+                await Info.schema.validate(info);
+        
+                expect(info.name.charAt(0) == info.name.charAt(0).toUpperCase()).toBeTruthy();
+                expect(info.address.charAt(0) == info.address.charAt(0).toUpperCase()).toBeTruthy();
             })
         });
     } else {
@@ -53,16 +67,26 @@ describe.each(test_cases)('TUF4', id => {
             test('google api ready', async () => {
                 google_ready.set(true);
                 const presenter = new LocationPresenter(id);
+                expect(get(presenter.info)).toBeTruthy();
                 jest.runAllTimers();
-                expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Error with request to G_API"));
+                await expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Error with request to G_API"));
             })
         
-            test('google api not ready', () => {
+            test('google api not ready', async () => {
                 google_ready.set(false);
                 const presenter = new LocationPresenter(id);
-                expect(presenter.info).toBeTruthy();
+                expect(get(presenter.info)).toBeTruthy();
                 jest.runAllTimers();
-                expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Timeout on loading google api"));
+                await expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Timeout on loading google api"));
+            })
+
+            test('google api not ready -> ready', async () => {
+                google_ready.set(false);
+                const presenter = new LocationPresenter(id);
+                expect(get(presenter.info)).toBeTruthy();
+                google_ready.set(true);
+                jest.runAllTimers();
+                await expect(get(presenter.info)).rejects.toEqual(new RequestError(404, "Error with request to G_API"));
             })
         });
     }

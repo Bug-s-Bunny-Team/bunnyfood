@@ -1,6 +1,6 @@
 import { Info, RequestError } from "../models";
 import { LocationModel } from "../models/locationModel";
-import { Writable, writable } from "svelte/store";
+import { get, Unsubscriber, Writable, writable } from "svelte/store";
 import { google_ready } from "../store";
 import { capitalizeFirstLetter } from "../utils";
 
@@ -18,15 +18,23 @@ export class LocationPresenter {
 
     getInfo() : void {
         this.#info.set(new Promise((resolve, reject) => {
+            let unsubscribe: Unsubscriber = undefined;
             let timeout = setTimeout(() => {
+                unsubscribe();
                 reject(new RequestError(404, "Timeout on loading google api"));
             }, 10000);
-            google_ready.subscribe(_ready => {
-                if(_ready) {
-                    clearTimeout(timeout);
-                    resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
-                }
-            });
+            if(get(google_ready)) {
+                clearTimeout(timeout);
+                resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
+            } else {
+                unsubscribe = google_ready.subscribe(_ready => {
+                    if(_ready) {
+                        unsubscribe();
+                        clearTimeout(timeout);
+                        resolve(this.adjustInfo(LocationModel.getInstance().getInfo(this.#id, document.getElementById("location"))));
+                    }
+                });
+            }
         }));
     }
 

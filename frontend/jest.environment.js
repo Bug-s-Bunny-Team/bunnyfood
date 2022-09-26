@@ -1,4 +1,5 @@
 import { test_fetch } from './tests/integration/integration'
+import { test_google } from './tests/integration/integration';
 
 if(!document.getElementById("error")) {
     const error_div = document.createElement('div');
@@ -7,3 +8,4 @@ if(!document.getElementById("error")) {
 }
 
 window.fetch = test_fetch;
+window.google = test_google;

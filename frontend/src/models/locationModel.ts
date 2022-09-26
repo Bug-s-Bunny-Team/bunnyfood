@@ -18,19 +18,21 @@ export class LocationModel {
         
     async getInfo(id: number, parentNode: HTMLElement) : Promise<Info> {
         const location: Location = ResultsModel.getInstance().getById(id);
+        if(!location) return new Promise((res, rej) => rej(new RequestError(404, "Error with request to G_API")));
+
         const attribution_div = document.createElement('div');
         parentNode.append(attribution_div);
 
         // google will be defined once the application runs
-        let service = new google.maps.places.PlacesService(attribution_div);
+        let service = new (window.google || google).maps.places.PlacesService(attribution_div);
         let fields = ['photos', 'international_phone_number', 'website', 'types'];
         
         return new Promise((resolve, reject) => {
             service.getDetails({placeId: location.maps_place_id, fields: fields}, 
                 function(result, status) {
-                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        if (status === (window.google || google).maps.places.PlacesServiceStatus.OK) {
                             resolve(new Info(location.name, 
-                                             result.photos && result.photos[0] ? 
+                                             result.photos && result.photos[0] && result.photos[0].getUrl() ? 
                                                     {height: result.photos[0].height, 
                                                      width: result.photos[0].width, 
                                                      url: result.photos[0].getUrl(), 

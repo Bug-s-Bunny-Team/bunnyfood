@@ -1,9 +1,6 @@
-<svelte:head>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVMx0kLnfUJbOXiiEBaQHL7CmtUDTkreI&libraries=places&callback=google_initialize" type="text/javascript"></script>
-</svelte:head>
-
 <script lang='ts'>
     import './style.css';
+    import GoogleLoader from "./Google_Loader.svelte";
     import { Router } from "svelte-router-spa";
     import { AppPresenter } from './presenters/AppPresenter';
     import { google_ready } from './store';
@@ -15,6 +12,10 @@
         google_ready.set(true);
     }
 </script>
+
+{#if !import.meta.env.DEV}
+    <GoogleLoader/>
+{/if}
 
 <div id="error"></div>
 

@@ -1,6 +1,6 @@
 [
     {
-      "id": 0,
+      "maps_place_id": "ChIJzR55PvjPfkcRJ7lxtptJGLM",
       "name": "pedrocchi",
       "address": "Via VIII Febbraio, 15, 35122 Padova PD, Italia",
       "img": {
@@ -15,22 +15,7 @@
       "website": ""
     },
     {
-      "id": 1,
-      "name": "bar dei osei",
-      "address": "Via del Portello, 12, 35131 Padova PD, Italia",
-      "img": {
-        "width": 400,
-        "height": 20,
-        "url": "",
-        "alt": "image unavailable"
-      }, 
-      "score": 0,
-      "phone_number": "",
-      "types": [],
-      "website": ""
-    },
-    {
-      "id": 2,
+      "maps_place_id": "ChIJzbP8mFHafkcR3JGI5fkxShg",
       "name": "fly bar",
       "address": "Galleria Tito Livio, 4, 35123 Padova PD, Italia",
       "img": {
@@ -45,7 +30,7 @@
       "website": ""
     },
     {
-      "id": 3,
+      "maps_place_id": "ChIJTa4zl1HafkcRD68gy145jnw",
       "name": "caffeine",
       "address": "Via Roma, 96, 35122 Padova PD, Italia",
       "img": {
@@ -60,7 +45,7 @@
       "website": ""
     },
     {
-      "id": 4,
+      "maps_place_id": "ChIJtSDfulHafkcRXqCEUnZKrN0",
       "name": "otvim",
       "address": "Via Roma, 69, 35122 Padova PD, Italia",
       "img": {
@@ -75,7 +60,7 @@
       "website": ""
     },
     {
-      "id": 5,
+      "maps_place_id": "ChIJIesUGFjafkcR4MGNLHzkjZc",
       "name": "sumiti",
       "address": "Via Giambattista Belzoni, 8, 35121 Padova PD, Italia",
       "img": {
