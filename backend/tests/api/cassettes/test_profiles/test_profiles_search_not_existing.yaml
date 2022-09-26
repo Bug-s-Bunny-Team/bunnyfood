@@ -18,133 +18,75 @@ interactions:
     uri: https://gramhir.com/app/controllers/ajax.php
   response:
     body:
-      string: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n
-        \   <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n
-        \   <title>Error 500</title>\n\n            <meta name=\"description\" content=\"Internal
-        Server Error\">\n        <meta property=\"og:title\" content=\"Error 500\"
-        />\n\n            <meta property=\"og:description\" content=\"Internal Server
-        Error\" />\n    \n    \n    \n    \n    <link rel=\"canonical\" href=\"https://gramhir.com/app/controllers/ajax.php\">\n\n
-        \   <link rel=\"icon\" href=\"/favicon.ico\">\n\n\n    <link rel=\"stylesheet\"
-        href=\"/app/assets/css/style.css?v=1662216013\">\n    <link rel=\"stylesheet\"
-        media=\"print\" type=\"text/css\" href=\"/app/assets/css/print.css?v=126\">\n
-        \   <link rel=\"stylesheet\" href=\"/app/assets/fonts/fontello/css/fontello.css?v=2\">\n
-        \   <link rel=\"stylesheet\" href=\"/app/assets/fonts/fontello/css/fontello-codes.css?v=2\">\n
-        \   <link rel=\"stylesheet\" href=\"/app/assets/fonts/flaticon/flaticon.css\">\n
-        \   <link rel=\"stylesheet\" href=\"/app/assets/fonts/flat-comments/flaticon.css\">\n
-        \   <!-- Global site tag (gtag.js) - Google Analytics -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-206621869-1\"></script>\n<script>\n
-        \ window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n
-        \ gtag('js', new Date());\n\n  gtag('config', 'UA-206621869-1');\n</script>\n
-        \   </head>\n<body>\n<input type=\"hidden\" id=\"ajaxurl\" value=\"/ajax/\">\n<input
-        type=\"hidden\" id=\"folder\" value=\"\">\n\n<header class=\"main-header header-search
-        main-page\">\n    <div class=\"content clearfix\">\n        <div class=\"left-header\">\n
-        \           <div class=\"logo\">\n                <a href=\"https://gramhir.com\">Gramhir</a>\n
-        \           </div>\n        </div>\n        <div class=\"center-header\">\n
-        \                   </div>\n        <div class=\"menu_block\">\n            <a
-        href=\"https://gramhir.com/popular\" class=\"new-main-button\">Popular</a>\n
-        \           <div class=\"menu_open_button\">\n                <i class=\"flaticon-menu-button\"></i>\n
-        \           </div>\n        </div>\n    </div>\n</header>\n\n\n<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js\"></script>\n<script
-        src=\"/app/assets/js/imagesloaded.pkgd.js\"></script>\n<script src=\"/app/assets/js/isotope.pkgd.min.js\"></script>\n<script
-        src=\"/app/assets/js/infinite-scroll.pkgd.js\"></script>\n<script src=\"/app/assets/libs/adblock.js\"></script>\n<script
-        src=\"/app/assets/js/main.js?v=1662216013\"></script>\n<div class=\"wrapper\">\n
-        \   <div class=\"content\">\n        <div class=\"content-page\">\n            <div
-        class=\"error-p\">\n                <div class=\"error-svg\">\n                    <svg
-        version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"
-        x=\"0px\" y=\"0px\" viewBox=\"0 0 426.667 426.667\" style=\"enable-background:new
-        0 0 426.667 426.667;\" xml:space=\"preserve\"><g><g><g><path d=\"M138.667,192c17.707,0,32-14.293,32-32s-14.293-32-32-32s-32,14.293-32,32S120.96,192,138.667,192z\"/><path
-        d=\"M288,192c17.707,0,32-14.293,32-32s-14.293-32-32-32s-32,14.293-32,32S270.293,192,288,192z\"/><path
-        d=\"M213.12,0C95.36,0,0,95.573,0,213.333s95.36,213.333,213.12,213.333c117.973,0,213.547-95.573,213.547-213.333\t\t\t\tS331.093,0,213.12,0z
-        M213.333,384c-94.293,0-170.667-76.373-170.667-170.667S119.04,42.667,213.333,42.667\t\t\tS384,119.04,384,213.333S307.627,384,213.333,384z\"/><path
-        d=\"M213.333,256c-49.707,0-92.16,31.04-109.227,74.667h35.733C154.667,305.28,181.867,288,213.333,288\t\t\ts58.667,17.28,73.493,42.667h35.733C305.493,287.04,263.04,256,213.333,256z\"/></g></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>\n
-        \               </div>\n                <p>Sorry, we are currently having
-        technical difficulties and maybe some of the options won't be working.<br>\n
-        \                   We are working on fixing them. Please, try again later.</p>\n<!--
-        \               <h1>500</h1>-->\n<!--                <span>Internal Server
-        Error, please try again later</span>-->\n            </div>\n        </div>\n
-        \   </div>\n</div>\n\n<script>var isAdBlockActive=true;</script>\n<script
-        src=\"/app/assets/js/adx.js?v=2\"></script>\n<script>\n    $(function () {\n
-        \       if (isAdBlockActive) {\n            $(\".adv\").remove();\n        }\n
-        \   });\n</script>\n<div class=\"lightbox-p\">\n    <div class=\"lightbox-bg\"></div>\n
-        \   <div class=\"lightbox\">\n        <div class=\"lightbox-close\" style=\"display:
-        none;\"><span class=\"flaticon-close-button\"></span></div>\n        <div
-        class=\"download_button\" data-url=\"\" data-downloadname=\"\" style=\"display:
-        none;\"><span class=\"flaticon-download-button\"></span></div>\n        <div
-        id=\"lightbox\" class=\"lightbox-media-place\"></div>\n    </div>\n</div>\n<script
-        type=\"text/javascript\" src=\"//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cad1cdf2197eb6d\"></script>\n\n<div
-        class=\"bg\"></div>\n<div class=\"news_popup_wrapper\" id=\"dropdown-popup\">\n
-        \   <div class=\"news_popup_header\">\n        <div class=\"news_popup_title\"></div>\n
-        \       <div class=\"news_popup_close\">\n            <svg version=\"1.1\"
-        id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"
-        x=\"0px\" y=\"0px\" width=\"357px\" height=\"357px\" viewBox=\"0 0 357 357\"
-        style=\"enable-background:new 0 0 357 357;\" xml:space=\"preserve\"><g><g
-        id=\"close\"><polygon points=\"357,35.7 321.3,0 178.5,142.8 35.7,0 0,35.7
-        142.8,178.5 0,321.3 35.7,357 178.5,214.2 321.3,357 357,321.3 \t\t214.2,178.5
-        \t\t\"></polygon></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>\n
-        \       </div>\n    </div>\n    <div class=\"news_popup_body\">\n        <div
-        class=\"dropdown\">\n            <div>\n                <div class=\"page-desc-wrapper\">\n
-        \                   <div class=\"page-domain\">Gramhir.com</div>\n                    <div
-        class=\"page-description\">Instagram analyzer and viewer</div>\n                </div>\n
-        \               <div class=\"dropdown_menu\">\n                    <div class=\"a_li\">\n
-        \                   <a class=\"hide_pc\" href=\"https://gramhir.com/popular\">\n
-        \                       <svg version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\"
-        xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0
-        0 426.667 426.667\" style=\"enable-background:new 0 0 426.667 426.667;\" xml:space=\"preserve\"><g><g><path
-        d=\"M309.333,17.6c-37.12,0-72.747,17.28-96,44.48c-23.253-27.2-58.88-44.48-96-44.48C51.52,17.6,0,69.12,0,134.933\tc0,80.533,72.533,146.347,182.4,246.08l30.933,28.053l30.933-28.053c109.867-99.733,182.4-165.547,182.4-246.08\t\t\tC426.667,69.12,375.147,17.6,309.333,17.6z
-        M215.573,349.44l-2.24,2.027l-2.24-2.027\t\tC109.653,257.387,42.667,196.587,42.667,134.933c0-42.56,32.107-74.667,74.667-74.667c32.853,0,64.853,21.227,76.053,50.347\t\th39.787c11.307-29.12,43.307-50.347,76.16-50.347c42.56,0,74.667,32.107,74.667,74.667\t\tC384,196.587,317.013,257.387,215.573,349.44z\"/></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>\n
-        \                       Popular\n                    </a>\n                    </div>\n
-        \                   <div class=\"a_li\">\n                    <a href=\"https://gramhir.com/page/about\">\n
-        \                       <svg version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\"
-        xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" width=\"561px\"
-        height=\"561px\" viewBox=\"0 0 561 561\" style=\"enable-background:new 0 0
-        561 561;\" xml:space=\"preserve\"> <g> <g id=\"content-copy\"> <path d=\"M395.25,0h-306c-28.05,0-51,22.95-51,51v357h51V51h306V0z
-        M471.75,102h-280.5c-28.05,0-51,22.95-51,51v357 c0,28.05,22.95,51,51,51h280.5c28.05,0,51-22.95,51-51V153C522.75,124.95,499.8,102,471.75,102z
-        M471.75,510h-280.5V153h280.5V510 z\"></path> </g> </g> <g> </g> <g> </g> <g>
-        </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g>
-        <g> </g> <g> </g> <g> </g> <g> </g> </svg>\n                        About
-        Us\n                    </a>\n                    </div>\n                    <div
-        class=\"a_li\">\n                    <a href=\"https://gramhir.com/page/remove\">\n
-        \                       <svg version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\"
-        xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0
-        0 426.667 426.667\" style=\"enable-background:new 0 0 426.667 426.667;\" xml:space=\"preserve\"><g><g><g><rect
-        x=\"106.667\" y=\"192\" width=\"213.333\" height=\"42.667\"></rect><path d=\"M213.333,0C95.467,0,0,95.467,0,213.333s95.467,213.333,213.333,213.333S426.667,331.2,426.667,213.333\t\t\tS331.2,0,213.333,0z
-        M213.333,384c-94.08,0-170.667-76.587-170.667-170.667S119.253,42.667,213.333,42.667\t\t\tS384,119.253,384,213.333S307.413,384,213.333,384z\"></path></g></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>\n
-        \                       Remove Content\n                    </a>\n                    </div>\n
-        \                   <div class=\"a_li\">\n                    <a href=\"https://gramhir.com/page/privacy\">\n
-        \                       <svg version=\"1.1\" id=\"Capa_1\" xmlns=\"http://www.w3.org/2000/svg\"
-        xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" width=\"561px\"
-        height=\"561px\" viewBox=\"0 0 561 561\" style=\"enable-background:new 0 0
-        561 561;\" xml:space=\"preserve\"> <g> <g id=\"content-copy\"> <path d=\"M395.25,0h-306c-28.05,0-51,22.95-51,51v357h51V51h306V0z
-        M471.75,102h-280.5c-28.05,0-51,22.95-51,51v357 c0,28.05,22.95,51,51,51h280.5c28.05,0,51-22.95,51-51V153C522.75,124.95,499.8,102,471.75,102z
-        M471.75,510h-280.5V153h280.5V510 z\"></path> </g> </g> <g> </g> <g> </g> <g>
-        </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g> <g> </g>
-        <g> </g> <g> </g> <g> </g> <g> </g> </svg>\n                        Privacy
-        Policy\n                    </a>\n                    </div>\n                </div>\n
-        \           </div>\n            <div class=\"dropdown_footer\">\n                Gramhir.com
-        2020\n            </div>\n        </div>\n    </div>\n</div>\n\n<script>\n
-        \   window.passbackCallback = function(divid) {\n        document.getElementById(divid).parentElement.remove();\n
-        \   }\n</script>\n<script src=\"/app/assets/js/web-push/firebase.js\"></script>\n<script
-        src=\"/app/assets/js/web-push/app.js\"></script>\n\n</body>\n</html>"
+      string: !!binary |
+        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
     headers:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 744f3d43de50bab2-MXP
+      - 750ae0a1be080e0e-MXP
       Connection:
       - keep-alive
+      Content-Encoding:
+      - gzip
       Content-Type:
       - text/html; charset=UTF-8
       Date:
-      - Sat, 03 Sep 2022 14:40:13 GMT
+      - Mon, 26 Sep 2022 09:12:24 GMT
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=yOFYjg6Bb7CtRZowVmNJpssaH%2FetIGYwHHJdghLqWTskloo%2FH2xc%2FSalsFVRlXqlFygqHLP792PBmvKB0VdlzULRge5pm5WxPvmC2mHrK7204A9IkAAxVjjPDMvX"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=dgel3IXHKDROqr5EKuhP0jOvcH4yYB5hhjQ5HnyK5%2FTISZaXyPnJNX9J7ev3bL%2BTcPLbHIwZt%2Bt4fqBFuY%2Bko52GlrDh%2FxNf5HccubJrAjI91Jakb%2F80D17NJraR"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Status:
-      - 500 Internal Server Error
+      - 404 Not Found
       Transfer-Encoding:
       - chunked
+      Vary:
+      - Accept-Encoding
     status:
-      code: 500
-      message: Internal Server Error
+      code: 404
+      message: Not Found
 version: 1
