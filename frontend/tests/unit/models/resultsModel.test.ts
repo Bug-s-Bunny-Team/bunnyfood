@@ -55,8 +55,8 @@ describe('TUF11', () => {
 
         test('not to be found', async () => {
             const rankedList = await ResultsModel.getInstance().getRankedList(filter_test_cases[0]);
-            for(let i=1; i<10; ++i) {
-                expect(ResultsModel.getInstance().getById(rankedList[rankedList.length-1].id+i)).toBeFalsy();
+            for(let i=0; i<4; ++i) {
+                expect(ResultsModel.getInstance().getById(rankedList.length+i)).toBeFalsy();
             }
         })
     })

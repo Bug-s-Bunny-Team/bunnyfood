@@ -176,7 +176,7 @@ export let mock_google: any = {
             },
             PlacesService: class PlacesService{
                 getDetails( params: {placeId: string, fields: string[]}, callback: (result: {photos: {height: number, width: number, getUrl: () => string}[], international_phone_number: string, types: string[], website: string}, status: number) => void) {
-                    getDetails(params.placeId)
+                    getDetails(params.placeId, true)
                         .then(info => callback(info, mock_google.maps.places.PlacesServiceStatus.OK))
                         .catch(() => callback(undefined, 404));
                 }

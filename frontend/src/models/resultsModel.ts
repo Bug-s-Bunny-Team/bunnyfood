@@ -49,6 +49,7 @@ export class ResultsModel {
     private fixLocations(list: any[]) : Location[] {
         return list.map(location => {return new Location(location.id, location.name, new Position(location.lat, location.long), 
                                                          location.address, location.maps_place_id, location.score)})
+                                                         .sort((location_a, location_b) => {return -1*(!location_a.score ? (!location_b.score ? 0 : -1) : (!location_b.score ? 1 : location_a.score - location_b.score))});
     }
 
     getById(id: number) : Location {
