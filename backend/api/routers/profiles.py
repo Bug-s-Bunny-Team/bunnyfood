@@ -90,7 +90,7 @@ def search_profile(
                 status_code=status.HTTP_404_NOT_FOUND, detail='SocialProfile not found'
             )
     if profile in user.followed_profiles:
-        response.status_code = status.HTTP_204_NO_CONTENT
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
     else:
         return profile
 

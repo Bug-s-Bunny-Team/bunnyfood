@@ -99,7 +99,7 @@ def test_profiles_search_following(api_client):
     results = api_client.get('/profiles/search/testprofile1')
 
     assert results.status_code == 204
-    assert not results.json()
+    assert not results.content
     assert len(s4.runs) == 0
 
 
