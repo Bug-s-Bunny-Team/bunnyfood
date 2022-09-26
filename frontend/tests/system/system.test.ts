@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
 import {render, fireEvent, screen} from '@testing-library/svelte';
-import ThemeSwitch from '../../frontend/src/components/ThemeSwitch.svelte';
-import Error from '../../frontend/src/components/Error.svelte';
-import AddProfile from '../../frontend/src/pages/AddProfile.svelte';
+import ThemeSwitch from '../../src/components/ThemeSwitch';
+import Error from '../../src/components/Error';
+import AddProfile from '../../src/pages/AddProfile';
 
 describe('1 - ThemeSwitch', () => {
     test('Il tema cambia se premuto lo switch', async () => {
