@@ -20,7 +20,7 @@ beforeEach(async () => {
     await AccountModel.getInstance().createAccount();
 })
 
-describe('TUF9', () => {
+describe('TUF11', () => {
 
     describe('1 - constructor', () => {
         test('logged', () => {

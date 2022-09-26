@@ -14,7 +14,7 @@ const filter_test_cases = [
     new Filter(false, null as any, null as any, null as any, 0.0)
 ]
 
-describe('TUF11', () => {
+describe('TUF16', () => {
     describe('1 - Session Storage update', () => {
         test('rankedList defined', async () => {
             ResultsModel.getInstance().rankedList.set([]);

@@ -35,7 +35,7 @@ describe('3 - Visualizzazione errore Not Found Profile', () => {
 
         const { container } = render(AddProfile);
         const input = screen.getByPlaceholderText('testuser123');
-        fireEvent.change(input, {target: {value: 'tulliovardanegaa'}});
+        fireEvent.change(input, {target: {value: 'tommasodifanta'}});
         expect(container.get).toBe("Couldn't find profile. You must enter the correct and full username of the profile");
     })
 });

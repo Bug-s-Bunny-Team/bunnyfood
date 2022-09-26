@@ -5,7 +5,7 @@ import { Account, RequestError } from '../../../src/models';
 const mock_idtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQwMjE0NDksImV4cCI6MTY5NTU1NzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsImVtYWlsIjoidGVzdEBnbWFpbC5jb20ifQ.QeUGbaE3XT-bcS2gI8bbFjFBrVv7xuOvHlbamr7k3Cw';
 const mock_accesstoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NjQwMjE0NDksImV4cCI6MTY5NTU1NzQ0OSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoidGVzdCB1c2VybmFtZSJ9.g_ypyq8Fd_0U8zmrTUnLIP5RuK1Xx0ht6fqCi-cbogA'
 
-describe('TUF13', () => {
+describe('TUF17', () => {
     describe('1 - Session Storage update', () => {
         test('account defined', async () => {
             AccountModel.getInstance().account.set(new Account());
