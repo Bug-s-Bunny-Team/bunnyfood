@@ -66,7 +66,7 @@ describe('TUF9', () => {
         })
     })
     
-    // cannot test because the test environment jsdom does not support window.location navigation, so the function fails
+    // cannot test because the test environment jsdom does not support window.location navigation, so the function fails with "Error: Not implemented: navigation (except hash changes)"
     /*test('3 - logout', async () => {
         const presenter = new AccountPresenter();
         const url = window.location.href;
