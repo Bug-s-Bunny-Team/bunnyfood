@@ -3,6 +3,13 @@ import {render, fireEvent, screen} from '@testing-library/svelte';
 import Home from '../../src/components/ThemeSwitch';
 import Error from '../../src/components/Error';
 import AddProfile from '../../src/pages/AddProfile';
+import { AccountModel } from '../../src/models/accountModel'
+
+jest.mock('../../src/models/accountModel')
+
+beforeAll(() => {
+    AccountModel.getInstance().createAccount();
+})
 
 describe('1 - ThemeSwitch', () => {
     test('Il tema cambia se premuto lo switch', async () => {

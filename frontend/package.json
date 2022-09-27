@@ -10,7 +10,8 @@
     "build": "vite build",
     "deploy": "aws s3 sync dist/ s3://bunnyfood-frontend --delete",
     "build_deploy": "npm run build && npm run deploy",
-    "test": "jest test"
+    "test": "jest test",
+    "test_dev": "jest test --detectOpenHandles"
   },
   "devDependencies": {
     "@babel/core": "^7.18.13",
