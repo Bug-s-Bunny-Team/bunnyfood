@@ -17,7 +17,7 @@ beforeEach(() => {
     jest.clearAllMocks();
 })
 
-describe('TUF8', () => {
+describe('TUF9', () => {
     test('1 - constructor', () => {
         const tmp = ExplorePresenter.prototype.refresh;
         ExplorePresenter.prototype.refresh = jest.fn();

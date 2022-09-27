@@ -1,11 +1,11 @@
-import json
-from pathlib import Path
-
 import pytest
 from sqlalchemy.orm import Session
 
 from functions.scoring.function.models import ScoringPost
 from functions.scoring.function.scoring_service import BasicScoringService
+
+from tests.mocks import ClientMock
+
 
 '''@pytest.fixture
 def scorer(session):
@@ -21,12 +21,6 @@ def scorer():
 @pytest.fixture
 def scored():
     return ScoringPost('0', 'caption', '0', {0: ''})
-
-
-def load_json_fixture(path: str) -> dict:
-    path = '../tests/fixtures' / Path(path)
-    with open(path, 'r') as f:
-        return json.load(f)
 
 
 @pytest.mark.parametrize(
@@ -117,8 +111,8 @@ def test_calcFinalScore_two_present(
 )
 def test_face_scoring(scorer, scored, face_result_path, expected_score):
     sPost = scored
-    text_result = load_json_fixture('textOnPictureMOC_empty.json')
-    face_result = load_json_fixture(face_result_path)
+    text_result = ClientMock.load_json_fixture('textOnPictureMOC_empty.json')
+    face_result = ClientMock.load_json_fixture(face_result_path)
     scorer._BasicScoringService__parse_rekognition_response(
         sPost, text_result, face_result
     )
@@ -135,8 +129,8 @@ def test_face_scoring(scorer, scored, face_result_path, expected_score):
 )
 def test_text_on_picture(scorer, scored, text_result_path, expected_text):
     sPost = scored
-    text_result = load_json_fixture(text_result_path)
-    face_result = load_json_fixture("facialAnalysisMOC_empty.json")
+    text_result = ClientMock.load_json_fixture(text_result_path)
+    face_result = ClientMock.load_json_fixture("facialAnalysisMOC_empty.json")
     scorer._BasicScoringService__parse_rekognition_response(
         sPost, text_result, face_result
     )
@@ -154,7 +148,7 @@ def test_text_on_picture(scorer, scored, text_result_path, expected_text):
 )
 def test_caption_scoring(scorer, scored, comprehend_result_path, expected_score):
     sPost = scored
-    comprehend_result = load_json_fixture(comprehend_result_path)
+    comprehend_result = ClientMock.load_json_fixture(comprehend_result_path)
     scorer._BasicScoringService__parse_comprehend_response(sPost, comprehend_result)
 
     assert sPost.captionScore == expected_score
@@ -170,26 +164,43 @@ def test_caption_scoring(scorer, scored, comprehend_result_path, expected_score)
 )
 def test_caption_scoring(scorer, scored, comprehend_result_path, expected_score):
     sPost = scored
-    comprehend_result = load_json_fixture(comprehend_result_path)
+    comprehend_result = ClientMock.load_json_fixture(comprehend_result_path)
     scorer._BasicScoringService__parse_comprehend_response(sPost, comprehend_result)
 
     assert sPost.textsScore == expected_score
 
-@pytest.mark.parametrize("dominant_language_response_path, expected_result",[
-    ("dominantLanguageResponseMOC_it.json", 'it'),
-    ("dominantLanguageResponseMOC_en.json", 'en'),
-    ("dominantLanguageResponseMOC_de.json", 'de')
-])
-def test_dominant_language_parsing(scorer, dominant_language_response_path, expected_result):
-    dominant_language_response = load_json_fixture(dominant_language_response_path)
-    result = scorer._BasicScoringService__parse_dominant_language_response(dominant_language_response)
+
+@pytest.mark.parametrize(
+    "dominant_language_response_path, expected_result",
+    [
+        ("dominantLanguageResponseMOC_it.json", 'it'),
+        ("dominantLanguageResponseMOC_en.json", 'en'),
+        ("dominantLanguageResponseMOC_de.json", 'de'),
+    ],
+)
+def test_dominant_language_parsing(
+    scorer, dominant_language_response_path, expected_result
+):
+    dominant_language_response = ClientMock.load_json_fixture(
+        dominant_language_response_path
+    )
+    result = scorer._BasicScoringService__parse_dominant_language_response(
+        dominant_language_response
+    )
 
     assert result == expected_result
 
-@pytest.mark.parametrize("texts, expected_result", [
-    ({0: 'FIRST', 1: 'SECOND', 2: 'THIRD'}, ['CAPTION', 'FIRST', 'SECOND', 'THIRD']),
-    ({}, ['CAPTION'])
-])
+
+@pytest.mark.parametrize(
+    "texts, expected_result",
+    [
+        (
+            {0: 'FIRST', 1: 'SECOND', 2: 'THIRD'},
+            ['CAPTION', 'FIRST', 'SECOND', 'THIRD'],
+        ),
+        ({}, ['CAPTION']),
+    ],
+)
 def test_post_unpacker_for_comprehend(scorer, scored, texts, expected_result):
     sPost = scored
     sPost.caption = 'CAPTION'

@@ -11,17 +11,17 @@ beforeAll(async () => {
 
 const profiles_search_cases = [
     { username: 'antoniorazzi', validobj: true, throws: false },
-    { username: 'tulliovardanega', validobj: true, throws: false },
-    { username: 'cardin', validobj: false, obj: undefined, throws: false },
+    { username: 'tommasodifant', validobj: true, throws: false },
+    { username: 'unipd', validobj: false, obj: undefined, throws: false },
     { username: 'sergiomattarella', validobj: false, obj: null, throws: false },
 ]
 
 const follow_test_cases = [
     { profile: new SocialProfile(0, 'antoniorazzi'), throws: false },
-    { profile: new SocialProfile(1, 'tulliovardanega'), throws: true }
+    { profile: new SocialProfile(1, 'tommasodifant'), throws: true }
 ]
 
-describe('TUF10', () => {
+describe('TUF14', () => {
     describe('1 - getFollowed', () => {
         test('integration', async () => {
             try { await ProfilesModel.getInstance().getFollowed() } 

@@ -5,7 +5,7 @@ import { RequestOptions } from '../../../src/models/requestOptions'
 
 jest.mock('../../../src/models/accountModel')
 
-describe('TUF12', () => {
+describe('TUF15', () => {
     describe('not logged', () => {
         beforeAll(() => {
             AccountModel.getInstance().logout();
