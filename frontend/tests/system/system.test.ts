@@ -1,23 +1,21 @@
 import '@testing-library/jest-dom';
 import {render, fireEvent, screen} from '@testing-library/svelte';
-import ThemeSwitch from '../../src/components/ThemeSwitch';
+import Home from '../../src/components/ThemeSwitch';
 import Error from '../../src/components/Error';
 import AddProfile from '../../src/pages/AddProfile';
 
 describe('1 - ThemeSwitch', () => {
     test('Il tema cambia se premuto lo switch', async () => {
 
-        const { container } = render(ThemeSwitch);
+        const { container } = render(Home);
         const input = container.querySelector("input[type=checkbox]");
 
-        //await fireEvent.change(input, { target: { value: "light" } });
         await fireEvent.click(input);
 
         expect(input).toBeChecked();
         expect(input).toHaveStyle({
             'background-color': 'white'
         })
-        //expect(input.value).toBe("light");
     })
 });
 
@@ -32,12 +30,15 @@ describe('2 - Visualizzazione errore', () => {
 
 describe('3 - Visualizzazione errore Not Found Profile', () => {
     test('Not Found Profile', async () => {
-
         const { container } = render(AddProfile);
-        const input = screen.getByPlaceholderText('testuser123');
-        fireEvent.change(input, {target: {value: 'tommasodifanta'}});
-        expect(container.get).toBe("Couldn't find profile. You must enter the correct and full username of the profile");
+
+        const input = screen.getByTestId("scrape-input");
+        fireEvent.change(input, {target: {value: "thisusernamedoesnotexist38434"}});
+
+        const btn = screen.getByTestId("search-btn");
+        fireEvent.click(btn);
+
+        const error = await screen.findByTestId("error");
+        expect(error.textContent).toBe("Couldn't find profile. You must enter the correct and full username of the profile");
     })
 });
-
-//Messaggi di errore dentro pagina;

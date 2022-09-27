@@ -14,6 +14,7 @@
                 <input
                     type="search"
                     id="scrape-input"
+                    data-testid="scrape-input"
                     bind:value={$searchText}
                     placeholder="testuser123"
                     required
@@ -21,7 +22,7 @@
                     pattern="^[^\s]+$"
                 />
     </label>
-    <button id="submit" type="submit" disabled={$disableButtons}> Search </button>
+    <button data-testid="search-btn" id="submit" type="submit" disabled={$disableButtons}> Search </button>
     </div>
     </form>
 </article>
@@ -44,12 +45,12 @@
                 </article>
             </div>
         {:else if _profile === undefined}
-            <p>You already follow this account</p>
+            <p data-testid="error">You already follow this account</p>
         {:else}
-            <p>Couldn't find profile. <strong>You must enter the correct and full username of the profile</strong></p>
+            <p data-testid="error">Couldn't find profile. <strong>You must enter the correct and full username of the profile</strong></p>
         {/if}
     {:catch}
-        <p>There has been an error, please try again</p>
+        <p data-testid="error">There has been an error, please try again</p>
     {/await}    
 {/if}
 
