@@ -7,8 +7,8 @@ import { AccountModel } from '../../src/models/accountModel'
 
 jest.mock('../../src/models/accountModel')
 
-beforeAll(() => {
-    AccountModel.getInstance().createAccount();
+beforeAll(async () => {
+    await AccountModel.getInstance().createAccount();
 })
 
 describe('1 - ThemeSwitch', () => {
