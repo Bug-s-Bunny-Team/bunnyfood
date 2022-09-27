@@ -1,7 +1,7 @@
 import pytest
 
 from functions.sorter.function.sorting_service import SorterService
-from mocks import RekoMock
+from tests.mocks import RekoMock
 
 
 @pytest.fixture

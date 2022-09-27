@@ -1,7 +1,7 @@
 import pytest
 from datetime import datetime, timedelta
 
-from mocks import SFNMock
+from tests.mocks import SFNMock
 
 from db import models
 from functions.scheduler.function.service import SchedulerService, SchedulerEvent
