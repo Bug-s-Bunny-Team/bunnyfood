@@ -11,5 +11,5 @@ module.exports = {
   moduleFileExtensions: ['js', 'ts', 'svelte'],
   transformIgnorePatterns: ["node_modules/(?!(svelte-star-rating)/)"],
   collectCoverage: true,
-  collectCoverageFrom: ['./src/models/*', './src/presenters/{!(MapPresenter.ts), *}', './src/utils.ts', './src/models.ts']
+  collectCoverageFrom: ['./src/models/*', './src/presenters/*', './src/utils.ts', './src/models.ts']
 };
